@@ -1,0 +1,49 @@
+name: Feature
+description: Define a scoped product or engineering feature
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What user problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and docs
+      description: Link relevant PRD, architecture, ADR, or design docs.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Out of scope
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Use testable checkboxes.
+      value: "- [ ] "
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Tests and documentation
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Security, privacy, or migration risks

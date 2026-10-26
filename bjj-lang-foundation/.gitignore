@@ -1,0 +1,17 @@
+node_modules/
+.expo/
+dist/
+web-build/
+coverage/
+.env
+.env.*
+!.env.example
+*.keystore
+*.p8
+*.p12
+*.mobileprovision
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+supabase/.temp/
