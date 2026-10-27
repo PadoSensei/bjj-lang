@@ -16,7 +16,7 @@ BJJ_Lang is a mobile-first language-learning platform for Brazilian Jiu-Jitsu vo
 
 ## Status
 
-Early project foundation. Product requirements and technical decisions are being refined.
+Bootstrap shell phase (M0). Minimum mobile app foundation and CI pipeline established.
 
 ## Documentation
 
@@ -31,25 +31,73 @@ Early project foundation. Product requirements and technical decisions are being
 - [Testing strategy](docs/testing/TEST_STRATEGY.md)
 - [Curriculum](docs/content/CURRICULUM.md)
 - [Release process](docs/operations/RELEASE_PROCESS.md)
+- [Bootstrap task](docs/engineering/BOOTSTRAP_TASK.md)
 - [ADRs](docs/architecture/ADR/)
 
-## Planned stack
+## Stack
 
-- Expo + React Native + TypeScript
+- Expo (SDK 58) + React Native (0.88) + TypeScript (strict mode)
 - Expo Router
-- Supabase (PostgreSQL, Auth, Storage, Edge Functions)
-- SQLite for local/offline state
-- FSRS spaced repetition
-- TanStack Query and Zustand
-- Zod
-- Vitest, React Native Testing Library, Maestro
-- EAS Build and GitHub Actions
+- pnpm (lockfile pinned)
+- ESLint (flat config) + Prettier
+- Jest + `jest-expo` + React Native Testing Library
+- Zod (environment validation)
+- GitHub Actions CI
 
-These are proposed baseline choices. Record material changes as Architecture Decision Records (ADRs).
+## Development Setup
 
-## Development
+### Prerequisites
 
-Setup instructions will be added after the application bootstrap task is completed. Do not invent environment values; use `.env.example` and the relevant setup docs.
+- Node.js 22+
+- `pnpm` (version 10.30.3 specified via `packageManager` field)
+
+### Installation
+
+```bash
+pnpm install
+```
+
+### Running the App
+
+```bash
+# Start Metro bundler / Expo dev server
+pnpm start
+
+# Run on iOS simulator (macOS required)
+pnpm ios
+
+# Run on Android emulator
+pnpm android
+
+# Run on Web
+pnpm web
+```
+
+### Quality Checks & Verification
+
+```bash
+# Run ESLint
+pnpm lint
+
+# Run TypeScript typecheck
+pnpm typecheck
+
+# Run Jest unit & component tests
+pnpm test
+
+# Run Expo doctor diagnostics
+pnpm run doctor
+```
+
+## Environment Configuration
+
+Copy `.env.example` to `.env` if custom public configuration is needed:
+
+```bash
+cp .env.example .env
+```
+
+Environment variables prefixed with `EXPO_PUBLIC_` are validated safely using Zod at runtime (`src/config/env.ts`).
 
 ## Contribution
 

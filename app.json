@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "BJJ_Lang",
+    "slug": "bjj-lang",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "scheme": "bjj-lang",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bjjlang.app"
+    },
+    "android": {
+      "package": "com.bjjlang.app"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
