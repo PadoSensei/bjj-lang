@@ -32,6 +32,7 @@ export default function SelectDirectionScreen() {
           ]}
           onPress={() => handleSelect('pt-BR->en')}
           testID="select-pt-BR->en-card"
+          accessibilityLabel="Português to English course direction"
         >
           <View style={styles.optionHeader}>
             <Text style={styles.flags}>🇧🇷 ➔ 🇺🇸</Text>
@@ -47,6 +48,7 @@ export default function SelectDirectionScreen() {
             onPress={() => handleSelect('pt-BR->en')}
             style={styles.selectBtn}
             testID="select-pt-BR->en-btn"
+            accessibilityLabel="Select Português to English course direction"
           />
         </Card>
 
@@ -57,6 +59,7 @@ export default function SelectDirectionScreen() {
           ]}
           onPress={() => handleSelect('en->pt-BR')}
           testID="select-en->pt-BR-card"
+          accessibilityLabel="English to Português course direction"
         >
           <View style={styles.optionHeader}>
             <Text style={styles.flags}>🇺🇸 ➔ 🇧🇷</Text>
@@ -72,6 +75,7 @@ export default function SelectDirectionScreen() {
             onPress={() => handleSelect('en->pt-BR')}
             style={styles.selectBtn}
             testID="select-en->pt-BR-btn"
+            accessibilityLabel="Select English to Português course direction"
           />
         </Card>
       </View>
