@@ -1,0 +1,13 @@
+
+> bjj-lang@0.1.0 web /app
+> expo start --web
+
+Starting project at /app
+Starting Metro Bundler
+
+Waiting on http://localhost:8081
+
+Logs for your project will appear below.
+TypeScript: The tsconfig.json#include property has been updated
+Web Bundled 9768ms node_modules/.pnpm/expo-router@58.0.26_fa7c009fac8452246f0088cc13901b6f/node_modules/expo-router/entry.js (862 modules)
+Web  INFO  %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
