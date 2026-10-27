@@ -27,6 +27,7 @@ Bootstrap shell phase (M0). Minimum mobile app foundation and CI pipeline establ
 - [API strategy](docs/architecture/API.md)
 - [Design system](docs/design/DESIGN_SYSTEM.md)
 - [Engineering workflow](docs/engineering/DEVELOPMENT_WORKFLOW.md)
+- [Milestone 1.1 Acceptance Audit](docs/engineering/M1.1_ACCEPTANCE_AUDIT.md)
 - [Security and privacy](docs/security/SECURITY.md)
 - [Testing strategy](docs/testing/TEST_STRATEGY.md)
 - [Curriculum](docs/content/CURRICULUM.md)

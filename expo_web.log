@@ -8,6 +8,33 @@ Starting Metro Bundler
 Waiting on http://localhost:8081
 
 Logs for your project will appear below.
-TypeScript: The tsconfig.json#include property has been updated
-Web Bundled 9768ms node_modules/.pnpm/expo-router@58.0.26_fa7c009fac8452246f0088cc13901b6f/node_modules/expo-router/entry.js (862 modules)
+Web Bundled 9156ms node_modules/.pnpm/expo-router@58.0.27_9db512f6f5cece57932527872bc638aa/node_modules/expo-router/entry.js (862 modules)
 Web  INFO  %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+Web  ERROR
+
+Code: Button.tsx
+[0m [90m 40 |[39m
+ [90m 41 |[39m   [36mreturn[39m (
+[31m[1m>[22m[39m[90m 42 |[39m     [33m<[39m[33mPressable[39m
+ [90m    |[39m     [31m[1m^[22m[39m
+ [90m 43 |[39m       testID[33m=[39m{testID}
+ [90m 44 |[39m       disabled[33m=[39m{[33m![39misInteractive}
+ [90m 45 |[39m       accessibilityRole[33m=[39m[32m"button"[39m[0m
+Call Stack
+  Button (src/components/ui/Button.tsx:42:5)
+  SelectDirectionScreen (app/select-direction.tsx:44:11)
+  RootLayout (app/_layout.tsx:10:7)
+Web  ERROR
+
+Code: Card.tsx
+[0m [90m 26 |[39m   [36mif[39m (onPress) {
+ [90m 27 |[39m     [36mreturn[39m (
+[31m[1m>[22m[39m[90m 28 |[39m       [33m<[39m[33mPressable[39m
+ [90m    |[39m       [31m[1m^[22m[39m
+ [90m 29 |[39m         testID[33m=[39m{testID}
+ [90m 30 |[39m         onPress[33m=[39m{onPress}
+ [90m 31 |[39m         accessibilityRole[33m=[39m[32m"button"[39m[0m
+Call Stack
+  Card (src/components/ui/Card.tsx:28:7)
+  SelectDirectionScreen (app/select-direction.tsx:28:9)
+  RootLayout (app/_layout.tsx:10:7)
