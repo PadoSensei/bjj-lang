@@ -1,18 +1,23 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { CourseProvider } from '../src/context/CourseContext';
+import { colors } from '../src/theme/tokens';
 
 export default function RootLayout() {
   return (
-    <>
-      <StatusBar style="auto" />
+    <CourseProvider>
+      <StatusBar style="light" />
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#0f172a',
+            backgroundColor: colors.background,
           },
-          headerTintColor: '#ffffff',
+          headerTintColor: colors.textPrimary,
           headerTitleStyle: {
             fontWeight: 'bold',
+          },
+          contentStyle: {
+            backgroundColor: colors.background,
           },
         }}
       >
@@ -20,9 +25,23 @@ export default function RootLayout() {
           name="index"
           options={{
             title: 'BJJ_Lang',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="select-direction"
+          options={{
+            title: 'Select Course Direction',
+            presentation: 'modal',
+          }}
+        />
+        <Stack.Screen
+          name="lesson/[id]"
+          options={{
+            title: 'Lesson',
           }}
         />
       </Stack>
-    </>
+    </CourseProvider>
   );
 }
