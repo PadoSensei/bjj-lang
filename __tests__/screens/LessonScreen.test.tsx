@@ -26,7 +26,10 @@ describe('LessonScreen Integration', () => {
     mockParams = { id: 'invalid-id-xyz' };
 
     const { getByTestId, getByText } = render(
-      <CourseProvider initialDirection="en->pt-BR">
+      <CourseProvider
+        initialDirection="en->pt-BR"
+        initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+      >
         <LessonScreen />
       </CourseProvider>
     );
@@ -40,7 +43,10 @@ describe('LessonScreen Integration', () => {
 
   it('navigates through vocabulary, multiple choice, translation recall, and completion screen', () => {
     const { getByTestId, getByText } = render(
-      <CourseProvider initialDirection="pt-BR->en">
+      <CourseProvider
+        initialDirection="pt-BR->en"
+        initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+      >
         <LessonScreen />
       </CourseProvider>
     );
