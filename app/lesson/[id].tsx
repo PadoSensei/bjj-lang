@@ -1,76 +1,120 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ScreenContainer } from '../../src/components/ui/ScreenContainer';
-import { Card } from '../../src/components/ui/Card';
-import { Button } from '../../src/components/ui/Button';
-import { colors, spacing, typography } from '../../src/theme/tokens';
+import { useCourse } from '../../src/context/CourseContext';
+import { useLesson } from '../../src/features/lesson/useLesson';
+import {
+  LessonHeader,
+  VocabularyView,
+  MultipleChoiceView,
+  TranslationRecallView,
+  LessonCompletionView,
+  LessonNotFoundView,
+} from '../../src/features/lesson/components';
+import { MultipleChoiceExercise, TranslationRecallExercise } from '../../src/types/lesson';
+import { spacing } from '../../src/theme/tokens';
 
-export default function LessonPlaceholderScreen() {
+export default function LessonScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { direction } = useCourse();
+
+  const lessonState = useLesson(id, direction);
+
+  const handleReturnToCourse = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.push('/');
+    }
+  };
+
+  if (!lessonState.lesson) {
+    return (
+      <ScreenContainer testID="lesson-screen-not-found">
+        <LessonNotFoundView lessonId={id} onReturnToCourse={handleReturnToCourse} />
+      </ScreenContainer>
+    );
+  }
+
+  const localizedTitle =
+    direction === 'en->pt-BR'
+      ? lessonState.lesson.title.en
+      : lessonState.lesson.title.pt;
+
+  const localizedObjective =
+    direction === 'en->pt-BR'
+      ? lessonState.lesson.objective.en
+      : lessonState.lesson.objective.pt;
 
   return (
-    <ScreenContainer testID="lesson-placeholder-screen">
-      <View style={styles.content}>
-        <Card style={styles.card} testID="lesson-placeholder-card">
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>M1.2 Placeholder</Text>
-          </View>
-          <Text style={styles.title} testID="lesson-id-title">
-            Lesson Route: {id || 'Unknown'}
-          </Text>
-          <Text style={styles.description}>
-            Interactive lesson mechanics, flashcards, exercises, and audio controls
-            will be fully implemented in Milestone M1.2.
-          </Text>
-        </Card>
-
-        <Button
-          title="Return to Learning Path"
-          variant="primary"
-          onPress={() => router.back()}
-          testID="back-to-home-btn"
+    <ScreenContainer testID="lesson-screen">
+      <View style={styles.container}>
+        <LessonHeader
+          title={localizedTitle}
+          progressText={lessonState.progressText}
+          progressValue={lessonState.progressValue}
+          onClose={handleReturnToCourse}
         />
+
+        <View style={styles.content}>
+          {lessonState.step === 'vocabulary' && (
+            <VocabularyView
+              objective={localizedObjective}
+              vocabulary={lessonState.lesson.vocabulary}
+              direction={direction}
+              onStartExercises={lessonState.startExercises}
+            />
+          )}
+
+          {lessonState.step === 'exercise' && lessonState.currentExercise && lessonState.formattedExercise && (
+            <>
+              {lessonState.currentExercise.type === 'multiple-choice' ? (
+                <MultipleChoiceView
+                  exercise={lessonState.currentExercise as MultipleChoiceExercise}
+                  formatted={lessonState.formattedExercise}
+                  selectedOptionIndex={lessonState.selectedOptionIndex}
+                  isSubmitted={lessonState.isSubmitted}
+                  onSelectOption={lessonState.selectOption}
+                  onSubmitAnswer={lessonState.submitMultipleChoice}
+                  onNext={lessonState.nextStep}
+                />
+              ) : (
+                <TranslationRecallView
+                  exercise={lessonState.currentExercise as TranslationRecallExercise}
+                  formatted={lessonState.formattedExercise}
+                  isAnswerRevealed={lessonState.isAnswerRevealed}
+                  isSubmitted={lessonState.isSubmitted}
+                  recallRating={lessonState.recallRating}
+                  onRevealAnswer={lessonState.revealRecallAnswer}
+                  onSubmitRating={lessonState.submitRecallRating}
+                  onNext={lessonState.nextStep}
+                />
+              )}
+            </>
+          )}
+
+          {lessonState.step === 'completion' && (
+            <LessonCompletionView
+              lessonTitle={localizedTitle}
+              score={lessonState.score}
+              onRetry={lessonState.retryLesson}
+              onReturnToCourse={handleReturnToCourse}
+            />
+          )}
+        </View>
       </View>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    gap: spacing.xl,
-  },
-  card: {
-    gap: spacing.md,
-    alignItems: 'center',
-    padding: spacing.xl,
-  },
-  badge: {
-    backgroundColor: colors.surfaceHover,
-    borderColor: colors.primary,
-    borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: 20,
-  },
-  badgeText: {
-    color: colors.primary,
-    fontSize: typography.fontSize.xs,
-    fontWeight: typography.fontWeight.semibold,
-  },
-  title: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: typography.fontWeight.bold,
-    color: colors.textPrimary,
-    textAlign: 'center',
-  },
-  description: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 22,
+    marginTop: spacing.xs,
   },
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import SelectDirectionScreen from '../../app/select-direction';
-import LessonPlaceholderScreen from '../../app/lesson/[id]';
+import LessonScreen from '../../app/lesson/[id]';
 import { CourseProvider } from '../../src/context/CourseContext';
 
 const mockPush = jest.fn();
@@ -12,6 +12,7 @@ jest.mock('expo-router', () => ({
   useRouter: () => ({
     push: mockPush,
     back: mockBack,
+    canGoBack: () => true,
   }),
   useLocalSearchParams: () => mockParams,
 }));
@@ -38,16 +39,20 @@ describe('Screen Navigation & Integration Tests', () => {
     });
   });
 
-  describe('LessonPlaceholderScreen', () => {
-    it('renders placeholder with lesson ID and handles back navigation', () => {
-      mockParams = { id: 'lesson-xyz' };
+  describe('LessonScreen', () => {
+    it('renders lesson screen with lesson ID and handles navigation', () => {
+      mockParams = { id: 'lesson-1-1' };
 
-      const { getByTestId, getByText } = render(<LessonPlaceholderScreen />);
+      const { getByTestId, getByText } = render(
+        <CourseProvider initialDirection="pt-BR->en">
+          <LessonScreen />
+        </CourseProvider>
+      );
 
-      expect(getByTestId('lesson-placeholder-card')).toBeTruthy();
-      expect(getByText('Lesson Route: lesson-xyz')).toBeTruthy();
+      expect(getByTestId('lesson-screen')).toBeTruthy();
+      expect(getByText('Vocabulary Review')).toBeTruthy();
 
-      fireEvent.press(getByTestId('back-to-home-btn'));
+      fireEvent.press(getByTestId('lesson-close-btn'));
       expect(mockBack).toHaveBeenCalledTimes(1);
     });
   });
