@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { CourseDirection } from '../../components/ui/CourseDirectionSelector';
 import { MOCK_LESSONS } from '../../data/mockLessons';
 import {
@@ -86,7 +86,15 @@ export function calculateLessonScore(
   };
 }
 
-export function useLesson(lessonId: string | undefined, direction: CourseDirection) {
+export interface UseLessonOptions {
+  onComplete?: (lessonId: string) => void;
+}
+
+export function useLesson(
+  lessonId: string | undefined,
+  direction: CourseDirection,
+  options?: UseLessonOptions
+) {
   const lesson: LessonData | null = useMemo(() => {
     if (!lessonId) return null;
     return MOCK_LESSONS[lessonId] || null;
@@ -100,6 +108,11 @@ export function useLesson(lessonId: string | undefined, direction: CourseDirecti
   const [recallRating, setRecallRating] = useState<SelfRating | null>(null);
   const [results, setResults] = useState<ExerciseResult[]>([]);
 
+  const onCompleteRef = useRef(options?.onComplete);
+  useEffect(() => {
+    onCompleteRef.current = options?.onComplete;
+  }, [options?.onComplete]);
+
   // Reset all state if lessonId changes
   useEffect(() => {
     setStep('vocabulary');
@@ -110,6 +123,13 @@ export function useLesson(lessonId: string | undefined, direction: CourseDirecti
     setRecallRating(null);
     setResults([]);
   }, [lessonId]);
+
+  // Trigger onComplete callback when transitioning to completion step
+  useEffect(() => {
+    if (step === 'completion' && lesson?.id) {
+      onCompleteRef.current?.(lesson.id);
+    }
+  }, [step, lesson?.id]);
 
   const currentExercise = useMemo(() => {
     if (!lesson || !lesson.exercises || lesson.exercises.length === 0) return null;

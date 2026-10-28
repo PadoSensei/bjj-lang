@@ -76,10 +76,59 @@ describe('Lesson Feature Logic (useLesson)', () => {
     });
   });
 
-  describe('useLesson Hook State Transitions', () => {
+  describe('useLesson Hook State Transitions & Completion', () => {
     it('returns null lesson for non-existent ID', () => {
       const { result } = renderHook(() => useLesson('non-existent-id', 'pt-BR->en'));
       expect(result.current.lesson).toBeNull();
+    });
+
+    it('triggers onComplete callback when reaching completion step', () => {
+      const onCompleteMock = jest.fn();
+      const { result } = renderHook(() =>
+        useLesson('lesson-1-1', 'pt-BR->en', { onComplete: onCompleteMock })
+      );
+
+      expect(result.current.step).toBe('vocabulary');
+      expect(onCompleteMock).not.toHaveBeenCalled();
+
+      // Start exercises and go through them
+      act(() => {
+        result.current.startExercises();
+      });
+      expect(result.current.step).toBe('exercise');
+      expect(onCompleteMock).not.toHaveBeenCalled();
+
+      // Exercise 1
+      act(() => {
+        result.current.nextStep();
+      });
+      // Exercise 2
+      act(() => {
+        result.current.nextStep();
+      });
+      // Complete all exercises -> completion step
+      act(() => {
+        result.current.nextStep();
+      });
+
+      expect(result.current.step).toBe('completion');
+      expect(onCompleteMock).toHaveBeenCalledWith('lesson-1-1');
+    });
+
+    it('does not trigger onComplete if learner exits early', () => {
+      const onCompleteMock = jest.fn();
+      const { result, unmount } = renderHook(() =>
+        useLesson('lesson-1-1', 'pt-BR->en', { onComplete: onCompleteMock })
+      );
+
+      act(() => {
+        result.current.startExercises();
+      });
+
+      // Simulated early exit / unmount during exercises
+      unmount();
+
+      expect(onCompleteMock).not.toHaveBeenCalled();
     });
 
     it('loads lesson and supports full exercise interaction cycle and retry', () => {

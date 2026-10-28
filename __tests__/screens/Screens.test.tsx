@@ -25,7 +25,10 @@ describe('Screen Navigation & Integration Tests', () => {
   describe('SelectDirectionScreen', () => {
     it('renders both direction options and handles selection', () => {
       const { getByTestId, getByText } = render(
-        <CourseProvider initialDirection="pt-BR->en">
+        <CourseProvider
+          initialDirection="pt-BR->en"
+          initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+        >
           <SelectDirectionScreen />
         </CourseProvider>
       );
@@ -44,7 +47,10 @@ describe('Screen Navigation & Integration Tests', () => {
       mockParams = { id: 'lesson-1-1' };
 
       const { getByTestId, getByText } = render(
-        <CourseProvider initialDirection="pt-BR->en">
+        <CourseProvider
+          initialDirection="pt-BR->en"
+          initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+        >
           <LessonScreen />
         </CourseProvider>
       );

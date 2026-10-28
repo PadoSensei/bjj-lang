@@ -12,7 +12,9 @@ import { colors, spacing, typography } from '../src/theme/tokens';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { direction, setDirection, courseData } = useCourse();
+  const { direction, setDirection, courseData, courseProgress } = useCourse();
+
+  const coursePercentage = Math.round(courseProgress.progress * 100);
 
   return (
     <ScreenContainer testID="home-screen-container">
@@ -57,6 +59,21 @@ export default function HomeScreen() {
           <Text style={styles.courseSubtitle}>
             {courseData.subtitle}
           </Text>
+
+          {/* Overall Course Progress Section */}
+          <View style={styles.courseProgressSection} testID="overall-course-progress-section">
+            <View style={styles.courseProgressHeader}>
+              <Text style={styles.courseProgressLabel}>Overall Course Progress</Text>
+              <Text style={styles.courseProgressValue} testID="overall-course-progress-text">
+                {`${courseProgress.completedCount} of ${courseProgress.totalCount} complete (${coursePercentage}%)`}
+              </Text>
+            </View>
+            <ProgressBar
+              progress={courseProgress.progress}
+              showPercentage={false}
+              testID="overall-course-progress-bar"
+            />
+          </View>
         </Card>
 
         {/* Units / Learning Path Progression */}
@@ -67,49 +84,70 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        {courseData.units.map((unit) => (
-          <Card key={unit.id} style={styles.unitCard} testID={`unit-card-${unit.id}`}>
-            <View style={styles.unitHeader}>
-              <BeltBadge belt={unit.belt} testID={`unit-belt-${unit.id}`} />
-              <Text style={styles.unitTitle}>{unit.title}</Text>
-            </View>
+        {courseData.units.map((unit) => {
+          const unitCompletedCount = unit.lessons.filter((l) => l.completed).length;
+          const unitTotalCount = unit.lessons.length;
 
-            <Text style={styles.unitDescription}>{unit.description}</Text>
+          return (
+            <Card key={unit.id} style={styles.unitCard} testID={`unit-card-${unit.id}`}>
+              <View style={styles.unitHeader}>
+                <BeltBadge belt={unit.belt} testID={`unit-belt-${unit.id}`} />
+                <Text style={styles.unitTitle}>{unit.title}</Text>
+              </View>
 
-            <View style={styles.progressContainer}>
-              <Text style={styles.progressLabel}>Unit Progress</Text>
-              <ProgressBar
-                progress={unit.progress}
-                showPercentage
-                testID={`unit-progress-${unit.id}`}
-              />
-            </View>
+              <Text style={styles.unitDescription}>{unit.description}</Text>
 
-            {/* Lessons List */}
-            <View style={styles.lessonsContainer}>
-              {unit.lessons.map((lesson) => (
-                <View key={lesson.id} style={styles.lessonRow}>
-                  <View style={styles.lessonInfo}>
-                    <Text style={styles.lessonTitle}>
-                      {lesson.completed ? '✓ ' : '• '}{lesson.title}
-                    </Text>
-                    <Text style={styles.lessonMeta}>
-                      {lesson.estimatedMinutes} min • {lesson.conceptCount} concepts
-                    </Text>
-                  </View>
-
-                  <Button
-                    title={lesson.completed ? 'Review' : 'Start'}
-                    variant={lesson.completed ? 'secondary' : 'primary'}
-                    size="sm"
-                    onPress={() => router.push(`/lesson/${lesson.id}`)}
-                    testID={`start-lesson-btn-${lesson.id}`}
-                  />
+              <View style={styles.progressContainer}>
+                <View style={styles.unitProgressHeader}>
+                  <Text style={styles.progressLabel}>Unit Progress</Text>
+                  <Text style={styles.unitProgressText} testID={`unit-progress-text-${unit.id}`}>
+                    {`${unitCompletedCount} of ${unitTotalCount} complete`}
+                  </Text>
                 </View>
-              ))}
-            </View>
-          </Card>
-        ))}
+                <ProgressBar
+                  progress={unit.progress}
+                  showPercentage
+                  testID={`unit-progress-${unit.id}`}
+                />
+              </View>
+
+              {/* Lessons List */}
+              <View style={styles.lessonsContainer}>
+                {unit.lessons.map((lesson) => (
+                  <View key={lesson.id} style={styles.lessonRow} testID={`lesson-row-${lesson.id}`}>
+                    <View style={styles.lessonInfo}>
+                      <Text style={styles.lessonTitle} testID={`lesson-title-${lesson.id}`}>
+                        <Text
+                          style={[
+                            styles.lessonStatusIndicator,
+                            lesson.completed ? styles.statusCompleted : styles.statusIncomplete,
+                          ]}
+                          testID={`lesson-status-${lesson.id}`}
+                        >
+                          {lesson.completed ? '✓ ' : '• '}
+                        </Text>
+                        {lesson.title}
+                      </Text>
+                      <Text style={styles.lessonMeta}>
+                        {lesson.estimatedMinutes} min • {lesson.conceptCount} concepts
+                        {lesson.completed ? ' • Completed' : ''}
+                      </Text>
+                    </View>
+
+                    <Button
+                      title={lesson.completed ? 'Review' : 'Start'}
+                      variant={lesson.completed ? 'secondary' : 'primary'}
+                      size="sm"
+                      onPress={() => router.push(`/lesson/${lesson.id}`)}
+                      testID={`start-lesson-btn-${lesson.id}`}
+                      accessibilityLabel={`${lesson.completed ? 'Review' : 'Start'} lesson ${lesson.title}`}
+                    />
+                  </View>
+                ))}
+              </View>
+            </Card>
+          );
+        })}
       </ScrollView>
     </ScreenContainer>
   );
@@ -147,7 +185,7 @@ const styles = StyleSheet.create({
   courseHeaderCard: {
     backgroundColor: colors.surfaceHover,
     borderColor: colors.primary,
-    gap: spacing.xs,
+    gap: spacing.sm,
   },
   courseTitle: {
     fontSize: typography.fontSize.lg,
@@ -157,6 +195,30 @@ const styles = StyleSheet.create({
   courseSubtitle: {
     fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
+  },
+  courseProgressSection: {
+    marginTop: spacing.xs,
+    paddingTop: spacing.xs,
+    borderTopWidth: 1,
+    borderTopColor: colors.surfaceBorder,
+    gap: spacing.xs,
+  },
+  courseProgressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+  },
+  courseProgressLabel: {
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  courseProgressValue: {
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textPrimary,
   },
   unitsHeader: {
     flexDirection: 'row',
@@ -192,9 +254,19 @@ const styles = StyleSheet.create({
   progressContainer: {
     gap: spacing.xs,
   },
+  unitProgressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   progressLabel: {
     fontSize: typography.fontSize.xs,
     color: colors.textMuted,
+  },
+  unitProgressText: {
+    fontSize: typography.fontSize.xs,
+    color: colors.textSecondary,
+    fontWeight: typography.fontWeight.medium,
   },
   lessonsContainer: {
     borderTopWidth: 1,
@@ -216,6 +288,15 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.sm,
     fontWeight: typography.fontWeight.medium,
     color: colors.textPrimary,
+  },
+  lessonStatusIndicator: {
+    fontWeight: typography.fontWeight.bold,
+  },
+  statusCompleted: {
+    color: colors.success,
+  },
+  statusIncomplete: {
+    color: colors.textMuted,
   },
   lessonMeta: {
     fontSize: typography.fontSize.xs,

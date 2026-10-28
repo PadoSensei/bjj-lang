@@ -18,9 +18,13 @@ import { spacing } from '../../src/theme/tokens';
 export default function LessonScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { direction } = useCourse();
+  const { direction, markLessonComplete } = useCourse();
 
-  const lessonState = useLesson(id, direction);
+  const lessonState = useLesson(id, direction, {
+    onComplete: (completedLessonId) => {
+      markLessonComplete(completedLessonId);
+    },
+  });
 
   const handleReturnToCourse = () => {
     if (router.canGoBack()) {
