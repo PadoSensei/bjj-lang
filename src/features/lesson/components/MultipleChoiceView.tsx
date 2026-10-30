@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/Button';
 import { FormattedExerciseData } from '../useLesson';
 import { MultipleChoiceExercise } from '../../../types/lesson';
 import { colors, spacing, typography } from '../../../theme/tokens';
+import { ContextualVocabularyView } from '../../vocabulary/components/ContextualVocabularyView';
 
 export interface MultipleChoiceViewProps {
   exercise: MultipleChoiceExercise;
@@ -103,6 +104,13 @@ export const MultipleChoiceView: React.FC<MultipleChoiceViewProps> = ({
           ) : null}
           {formatted.explanationText ? (
             <Text style={styles.explanationText}>{formatted.explanationText}</Text>
+          ) : null}
+          {formatted.matchedVocab ? (
+            <ContextualVocabularyView
+              vocab={formatted.matchedVocab}
+              showTermHeader={false}
+              testID="mc-contextual-vocab"
+            />
           ) : null}
           <Button
             title="Continue"

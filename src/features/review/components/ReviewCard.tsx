@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/Button';
 import { FormattedReviewItem } from '../reviewScheduler';
 import { ReviewOutcome } from '../../../types/review';
 import { colors, spacing, typography } from '../../../theme/tokens';
+import { ContextualVocabularyView } from '../../vocabulary/components/ContextualVocabularyView';
 
 export interface ReviewCardProps {
   formattedItem: FormattedReviewItem;
@@ -62,13 +63,27 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({
             </View>
           ) : null}
 
-          {formattedItem.contextText ? (
-            <View style={styles.contextBox}>
-              <Text style={styles.contextLabel}>Context & Usage:</Text>
-              <Text style={styles.contextText} testID="review-context-text">
-                {formattedItem.contextText}
-              </Text>
-            </View>
+          {formattedItem.rawVocab ? (
+            <ContextualVocabularyView
+              vocab={formattedItem.rawVocab}
+              showTermHeader={false}
+              testID="review-contextual-vocab"
+            />
+          ) : formattedItem.contextText || formattedItem.examplePt ? (
+            <ContextualVocabularyView
+              vocab={{
+                id: formattedItem.vocabId,
+                termPt: formattedItem.promptTerm,
+                termEn: formattedItem.targetTerm,
+                context: formattedItem.contextText
+                  ? { pt: formattedItem.contextText, en: formattedItem.contextText }
+                  : undefined,
+                examplePt: formattedItem.examplePt,
+                exampleEn: formattedItem.exampleEn,
+              }}
+              showTermHeader={false}
+              testID="review-contextual-vocab"
+            />
           ) : null}
 
           {!isSubmitted ? (

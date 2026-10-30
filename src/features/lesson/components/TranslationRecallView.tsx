@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/Button';
 import { FormattedExerciseData } from '../useLesson';
 import { SelfRating, TranslationRecallExercise } from '../../../types/lesson';
 import { colors, spacing, typography } from '../../../theme/tokens';
+import { ContextualVocabularyView } from '../../vocabulary/components/ContextualVocabularyView';
 
 export interface TranslationRecallViewProps {
   exercise: TranslationRecallExercise;
@@ -56,6 +57,14 @@ export const TranslationRecallView: React.FC<TranslationRecallViewProps> = ({
 
           {formatted.explanationText ? (
             <Text style={styles.explanationText}>{formatted.explanationText}</Text>
+          ) : null}
+
+          {formatted.matchedVocab ? (
+            <ContextualVocabularyView
+              vocab={formatted.matchedVocab}
+              showTermHeader={false}
+              testID="recall-contextual-vocab"
+            />
           ) : null}
 
           {!isSubmitted ? (
