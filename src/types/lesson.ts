@@ -9,6 +9,8 @@ export interface VocabularyItem {
   termEn: string;
   phonetic?: string;
   context?: LocalizedText;
+  examplePt?: string;
+  exampleEn?: string;
 }
 
 export interface MultipleChoiceOption {

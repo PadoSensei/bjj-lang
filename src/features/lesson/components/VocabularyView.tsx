@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/Button';
 import { CourseDirection } from '../../../components/ui/CourseDirectionSelector';
 import { VocabularyItem } from '../../../types/lesson';
 import { colors, spacing, typography } from '../../../theme/tokens';
+import { ContextualVocabularyView } from '../../vocabulary/components/ContextualVocabularyView';
 
 export interface VocabularyViewProps {
   objective: string;
@@ -19,8 +20,6 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({
   direction,
   onStartExercises,
 }) => {
-  const isEnToPt = direction === 'en->pt-BR';
-
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -36,23 +35,14 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({
         Key Vocabulary ({vocabulary.length})
       </Text>
 
-      {vocabulary.map((item, idx) => {
-        const primaryTerm = isEnToPt ? item.termPt : item.termEn;
-        const secondaryTerm = isEnToPt ? item.termEn : item.termPt;
-        const contextText = isEnToPt ? item.context?.pt || item.context?.en : item.context?.en || item.context?.pt;
-
-        return (
-          <Card key={item.id || idx} style={styles.vocabCard} testID={`vocab-card-${idx}`}>
-            <View style={styles.termRow}>
-              <Text style={styles.primaryTerm}>{primaryTerm}</Text>
-              <Text style={styles.secondaryTerm}>• {secondaryTerm}</Text>
-            </View>
-            {contextText ? (
-              <Text style={styles.contextText}>{contextText}</Text>
-            ) : null}
-          </Card>
-        );
-      })}
+      {vocabulary.map((item, idx) => (
+        <ContextualVocabularyView
+          key={item.id || idx}
+          vocab={item}
+          direction={direction}
+          testID={`vocab-card-${idx}`}
+        />
+      ))}
 
       <View style={styles.actionContainer}>
         <Button
