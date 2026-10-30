@@ -4,8 +4,11 @@ import { CourseData, MOCK_COURSES } from '../data/mockCourseData';
 import { MOCK_LESSONS } from '../data/mockLessons';
 import { progressStorage, DirectionProgressMap } from '../services/storage/progressStorage';
 import { reviewStorage, DEFAULT_REVIEWS } from '../services/storage/reviewStorage';
+import { historyStorage, DEFAULT_HISTORY } from '../services/storage/historyStorage';
 import { DirectionReviewMap, ReviewOutcome, ReviewRecord } from '../types/review';
+import { DirectionHistoryMap, ReviewHistoryEntry } from '../types/history';
 import { getDueItems, getNextReviewTimestamp } from '../features/review/reviewScheduler';
+import { calculateReviewStatistics, ReviewStatistics } from '../features/review/reviewStatistics';
 
 export interface CourseProgressSummary {
   completedCount: number;
@@ -30,6 +33,13 @@ export interface CourseContextType {
   nextReviewTimestamp: number | null;
   refreshReviews: () => Promise<void>;
   recordReviewOutcome: (vocabId: string, outcome: ReviewOutcome, nextDueAt: number) => Promise<boolean>;
+
+  // Review History integration
+  historyMap: DirectionHistoryMap;
+  activeHistory: ReviewHistoryEntry[];
+  reviewStatistics: ReviewStatistics;
+  refreshHistory: () => Promise<void>;
+  recordHistoryEntry: (vocabId: string, outcome: ReviewOutcome, completedAt?: number) => Promise<boolean>;
 }
 
 const CourseContext = createContext<CourseContextType | undefined>(undefined);
@@ -39,6 +49,11 @@ export interface CourseProviderProps {
   initialDirection?: CourseDirection;
   initialCompletedLessons?: DirectionProgressMap;
   initialReviewRecords?: DirectionReviewMap;
+  initialHistoryRecords?: DirectionHistoryMap;
+}
+
+function generateHistoryId(): string {
+  return `hist_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
 
 export const CourseProvider: React.FC<CourseProviderProps> = ({
@@ -46,6 +61,7 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
   initialDirection = 'pt-BR->en',
   initialCompletedLessons,
   initialReviewRecords,
+  initialHistoryRecords,
 }) => {
   const [direction, setDirection] = useState<CourseDirection>(initialDirection);
   const [completedMap, setCompletedMap] = useState<DirectionProgressMap>(
@@ -57,13 +73,19 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
   const [reviewMap, setReviewMap] = useState<DirectionReviewMap>(
     initialReviewRecords || DEFAULT_REVIEWS
   );
+  const [historyMap, setHistoryMap] = useState<DirectionHistoryMap>(
+    initialHistoryRecords || DEFAULT_HISTORY
+  );
   const [isLoadingProgress, setIsLoadingProgress] = useState<boolean>(!initialCompletedLessons);
 
-  // Load progress and review records from persistent storage on mount if not provided as initial props
+  // Load progress, review records, and history from persistent storage on mount if not provided as initial props
   useEffect(() => {
     if (initialCompletedLessons) {
       if (initialReviewRecords) {
         setReviewMap(initialReviewRecords);
+      }
+      if (initialHistoryRecords) {
+        setHistoryMap(initialHistoryRecords);
       }
       setIsLoadingProgress(false);
       return;
@@ -71,14 +93,16 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
 
     let isMounted = true;
     async function loadStoredData() {
-      const [storedProgress, storedReviews] = await Promise.all([
+      const [storedProgress, storedReviews, storedHistory] = await Promise.all([
         progressStorage.loadCompletedLessons(),
         reviewStorage.loadReviewRecords(),
+        historyStorage.loadHistoryRecords(),
       ]);
 
       if (isMounted) {
         setCompletedMap(storedProgress);
         setReviewMap(storedReviews);
+        setHistoryMap(storedHistory);
         setIsLoadingProgress(false);
       }
     }
@@ -87,11 +111,16 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [initialCompletedLessons, initialReviewRecords]);
+  }, [initialCompletedLessons, initialReviewRecords, initialHistoryRecords]);
 
   const refreshReviews = useCallback(async () => {
     const storedReviews = await reviewStorage.loadReviewRecords();
     setReviewMap(storedReviews);
+  }, []);
+
+  const refreshHistory = useCallback(async () => {
+    const storedHistory = await historyStorage.loadHistoryRecords();
+    setHistoryMap(storedHistory);
   }, []);
 
   const activeCompletedIds = useMemo(() => {
@@ -101,6 +130,15 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
   const activeReviewRecords = useMemo(() => {
     return reviewMap[direction] || [];
   }, [reviewMap, direction]);
+
+  const activeHistory = useMemo(() => {
+    const entries = historyMap[direction] || [];
+    return [...entries].sort((a, b) => b.completedAt - a.completedAt);
+  }, [historyMap, direction]);
+
+  const reviewStatistics = useMemo(() => {
+    return calculateReviewStatistics(activeHistory);
+  }, [activeHistory]);
 
   const dueReviewRecords = useMemo(() => {
     return getDueItems(activeReviewRecords);
@@ -170,13 +208,45 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
             [direction]: [...currentRecords, ...newRecords],
           };
           setReviewMap(updatedMap);
-          await reviewStorage.saveReviewRecords(updatedMap);
+          // Async background save to storage
+          reviewStorage.saveReviewRecords(updatedMap).catch((err) => {
+            console.warn('Failed to save review records in background:', err);
+          });
         }
       }
 
       return progressResult.success;
     },
     [direction, reviewMap]
+  );
+
+  const recordHistoryEntry = useCallback(
+    async (vocabId: string, outcome: ReviewOutcome, completedAt: number = Date.now()): Promise<boolean> => {
+      const newEntry: ReviewHistoryEntry = {
+        id: generateHistoryId(),
+        vocabId,
+        direction,
+        outcome,
+        completedAt,
+      };
+
+      setHistoryMap((prevMap) => {
+        const currentEntries = prevMap[direction] || [];
+        return {
+          ...prevMap,
+          [direction]: [...currentEntries, newEntry],
+        };
+      });
+
+      try {
+        const { success } = await historyStorage.addHistoryEntry(newEntry);
+        return success;
+      } catch (error) {
+        console.warn('Failed to persist history entry:', error);
+        return false;
+      }
+    },
+    [direction]
   );
 
   const recordReviewOutcome = useCallback(
@@ -208,9 +278,16 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
       };
 
       setReviewMap(updatedMap);
-      return await reviewStorage.saveReviewRecords(updatedMap);
+
+      // Record scheduling outcome
+      const savedReview = await reviewStorage.saveReviewRecords(updatedMap);
+
+      // Also record history entry (fails gracefully without interrupting review flow)
+      await recordHistoryEntry(vocabId, outcome, now);
+
+      return savedReview;
     },
-    [direction, reviewMap]
+    [direction, reviewMap, recordHistoryEntry]
   );
 
   // Derive dynamic courseData with recalculated unit progress & lesson completion statuses
@@ -280,6 +357,11 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
         nextReviewTimestamp,
         refreshReviews,
         recordReviewOutcome,
+        historyMap,
+        activeHistory,
+        reviewStatistics,
+        refreshHistory,
+        recordHistoryEntry,
       }}
     >
       {children}

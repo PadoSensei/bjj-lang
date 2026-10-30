@@ -13,7 +13,15 @@ import { colors, spacing, typography } from '../src/theme/tokens';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { direction, setDirection, courseData, courseProgress, dueReviewCount, nextReviewTimestamp } = useCourse();
+  const {
+    direction,
+    setDirection,
+    courseData,
+    courseProgress,
+    dueReviewCount,
+    nextReviewTimestamp,
+    reviewStatistics,
+  } = useCourse();
 
   const coursePercentage = Math.round(courseProgress.progress * 100);
 
@@ -107,6 +115,35 @@ export default function HomeScreen() {
                   ? `Start vocabulary review session with ${dueReviewCount} items due`
                   : 'View vocabulary review queue'
               }
+            />
+          </View>
+        </Card>
+
+        {/* Compact Review Insights Card */}
+        <Card style={styles.insightsCard} testID="review-insights-card">
+          <View style={styles.insightsHeaderRow}>
+            <View style={styles.insightsTextContainer}>
+              <Text style={styles.insightsCardTitle} testID="insights-card-title">
+                Review Insights
+              </Text>
+              {reviewStatistics.totalAttempts > 0 ? (
+                <Text style={styles.insightsStatsText} testID="insights-stats-text">
+                  {`${reviewStatistics.totalAttempts} total attempts • ${reviewStatistics.recallAccuracyPercentage}% accuracy • ${reviewStatistics.distinctVocabCount} terms reviewed`}
+                </Text>
+              ) : (
+                <Text style={styles.insightsEmptyText} testID="insights-empty-text">
+                  No review attempts recorded yet
+                </Text>
+              )}
+            </View>
+
+            <Button
+              title="View History"
+              variant="ghost"
+              size="sm"
+              onPress={() => router.push('/review/history')}
+              testID="view-review-history-btn"
+              accessibilityLabel="View detailed vocabulary review history"
             />
           </View>
         </Card>
@@ -281,6 +318,35 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   reviewCardSubtext: {
+    fontSize: typography.fontSize.xs,
+    color: colors.textMuted,
+  },
+  insightsCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.surfaceBorder,
+    borderWidth: 1,
+  },
+  insightsHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+  },
+  insightsTextContainer: {
+    flex: 1,
+    gap: 2,
+  },
+  insightsCardTitle: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textPrimary,
+  },
+  insightsStatsText: {
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.medium,
+    color: colors.textSecondary,
+  },
+  insightsEmptyText: {
     fontSize: typography.fontSize.xs,
     color: colors.textMuted,
   },
