@@ -208,10 +208,8 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
             [direction]: [...currentRecords, ...newRecords],
           };
           setReviewMap(updatedMap);
-          // Async background save to storage
-          reviewStorage.saveReviewRecords(updatedMap).catch((err) => {
-            console.warn('Failed to save review records in background:', err);
-          });
+          // Await save to ensure storage consistency and avoid unhandled promise timings in tests
+          await reviewStorage.saveReviewRecords(updatedMap);
         }
       }
 
