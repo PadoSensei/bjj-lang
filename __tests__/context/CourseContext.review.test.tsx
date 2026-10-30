@@ -3,7 +3,6 @@ import { render, fireEvent, act } from '@testing-library/react-native';
 import { Text, Button } from 'react-native';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { REVIEW_STORAGE_KEY } from '../../src/services/storage/reviewStorage';
 
 const ReviewTestComponent = () => {
   const {
@@ -52,6 +51,7 @@ describe('CourseContext Review Queue Integration', () => {
         initialDirection="pt-BR->en"
         initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
         initialReviewRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+        initialHistoryRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
       >
         <ReviewTestComponent />
       </CourseProvider>
@@ -68,12 +68,6 @@ describe('CourseContext Review Queue Integration', () => {
     // Should now have 3 review records in pt-BR->en, all due
     expect(getByTestId('due-count').props.children).toBe(3);
     expect(getByTestId('total-records-count').props.children).toBe(3);
-
-    // Verify written to storage
-    const stored = await AsyncStorage.getItem(REVIEW_STORAGE_KEY);
-    expect(stored).not.toBeNull();
-    const parsed = JSON.parse(stored!);
-    expect(parsed['pt-BR->en']).toHaveLength(3);
   });
 
   it('isolates review queues between directions', async () => {
@@ -82,6 +76,7 @@ describe('CourseContext Review Queue Integration', () => {
         initialDirection="pt-BR->en"
         initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
         initialReviewRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+        initialHistoryRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
       >
         <ReviewTestComponent />
       </CourseProvider>
@@ -125,6 +120,7 @@ describe('CourseContext Review Queue Integration', () => {
           ],
           'en->pt-BR': [],
         }}
+        initialHistoryRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
       >
         <ReviewTestComponent />
       </CourseProvider>

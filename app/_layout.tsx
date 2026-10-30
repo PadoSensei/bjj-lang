@@ -47,6 +47,12 @@ export default function RootLayout() {
             title: 'Vocabulary Review',
           }}
         />
+        <Stack.Screen
+          name="review/history"
+          options={{
+            title: 'Review History',
+          }}
+        />
       </Stack>
     </CourseProvider>
   );

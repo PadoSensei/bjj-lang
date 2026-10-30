@@ -36,6 +36,52 @@ describe('HomeScreen Component', () => {
     expect(getAllByText('Start').length).toBeGreaterThan(0);
   });
 
+  it('renders review insights card with empty state and navigates to review history', () => {
+    const { getByTestId, getByText } = render(
+      <CourseProvider
+        initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+        initialHistoryRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+      >
+        <HomeScreen />
+      </CourseProvider>
+    );
+
+    expect(getByTestId('review-insights-card')).toBeTruthy();
+    expect(getByText('No review attempts recorded yet')).toBeTruthy();
+
+    const viewHistoryBtn = getByTestId('view-review-history-btn');
+    fireEvent.press(viewHistoryBtn);
+
+    expect(mockPush).toHaveBeenCalledWith('/review/history');
+  });
+
+  it('renders review insights stats when history records exist', () => {
+    const { getByTestId, getByText } = render(
+      <CourseProvider
+        initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+        initialHistoryRecords={{
+          'pt-BR->en': [
+            {
+              id: 'h1',
+              vocabId: 'v1',
+              direction: 'pt-BR->en',
+              outcome: 'remembered',
+              completedAt: 1000,
+            },
+          ],
+          'en->pt-BR': [],
+        }}
+      >
+        <HomeScreen />
+      </CourseProvider>
+    );
+
+    expect(getByTestId('review-insights-card')).toBeTruthy();
+    expect(
+      getByText('1 total attempts • 100% accuracy • 1 terms reviewed')
+    ).toBeTruthy();
+  });
+
   it('renders partially completed state correctly', () => {
     const { getByTestId, getByText } = render(
       <CourseProvider
