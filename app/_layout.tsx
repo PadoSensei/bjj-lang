@@ -41,6 +41,12 @@ export default function RootLayout() {
             title: 'Lesson',
           }}
         />
+        <Stack.Screen
+          name="review"
+          options={{
+            title: 'Vocabulary Review',
+          }}
+        />
       </Stack>
     </CourseProvider>
   );

@@ -8,11 +8,12 @@ import { Card } from '../src/components/ui/Card';
 import { BeltBadge } from '../src/components/ui/BeltBadge';
 import { ProgressBar } from '../src/components/ui/ProgressBar';
 import { Button } from '../src/components/ui/Button';
+import { formatNextReviewTime } from '../src/features/review/components/ReviewEmptyView';
 import { colors, spacing, typography } from '../src/theme/tokens';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { direction, setDirection, courseData, courseProgress } = useCourse();
+  const { direction, setDirection, courseData, courseProgress, dueReviewCount, nextReviewTimestamp } = useCourse();
 
   const coursePercentage = Math.round(courseProgress.progress * 100);
 
@@ -72,6 +73,40 @@ export default function HomeScreen() {
               progress={courseProgress.progress}
               showPercentage={false}
               testID="overall-course-progress-bar"
+            />
+          </View>
+        </Card>
+
+        {/* Vocabulary Review Queue Banner Card */}
+        <Card style={styles.reviewCard} testID="review-queue-card">
+          <View style={styles.reviewHeaderRow}>
+            <View style={styles.reviewTextContainer}>
+              <Text style={styles.reviewCardTitle} testID="review-card-title">
+                Vocabulary Review Queue
+              </Text>
+              <Text style={styles.reviewCardStatusText} testID="review-card-due-text">
+                {dueReviewCount > 0
+                  ? `${dueReviewCount} item${dueReviewCount === 1 ? '' : 's'} due for review`
+                  : 'No reviews currently due'}
+              </Text>
+              {dueReviewCount === 0 && (
+                <Text style={styles.reviewCardSubtext} testID="review-card-subtext">
+                  {formatNextReviewTime(nextReviewTimestamp)}
+                </Text>
+              )}
+            </View>
+
+            <Button
+              title={dueReviewCount > 0 ? 'Start Review' : 'View Queue'}
+              variant={dueReviewCount > 0 ? 'primary' : 'secondary'}
+              size="sm"
+              onPress={() => router.push('/review')}
+              testID="start-review-queue-btn"
+              accessibilityLabel={
+                dueReviewCount > 0
+                  ? `Start vocabulary review session with ${dueReviewCount} items due`
+                  : 'View vocabulary review queue'
+              }
             />
           </View>
         </Card>
@@ -219,6 +254,35 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.xs,
     fontWeight: typography.fontWeight.semibold,
     color: colors.textPrimary,
+  },
+  reviewCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.secondary,
+    borderWidth: 1,
+  },
+  reviewHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+  },
+  reviewTextContainer: {
+    flex: 1,
+    gap: 2,
+  },
+  reviewCardTitle: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textPrimary,
+  },
+  reviewCardStatusText: {
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.primary,
+  },
+  reviewCardSubtext: {
+    fontSize: typography.fontSize.xs,
+    color: colors.textMuted,
   },
   unitsHeader: {
     flexDirection: 'row',
