@@ -13,18 +13,46 @@ import {
 
 export type LessonStep = 'vocabulary' | 'exercise' | 'completion';
 
+import { VocabularyItem } from '../../types/lesson';
+
 export interface FormattedExerciseData {
   promptText: string;
   explanationText?: string;
   optionsText?: string[];
   targetAnswerText?: string;
+  matchedVocab?: VocabularyItem;
 }
 
 export function getFormattedExerciseData(
   exercise: Exercise,
-  direction: CourseDirection
+  direction: CourseDirection,
+  vocabulary?: VocabularyItem[]
 ): FormattedExerciseData {
   const isEnToPt = direction === 'en->pt-BR';
+
+  let matchedVocab: VocabularyItem | undefined;
+  if (vocabulary && vocabulary.length > 0) {
+    if (exercise.type === 'translation-recall') {
+      const recall = exercise as TranslationRecallExercise;
+      matchedVocab = vocabulary.find(
+        (v) =>
+          v.termPt.toLowerCase() === recall.prompt.pt.toLowerCase() ||
+          v.termPt.toLowerCase() === recall.targetAnswer.pt.toLowerCase() ||
+          v.termEn.toLowerCase() === recall.prompt.en.toLowerCase() ||
+          v.termEn.toLowerCase() === recall.targetAnswer.en.toLowerCase()
+      );
+    } else if (exercise.type === 'multiple-choice') {
+      const mc = exercise as MultipleChoiceExercise;
+      const correctOption = mc.options[mc.correctIndex];
+      matchedVocab = vocabulary.find(
+        (v) =>
+          v.termPt.toLowerCase() === correctOption.pt.toLowerCase() ||
+          v.termEn.toLowerCase() === correctOption.en.toLowerCase() ||
+          mc.prompt.pt.toLowerCase().includes(v.termPt.toLowerCase()) ||
+          mc.prompt.en.toLowerCase().includes(v.termEn.toLowerCase())
+      );
+    }
+  }
 
   if (exercise.type === 'multiple-choice') {
     const mc = exercise as MultipleChoiceExercise;
@@ -32,6 +60,7 @@ export function getFormattedExerciseData(
       promptText: isEnToPt ? mc.prompt.en : mc.prompt.pt,
       explanationText: isEnToPt ? mc.explanation?.en : mc.explanation?.pt,
       optionsText: mc.options.map((opt) => (isEnToPt ? opt.pt : opt.en)),
+      matchedVocab,
     };
   } else {
     const recall = exercise as TranslationRecallExercise;
@@ -39,6 +68,7 @@ export function getFormattedExerciseData(
       promptText: isEnToPt ? recall.prompt.en : recall.prompt.pt,
       explanationText: isEnToPt ? recall.explanation?.en : recall.explanation?.pt,
       targetAnswerText: isEnToPt ? recall.targetAnswer.pt : recall.targetAnswer.en,
+      matchedVocab,
     };
   }
 }
@@ -138,8 +168,8 @@ export function useLesson(
 
   const formattedExercise = useMemo(() => {
     if (!currentExercise) return null;
-    return getFormattedExerciseData(currentExercise, direction);
-  }, [currentExercise, direction]);
+    return getFormattedExerciseData(currentExercise, direction, lesson?.vocabulary);
+  }, [currentExercise, direction, lesson?.vocabulary]);
 
   const selectOption = (index: number) => {
     if (isSubmitted) return;

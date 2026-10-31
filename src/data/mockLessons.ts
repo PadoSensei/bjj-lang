@@ -21,6 +21,8 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
           pt: 'Usado para saudar, demonstrar respeito e concordância no tatame.',
           en: 'Used to greet, show respect, and express agreement on the mat.',
         },
+        examplePt: 'Diga OSS ao cumprimentar o professor no início do treino.',
+        exampleEn: 'Say OSS when greeting the instructor at the start of practice.',
       },
       {
         id: 'vocab-1-1-2',
@@ -30,6 +32,8 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
           pt: 'Fazer uma reverência ou apertar as mãos antes de iniciar o treino.',
           en: 'To bow or shake hands before starting practice.',
         },
+        examplePt: 'Vamos cumprimentar o parceiro antes de começar o rola.',
+        exampleEn: 'Let us bow to our partner before starting the spar.',
       },
       {
         id: 'vocab-1-1-3',
@@ -39,6 +43,8 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
           pt: 'Usado ao entrar no tatame ou pedir passagem.',
           en: 'Used when entering the mat or asking to step through.',
         },
+        examplePt: 'Com licença, posso entrar no tatame?',
+        exampleEn: 'Excuse me, may I step onto the mat?',
       },
     ],
     exercises: [
@@ -118,6 +124,8 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
           pt: 'Comando para interromper imediatamente a luta ou exercício.',
           en: 'Call to immediately pause fighting or drilling.',
         },
+        examplePt: 'O professor gritou "Parou!" e todos interromperam a luta.',
+        exampleEn: 'The instructor shouted "Stop!" and everyone halted the roll.',
       },
       {
         id: 'vocab-1-2-2',
@@ -127,6 +135,8 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
           pt: 'Comando para trocar de parceiro ou de posição.',
           en: 'Call to switch training partners or change roles.',
         },
+        examplePt: 'Quando ouvir "Troca!", mude de parceiro rapidamente.',
+        exampleEn: 'When you hear "Switch!", change partners quickly.',
       },
       {
         id: 'vocab-1-2-3',
@@ -136,6 +146,8 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
           pt: 'Sinalizar desistência durante uma finalização.',
           en: 'Signal submission when caught in a hold.',
         },
+        examplePt: 'Se o golpe estiver encaixado, não hesite em bater.',
+        exampleEn: 'If the submission is locked in, do not hesitate to tap out.',
       },
     ],
     exercises: [
@@ -196,6 +208,8 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
           pt: 'Posição onde o atleta de baixo cruza as pernas atrás das costas do adversário.',
           en: 'Position where bottom athlete locks legs around opponent\'s back.',
         },
+        examplePt: 'Mantenha a guarda fechada para controlar a postura do parceiro.',
+        exampleEn: 'Keep closed guard to control your partner\'s posture.',
       },
       {
         id: 'vocab-2-1-2',
@@ -205,6 +219,8 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
           pt: 'Ação de superar as pernas do adversário e dominar a posição.',
           en: 'Action of getting past opponent\'s legs to establish control.',
         },
+        examplePt: 'Ele conseguiu a passagem de guarda com bom controle de quadril.',
+        exampleEn: 'He completed the guard pass with solid hip control.',
       },
     ],
     exercises: [

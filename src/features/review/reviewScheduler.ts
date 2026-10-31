@@ -66,6 +66,9 @@ export interface FormattedReviewItem {
   targetTerm: string;
   phonetic?: string;
   contextText?: string;
+  examplePt?: string;
+  exampleEn?: string;
+  rawVocab?: VocabularyItem;
 }
 
 /**
@@ -93,5 +96,8 @@ export function formatVocabForReview(
     targetTerm,
     phonetic: vocab.phonetic,
     contextText,
+    examplePt: vocab.examplePt,
+    exampleEn: vocab.exampleEn,
+    rawVocab: vocab,
   };
 }
