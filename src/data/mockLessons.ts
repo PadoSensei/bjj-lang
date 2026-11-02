@@ -188,6 +188,191 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
       },
     ],
   },
+  'lesson-1-3': {
+    id: 'lesson-1-3',
+    unitId: 'unit-1',
+    title: {
+      pt: 'Números e Respostas Básicas',
+      en: 'Numbers & Basic Responses',
+    },
+    objective: {
+      pt: 'Aprenda a contar repetições no treino e responder prontamente aos comandos do professor.',
+      en: 'Learn to count repetitions during drills and respond promptly to instructor calls.',
+    },
+    vocabulary: [
+      {
+        id: 'vocab-1-3-1',
+        termPt: 'Um',
+        termEn: 'One',
+        context: {
+          pt: 'Primeiro número utilizado para iniciar a contagem de repetições em exercícios específicos ou aquecimento.',
+          en: 'First number used to count repetitions during technical drills or warm-ups.',
+        },
+        examplePt: 'Vamos fazer cinco repetições de raspagem: um, dois, três, quatro, cinco.',
+        exampleEn: "Let's do five sweep repetitions: one, two, three, four, five.",
+      },
+      {
+        id: 'vocab-1-3-2',
+        termPt: 'Dois',
+        termEn: 'Two',
+        context: {
+          pt: 'Segundo número da contagem rítmica de posições no tatame.',
+          en: 'Second number in the rhythmic cadence of mat drills.',
+        },
+        examplePt: 'Faça duas entradas de queda antes de mudar o lado.',
+        exampleEn: 'Do two takedown entries before changing sides.',
+      },
+      {
+        id: 'vocab-1-3-3',
+        termPt: 'Três',
+        termEn: 'Three',
+        context: {
+          pt: 'Número frequentemente usado em séries de três repetições ou na contagem regressiva para iniciar o rola.',
+          en: 'Number commonly used for sets of three repetitions or countdowns to start rolling.',
+        },
+        examplePt: 'O professor contou até três e todos bateram palmas juntos.',
+        exampleEn: 'The instructor counted to three and everyone clapped together.',
+      },
+      {
+        id: 'vocab-1-3-4',
+        termPt: 'Quatro',
+        termEn: 'Four',
+        context: {
+          pt: 'Número que também corresponde aos quatro pontos concedidos por montada ou pegada de costas no Jiu-Jitsu.',
+          en: 'Number that also corresponds to the four points awarded for mount or back control in BJJ.',
+        },
+        examplePt: 'Estabilize a posição por três segundos para confirmar quatro pontos.',
+        exampleEn: 'Stabilize the position for three seconds to secure four points.',
+      },
+      {
+        id: 'vocab-1-3-5',
+        termPt: 'Cinco',
+        termEn: 'Five',
+        context: {
+          pt: 'Duração padrão comum para rounds de rola na academia (cinco minutos).',
+          en: 'Common standard round length for sparring at the academy (five minutes).',
+        },
+        examplePt: 'Faltam cinco minutos para terminar o treino livre.',
+        exampleEn: 'There are five minutes remaining in open sparring.',
+      },
+      {
+        id: 'vocab-1-3-6',
+        termPt: 'Sim',
+        termEn: 'Yes',
+        context: {
+          pt: 'Resposta afirmativa direta dada ao parceiro ou ao professor para confirmar instruções ou bem-estar.',
+          en: 'Direct affirmative answer given to training partners or coach to confirm instructions or well-being.',
+        },
+        examplePt: 'O professor perguntou se todos entenderam a posição e a turma respondeu: "Sim!".',
+        exampleEn: 'The professor asked if everyone understood the technique and the class answered: "Yes!".',
+      },
+      {
+        id: 'vocab-1-3-7',
+        termPt: 'Não',
+        termEn: 'No',
+        context: {
+          pt: 'Resposta negativa importante para comunicação de segurança e ajuste de limites durante os treinos.',
+          en: 'Crucial negative response for safety communication and setting boundaries during practice.',
+        },
+        examplePt: 'Não force a cervical se o colega não puder girar.',
+        exampleEn: "Don't force the neck if your partner cannot roll through.",
+      },
+      {
+        id: 'vocab-1-3-8',
+        termPt: 'Pronto',
+        termEn: 'Ready',
+        context: {
+          pt: 'Confirmação verbal indicando que o praticante já amarrou a faixa, ajustou o kimono ou está preparado para iniciar o rola.',
+          en: 'Verbal confirmation signaling the athlete has tied their belt, adjusted the gi, or is fully prepared to roll.',
+        },
+        examplePt: 'Amarrei a faixa e já estou pronto para o próximo rola.',
+        exampleEn: 'I tied my belt and I am ready for the next round.',
+      },
+      {
+        id: 'vocab-1-3-9',
+        termPt: 'Entendi',
+        termEn: 'I understand / Got it',
+        context: {
+          pt: 'Confirmação clara de que a instrução técnica ou detalhe demonstrado pelo mestre foi compreendido perfeitamente.',
+          en: 'Clear acknowledgement that the technique detail or coaching guidance was understood.',
+        },
+        examplePt: 'Entendi o detalhe da pegada na gola, vou praticar agora.',
+        exampleEn: 'I understand the collar grip detail, I will practice it now.',
+      },
+    ],
+    exercises: [
+      {
+        id: 'ex-1-3-mc1',
+        type: 'multiple-choice',
+        prompt: {
+          pt: 'Qual resposta confirma que você compreendeu a instrução técnica do professor?',
+          en: 'Which response confirms that you understood the technical instruction from the coach?',
+        },
+        options: [
+          { pt: 'Não', en: 'No' },
+          { pt: 'Entendi', en: 'I understand / Got it' },
+          { pt: 'Quatro', en: 'Four' },
+          { pt: 'Bater', en: 'Tap out' },
+        ],
+        correctIndex: 1,
+        explanation: {
+          pt: 'Entendi expressa que a instrução técnica foi compreendida.',
+          en: 'Entendi signals that you understand or got the coach\'s explanation.',
+        },
+      },
+      {
+        id: 'ex-1-3-recall1',
+        type: 'translation-recall',
+        prompt: {
+          pt: 'Três',
+          en: 'Three',
+        },
+        targetAnswer: {
+          pt: 'Três',
+          en: 'Three',
+        },
+        explanation: {
+          pt: 'Três é o terceiro número da contagem de repetições.',
+          en: 'Three is the third number when counting drill repetitions.',
+        },
+      },
+      {
+        id: 'ex-1-3-mc2',
+        type: 'multiple-choice',
+        prompt: {
+          pt: 'O que você diz para avisar ao parceiro que você está preparado para começar o rola?',
+          en: 'What do you say to let your partner know you are prepared to start rolling?',
+        },
+        options: [
+          { pt: 'Pronto', en: 'Ready' },
+          { pt: 'Parou!', en: 'Stop!' },
+          { pt: 'Um', en: 'One' },
+          { pt: 'Troca!', en: 'Switch!' },
+        ],
+        correctIndex: 0,
+        explanation: {
+          pt: 'Pronto significa que você está preparado para lutar.',
+          en: 'Pronto means ready to begin training or sparring.',
+        },
+      },
+      {
+        id: 'ex-1-3-recall2',
+        type: 'translation-recall',
+        prompt: {
+          pt: 'Pronto',
+          en: 'Ready',
+        },
+        targetAnswer: {
+          pt: 'Pronto',
+          en: 'Ready',
+        },
+        explanation: {
+          pt: 'Usado para confirmar prontidão antes do início da luta.',
+          en: 'Used to confirm readiness before sparring starts.',
+        },
+      },
+    ],
+  },
   'lesson-2-1': {
     id: 'lesson-2-1',
     unitId: 'unit-2',
@@ -250,4 +435,5 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
 // Also alias lesson-1-1-pt, lesson-1-2-pt, etc. to ensure unit-1-pt from mock course works seamlessly
 MOCK_LESSONS['lesson-1-1-pt'] = MOCK_LESSONS['lesson-1-1'];
 MOCK_LESSONS['lesson-1-2-pt'] = MOCK_LESSONS['lesson-1-2'];
+MOCK_LESSONS['lesson-1-3-pt'] = MOCK_LESSONS['lesson-1-3'];
 MOCK_LESSONS['lesson-2-1-pt'] = MOCK_LESSONS['lesson-2-1'];
