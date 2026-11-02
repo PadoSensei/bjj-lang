@@ -32,6 +32,7 @@ Bootstrap shell phase (M0). Minimum mobile app foundation and CI pipeline establ
 - [Testing strategy](docs/testing/TEST_STRATEGY.md)
 - [Curriculum](docs/content/CURRICULUM.md)
 - [Release process](docs/operations/RELEASE_PROCESS.md)
+- [Vercel deployment](docs/deployment/vercel.md)
 - [Bootstrap task](docs/engineering/BOOTSTRAP_TASK.md)
 - [ADRs](docs/architecture/ADR/)
 
@@ -70,8 +71,11 @@ pnpm ios
 # Run on Android emulator
 pnpm android
 
-# Run on Web
+# Run on Web (development)
 pnpm web
+
+# Build for Web (production static export)
+pnpm run build:web
 ```
 
 ### Quality Checks & Verification
