@@ -40,3 +40,6 @@ jobs:
 
       - name: Run Expo Doctor
         run: pnpm run doctor
+
+      - name: Run Expo web export
+        run: pnpm run build:web
