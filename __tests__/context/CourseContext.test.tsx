@@ -62,7 +62,7 @@ describe('CourseContext', () => {
     expect(getByTestId('course-title').props.children).toBe('Aprenda Inglês para Jiu-Jitsu');
     expect(getByTestId('completed-ids').props.children).toBe('lesson-1-1');
     expect(getByTestId('unit-1-lesson-1-completed').props.children).toBe('true');
-    expect(getByTestId('unit-1-progress').props.children).toBe(0.5); // 1 of 2 lessons completed in unit 1
+    expect(getByTestId('unit-1-progress').props.children).toBeCloseTo(1 / 3); // 1 of 3 lessons completed in unit 1
 
     // Switch direction to en->pt-BR
     await act(async () => {
@@ -87,14 +87,14 @@ describe('CourseContext', () => {
     );
 
     expect(getByTestId('completed-ids').props.children).toBe('');
-    expect(getByTestId('course-progress').props.children).toBe('0/4 (0%)');
+    expect(getByTestId('course-progress').props.children).toBe('0/5 (0%)');
 
     await act(async () => {
       fireEvent.press(getByTestId('complete-lesson-1-1-btn'));
     });
 
     expect(getByTestId('completed-ids').props.children).toBe('lesson-1-1');
-    expect(getByTestId('course-progress').props.children).toBe('1/4 (25%)');
+    expect(getByTestId('course-progress').props.children).toBe('1/5 (20%)');
 
     // Verify written to AsyncStorage
     const storedStr = await AsyncStorage.getItem(PROGRESS_STORAGE_KEY);
@@ -122,7 +122,7 @@ describe('CourseContext', () => {
       expect(getByTestId('completed-ids').props.children).toBe('lesson-1-1,lesson-1-2');
     });
 
-    expect(getByTestId('course-progress').props.children).toBe('2/4 (50%)');
-    expect(getByTestId('unit-1-progress').props.children).toBe(1); // 2 of 2 completed
+    expect(getByTestId('course-progress').props.children).toBe('2/5 (40%)');
+    expect(getByTestId('unit-1-progress').props.children).toBeCloseTo(2 / 3); // 2 of 3 completed
   });
 });
