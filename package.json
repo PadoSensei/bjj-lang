@@ -55,7 +55,11 @@
       "exclude": [
         "expo",
         "expo-router",
-        "react-native-screens"
+        "react-native-screens",
+        "expo-constants",
+        "expo-linking",
+        "jest-expo",
+        "react-native-safe-area-context"
       ]
     }
   }
