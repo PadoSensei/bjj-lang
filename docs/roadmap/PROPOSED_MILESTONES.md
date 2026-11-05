@@ -11,15 +11,20 @@
 
 The project's milestone structure spans two layers: the **actual GitHub milestones** registered in the repository issue tracker, and the **proposed milestone roadmap** designed to guide the project through MVP completion.
 
+To avoid ambiguity, milestones are explicitly labeled as follows:
+- **GitHub milestone #1:** `M0 — Project Bootstrap`
+- **GitHub milestone #2:** `M1 — Learning Experience Foundation`
+- **Proposed project milestone M2:** `M2 — Curriculum Completion`
+
 | Actual GitHub Milestone | GitHub Milestone ID | GitHub State | Roadmap Equivalent | Status & Relationship |
 |---|:---:|:---:|---|---|
-| **M0 — Project Bootstrap** | 1 (`#1`) | Open | M0 | **Complete in code (100%).** 1 issue closed (#1). Ready for owner administrative closure. |
-| **M1 — Learning Experience Foundation** | 2 (`#2`) | Open | M1 | **Functionally Complete on `master`.** All 6 acceptance criteria met. Displays 0% completion on GitHub due to unlinked issues; eligible for administrative closure after issue reconciliation. |
-| *(None)* | — | Not Created | **M2 — Curriculum Completion** | **Ready to begin.** Decoupled from backend infrastructure; completes Units 2 and 3 across both learning directions. |
+| **GitHub milestone #1: M0 — Project Bootstrap** | 1 (`#1`) | Open | M0 | **Complete in code (100% issue completion: 1/1 issue closed).** Milestone object remains open pending owner administrative closure. |
+| **GitHub milestone #2: M1 — Learning Experience Foundation** | 2 (`#2`) | Open | M1 | **Functionally Complete on `master`.** All 6 acceptance criteria met. Displays 0% completion on GitHub due to unlinked issues; eligible for administrative closure after issue reconciliation. |
+| *(None)* | — | Not Created | **Proposed project milestone M2: Curriculum Completion** | **Ready to begin.** Decoupled from backend infrastructure; completes Units 2 and 3 across both learning directions. |
 | *(None)* | — | Not Created | **M3 — Authentication & Backend Foundation** | **Proposed.** Cloud backend, Supabase Auth, profiles, age-gate safeguards. |
 | *(None)* | — | Not Created | **M4 — Learning Engine: FSRS & Offline Sync** | **Proposed.** Production FSRS algorithm, offline review sessions, safe cloud sync. |
 | *(None)* | — | Not Created | **M5 — Audio, Pronunciation & Progression** | **Proposed.** Native audio playback, XP accumulation engine, belt promotions. |
-| *(None)* | **M6 — Purchases, Entitlements & Account Lifecycle** | **Proposed.** In-app purchases (`en->pt-BR`), free path preservation (`pt-BR->en`), account deletion. |
+| *(None)* | — | Not Created | **M6 — Purchases, Entitlements & Account Lifecycle** | **Proposed.** In-app purchases (`en->pt-BR`), free path preservation (`pt-BR->en`), account deletion. |
 | *(None)* | — | Not Created | **M7 — Production Readiness & Release** | **Proposed.** Sentry crash monitoring, EAS build pipelines, store release review. |
 
 ---
@@ -41,8 +46,8 @@ To balance learner value, technical prerequisites, and dependency risks, the MVP
 
 ```mermaid
 graph TD
-    M0[M0 — Project Bootstrap<br>COMPLETED] --> M1[M1 — Learning Experience Foundation<br>COMPLETED IN CODE]
-    M1 --> M2[M2 — Curriculum Completion<br>READY TO BEGIN]
+    M0[GitHub milestone #1: M0 — Project Bootstrap<br>COMPLETED IN CODE] --> M1[GitHub milestone #2: M1 — Learning Experience Foundation<br>COMPLETED IN CODE]
+    M1 --> M2[Proposed project milestone M2: Curriculum Completion<br>READY TO BEGIN]
     M1 --> M3[M3 — Authentication & Backend Foundation]
     M2 --> M5[M5 — Audio, Pronunciation & Progression]
     M3 --> M4[M4 — Learning Engine: FSRS & Offline Sync]
@@ -53,7 +58,7 @@ graph TD
 ```
 
 ### Sequence Recommendations & Parallelization
-- **M2 & M3 Parallel Execution:** Once M1 is closed, **M2 (Curriculum)** and **M3 (Platform Foundation)** can proceed in parallel. Curriculum development does not require Supabase or authentication, and backend engineers can work on auth without waiting for lesson content.
+- **M2 & M3 Parallel Execution:** Once M1 is closed, **Proposed project milestone M2 (Curriculum)** and **M3 (Platform Foundation)** can proceed in parallel. Curriculum authoring does not require Supabase or authentication, and backend engineers can work on auth without waiting for lesson content.
 - **Dependency Gates:**
   - **M4 (Learning Engine)** requires M3 for authenticated user schemas and cloud mutation tables.
   - **M5 (Audio & Progression)** requires M2 for the full curriculum vocabulary corpus to attach audio assets and XP triggers.
@@ -66,7 +71,7 @@ graph TD
 
 ---
 
-### Milestone 1: Learning Experience Foundation (Completed in Code)
+### GitHub milestone #2: M1 — Learning Experience Foundation (Completed in Code)
 - **Objective:** Establish the Expo application shell, reusable design system tokens, bidirectional course navigation, interactive lesson mechanics, local progress persistence, and a basic vocabulary review queue.
 - **GitHub Tracking Status:** Displays 0% completion due to unlinked issues; eligible for administrative closure following issue reconciliation.
 - **Included Requirements:**
@@ -74,32 +79,39 @@ graph TD
   - P0 #2: Onboarding and course direction
   - P0 #5: Lesson interaction and answer feedback
   - P0 #6: Separate learning state (local AsyncStorage partitioning)
-  - P0 #8: Review queue and session completion (local heuristic queue)
+  - P0 #8: Review queue and session completion (local heuristic queue: +24h / +4h, distinct from production FSRS)
 - **Closure Criteria:**
   - [x] Responsive app shell running on iOS, Android, and Web (`dist/`).
   - [x] Course direction switcher with isolated state for `pt-BR->en` and `en->pt-BR`.
   - [x] Multiple-choice and translation-recall exercise runners with feedback and score calculation.
-  - [x] Local review queue with card flip, self-rating, and session completion screen.
+  - [x] Local review queue with card flip, self-rating, and session completion screen (heuristic scheduler).
   - [x] Comprehensive test suite (106 tests passing) and automated CI pipeline.
-  - [ ] **Administrative Closure Action:** Reassign canonical closed issues (#3, #6, #8, #10, #12, #14, #16, #18) to Milestone 2 on GitHub, then close Milestone 2.
+  - [ ] **Administrative Closure Action:** Reassign canonical closed issues (#3, #6, #8, #10, #12, #14, #16, #18) to GitHub milestone #2, then close GitHub milestone #2.
 
 ---
 
-### Milestone 2: Curriculum Completion (Ready to Begin)
-- **Objective:** Complete the published curriculum for all units and lessons across both course directions (`pt-BR->en` and `en->pt-BR`), authoring high-quality BJJ mat vocabulary, contextual coaching explanations, and exercise pairings.
+### Proposed project milestone M2: Curriculum Completion (Ready to Begin)
+- **Objective:** Complete the published curriculum for all units and lessons across both course directions (`pt-BR->en` and `en->pt-BR`), authoring authentic BJJ mat vocabulary, contextual coaching explanations, and exercise pairings.
 - **Included Requirements:**
   - P0 #4: Published course, units, lessons, and structured content
 - **Dependencies:** Milestone 1 foundation.
 - **Track:** Curriculum.
+- **Curriculum-Wide Integrity Criteria:**
+  - Every lesson listed in course metadata resolves to an implemented, playable lesson in both learning directions.
+  - Every lesson contains authentic contextual explanations and academy training usage examples in both languages.
+  - All vocabulary IDs (`vocab-*`) and exercise IDs (`ex-*`) are valid and unique.
+  - Exercises have non-empty prompts, valid options, correct target indices, and non-empty explanations.
+  - Lessons complete cleanly through `useLesson` and automatically enqueue vocabulary into the direction-specific review queue.
+  - Automated tests systematically cover all newly added content and verify bidirectional parity.
 - **Recommended Issue Breakdown:**
-  1. `M2.1`: Author and implement Unit 2 Lesson 2 (`lesson-2-2` — Escapes & Defensive Postures) with bidirectional translations, contextual notes, and exercises.
-  2. `M2.2`: Author and implement Unit 3 Lesson 1 (`lesson-3-1` — Submissions from Guard) with bidirectional translations, contextual notes, and exercises.
-  3. `M2.3`: Author and implement Unit 3 Lesson 2 (`lesson-3-2` — Sparring & Mat Dialogue) with bidirectional translations, contextual notes, and exercises.
-  4. `M2.4`: Update course metadata in `mockCourseData.ts` and add content validation test suite asserting unique IDs, non-empty examples, and valid exercise index bounds.
-  5. `M2.5`: Mobile and desktop visual verification across all newly authored lessons.
+  1. `M2.1`: Author and implement Unit 2 Lesson 2 (`lesson-2-2` / `lesson-2-2-pt` — Escapes & Defensive Postures) with bidirectional translations, contextual notes, and exercises.
+  2. `M2.2`: Author and implement Unit 3 Lesson 1 (`lesson-3-1` / `lesson-3-1-pt` — Submissions from Guard) with bidirectional translations, contextual notes, and exercises.
+  3. `M2.3`: Author and implement Unit 3 Lesson 2 (`lesson-3-2` / `lesson-3-2-pt` — Sparring & Mat Dialogue) with bidirectional translations, contextual notes, and exercises.
+  4. `M2.4`: Update course metadata in `mockCourseData.ts` and author comprehensive curriculum integrity test suite.
+  5. `M2.5`: Mobile and desktop visual verification across all newly authored lessons under `docs/engineering/evidence/m2/`.
 - **Definition of Done:**
-  - [ ] 100% of planned lessons in Units 1, 2, and 3 are implemented and navigable in both course directions (`pt-BR->en` and `en->pt-BR`).
-  - [ ] Automated content integrity tests pass with zero missing lesson references or broken exercise indices.
+  - [ ] 100% of planned lessons across Units 1, 2, and 3 are implemented, playable, and navigable in both course directions (`pt-BR->en` and `en->pt-BR`).
+  - [ ] Automated content integrity tests pass with zero missing lesson references, ID duplicates, or broken exercise indices.
   - [ ] Visual verification screenshots captured for each newly added lesson across desktop and mobile viewports under `docs/engineering/evidence/m2/`.
   - [ ] Quality gates pass: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm run doctor`, `pnpm run build:web`.
 
@@ -212,6 +224,14 @@ graph TD
 
 ## 5. Governance & Implementation Guidelines
 
-1. **Owner Administrative Reconciliation:** Before initiating M2 work, the repository owner should complete the administrative actions in `docs/roadmap/M1_COMPLETION_AUDIT.md`: assign issues #3, #6, #8, #10, #12, #14, #16, #18 to Milestone 2 on GitHub, close Milestone 1 (`M0`), close Milestone 2 (`M1`), and create the `M2 — Curriculum Completion` GitHub milestone.
+1. **Owner Administrative Reconciliation Sequence:** Before initiating M2 work, the repository owner should complete the administrative actions in `docs/roadmap/M1_COMPLETION_AUDIT.md`:
+   - Step 1: Verify the 8 canonical issue assignments and audit evidence.
+   - Step 2: Assign confirmed M1 issues to GitHub milestone #2.
+   - Step 3: Confirm GitHub reports 100% completion for M1.
+   - Step 4: Close GitHub milestone #1 (`M0 — Project Bootstrap`).
+   - Step 5: Close GitHub milestone #2 (`M1 — Learning Experience Foundation`).
+   - Step 6: Create the proposed `M2 — Curriculum Completion` GitHub milestone.
+   - Step 7: Approve and create the M2 implementation issues.
+   - Step 8: Begin M2 implementation.
 2. **Issue Hygiene:** When creating M2 issues on GitHub, each issue must link to its corresponding deliverable in this document and be explicitly assigned to the M2 milestone object.
 3. **Traceability:** No feature implementation branches should begin for M2 until the M2 milestone and canonical issues are administratively established.
