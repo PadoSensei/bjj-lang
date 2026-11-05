@@ -277,5 +277,5 @@ All standard repository health checks have been executed against `master` and ve
 | **Linting** | `pnpm lint` | **PASS** | 0 errors, 0 warnings across all source and test files. |
 | **Type Checking** | `pnpm typecheck` | **PASS** | `tsc --noEmit` passed with 0 TypeScript errors. |
 | **Test Suite** | `pnpm test` | **PASS** | 22 test suites passed, 106 tests passed, 0 failures. |
-| **Expo Doctor** | `pnpm run doctor` | **19/20 PASS** | 1 non-blocking dependency version warning (upstream SDK patch mismatches; per repository memory, unrelated patch bumps are deferred). |
+| **Expo Doctor** | `pnpm run doctor` | **PASS (20/20)** | All 20 diagnostics passed with zero warnings (`expo.install.exclude` configured for pinned dependencies). |
 | **Web Production Build** | `pnpm run build:web` | **PASS** | `expo export -p web` successfully exported SPA artifacts to `dist/`. |
