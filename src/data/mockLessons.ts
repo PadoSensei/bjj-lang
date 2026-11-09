@@ -430,6 +430,211 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
       },
     ],
   },
+  'lesson-2-2': {
+    id: 'lesson-2-2',
+    unitId: 'unit-2',
+    title: {
+      pt: 'Saídas e Posturas Defensivas',
+      en: 'Escapes & Defensive Postures',
+    },
+    objective: {
+      pt: 'Reconheça e comunique termos fundamentais de saídas de posições de sufoco e posturas defensivas no tatame.',
+      en: 'Recognize and communicate fundamental terms for escaping tough positions and maintaining defensive postures on the mats.',
+    },
+    vocabulary: [
+      {
+        id: 'vocab-2-2-1',
+        termPt: 'Ponte / Upa',
+        termEn: 'Bridge / Upa',
+        context: {
+          pt: 'Movimento explosivo de elevar o quadril empurrando o chão com os pés para desequilibrar o oponente montado ou criar espaço.',
+          en: 'Explosive hip extension pushing off the mat with the feet to off-balance a mounted opponent or generate space.',
+        },
+        examplePt: 'Faça uma ponte forte para desequilibrar o adversário antes de sair da montada.',
+        exampleEn: 'Execute a strong bridge to off-balance your opponent before escaping mount.',
+      },
+      {
+        id: 'vocab-2-2-2',
+        termPt: 'Fuga de Quadril / Shrimp',
+        termEn: 'Shrimp / Hip Escape',
+        context: {
+          pt: 'Movimento fundamental de quadril em direção contrária ao oponente para criar espaço e repor a guarda.',
+          en: 'Core movement sliding hips away from the opponent to generate space and recover guard.',
+        },
+        examplePt: 'Depois da ponte, faça a fuga de quadril imediatamente para colocar o joelho para dentro.',
+        exampleEn: 'Right after the bridge, shrimp immediately to slide your knee back inside.',
+      },
+      {
+        id: 'vocab-2-2-3',
+        termPt: 'Frame / Estrutura de Braços',
+        termEn: 'Frame / Framing',
+        context: {
+          pt: 'Uso dos antebraços e braços como estrutura ou barreira óssea para impedir a aproximação e pressão do adversário.',
+          en: 'Using forearms and arms as a structural bone wedge to prevent the opponent from flattening you with heavy pressure.',
+        },
+        examplePt: 'Mantenha os frames no pescoço e no quadril dele para aliviar o peso no cem quilos.',
+        exampleEn: 'Maintain frames against their neck and hip to relieve the pressure in side control.',
+      },
+      {
+        id: 'vocab-2-2-4',
+        termPt: 'Gancho por Baixo / Underhook',
+        termEn: 'Underhook',
+        context: {
+          pt: 'Controle em que você passa seu braço por baixo da axila do oponente para controlar a distância, subir ou contra-atacar.',
+          en: 'Pummeling control where you pass your arm underneath the opponent\'s armpit to control distance, sit up, or turn the corner.',
+        },
+        examplePt: 'Conquiste o underhook na meia-guarda para evitar ser amassado e poder subir.',
+        exampleEn: 'Secure the underhook from half guard to keep from getting flattened and begin sitting up.',
+      },
+      {
+        id: 'vocab-2-2-5',
+        termPt: 'Saída de Cotovelo',
+        termEn: 'Elbow Escape / Knee-Elbow Escape',
+        context: {
+          pt: 'Método defensivo tradicional de conectar o cotovelo ao joelho por baixo da montada ou controle lateral para recompor a guarda.',
+          en: 'Traditional defense connecting elbow to knee underneath mount or side control to slide a leg in and recover guard.',
+        },
+        examplePt: 'Conecte o cotovelo ao joelho e trabalhe a saída de cotovelo com calma.',
+        exampleEn: 'Connect your elbow to your knee and work the elbow escape patiently.',
+      },
+      {
+        id: 'vocab-2-2-6',
+        termPt: 'Posição de Tartaruga / Quatro Apoios',
+        termEn: 'Turtle Position',
+        context: {
+          pt: 'Postura defensiva de quatro apoios no solo com cotovelos e joelhos recolhidos para evitar a passagem de guarda e pontos.',
+          en: 'Defensive ground posture curled on knees and elbows to prevent guard pass points and protect against submissions.',
+        },
+        examplePt: 'Se a guarda for passada, feche os cotovelos e proteja o pescoço na posição de tartaruga.',
+        exampleEn: 'If your guard is passed, tuck your elbows and protect your neck in turtle position.',
+      },
+      {
+        id: 'vocab-2-2-7',
+        termPt: 'Postura',
+        termEn: 'Posture',
+        context: {
+          pt: 'Alinhamento ereto da coluna e cabeça que impede que o oponente por baixo quebre seu equilíbrio e feche estrangulamentos.',
+          en: 'Upright alignment of spine and head preventing the bottom guard player from breaking your balance and locking submissions.',
+        },
+        examplePt: 'Mantenha a postura na guarda fechada com o olhar para frente e a coluna ereta.',
+        exampleEn: 'Keep your posture inside closed guard with your eyes forward and spine straight.',
+      },
+      {
+        id: 'vocab-2-2-8',
+        termPt: 'Base',
+        termEn: 'Base',
+        context: {
+          pt: 'Estabilidade corporal e distribuição equilibrada de peso sobre os apoios para evitar raspagens e desequilíbrios.',
+          en: 'Physical stability and balanced weight distribution over contact points to prevent sweeps and balance disruption.',
+        },
+        examplePt: 'Abra os joelhos e abaixe o centro de gravidade para não perder a base.',
+        exampleEn: 'Widen your knees and lower your center of gravity so you do not lose your base.',
+      },
+      {
+        id: 'vocab-2-2-9',
+        termPt: 'Postura Defensiva',
+        termEn: 'Defensive Posture',
+        context: {
+          pt: 'Posicionamento compacto com braços colados ao tronco e queixo protegido para neutralizar tentativas de finalização.',
+          en: 'Compact body positioning with arms tight to ribs and chin tucked to neutralize submission threats.',
+        },
+        examplePt: 'Quando estiver sob pressão, adote uma postura defensiva antes de tentar qualquer saída.',
+        exampleEn: 'When under heavy pressure, assume a defensive posture before attempting any escape.',
+      },
+    ],
+    exercises: [
+      {
+        id: 'ex-2-2-mc1',
+        type: 'multiple-choice',
+        prompt: {
+          pt: 'Qual termo em inglês descreve a elevação explosiva do quadril para sair da montada?',
+          en: 'Which English term describes an explosive hip lift used to escape from mount?',
+        },
+        options: [
+          { pt: 'Bridge / Upa', en: 'Bridge / Upa' },
+          { pt: 'Turtle Position', en: 'Turtle Position' },
+          { pt: 'Underhook', en: 'Underhook' },
+          { pt: 'Elbow Escape', en: 'Elbow Escape' },
+        ],
+        correctIndex: 0,
+        explanation: {
+          pt: '"Bridge / Upa" é o movimento de ponte que projeta o quadril para cima desequilibrando o oponente.',
+          en: '"Bridge / Upa" refers to the bridging hip thrust used to off-balance the opponent.',
+        },
+      },
+      {
+        id: 'ex-2-2-mc2',
+        type: 'multiple-choice',
+        prompt: {
+          pt: 'Se o professor grita "Make frames!", o que ele quer que você faça no tatame?',
+          en: 'If your coach calls out "Faça frames!", what are they instructing you to do on the mats?',
+        },
+        options: [
+          {
+            pt: 'Bater imediatamente para desistir da luta',
+            en: 'Tap out immediately to concede the sparring round',
+          },
+          {
+            pt: 'Usar os antebraços e braços como estrutura para criar espaço e aliviar a pressão',
+            en: 'Use your forearms and arms as structural barriers to create space and relieve pressure',
+          },
+          {
+            pt: 'Ficar de pé e se afastar completamente do tatame',
+            en: 'Stand up and walk completely off the mat area',
+          },
+          {
+            pt: 'Atacar uma chave de braço ou triângulo por baixo',
+            en: 'Attack an armbar or triangle choke from the bottom',
+          },
+        ],
+        correctIndex: 1,
+        explanation: {
+          pt: 'Fazer "frames" significa criar estruturas rígidas com braços e antebraços para bloquear a pressão e ganhar espaço.',
+          en: 'Making "frames" means establishing rigid forearm or arm barriers to block pressure and manage space.',
+        },
+      },
+      {
+        id: 'ex-2-2-recall1',
+        type: 'translation-recall',
+        prompt: {
+          pt: 'Como você traduz o comando de saída "Ponte e fuga de quadril" para o inglês?',
+          en: 'How do you say the escape instruction "Bridge and shrimp" in Portuguese?',
+        },
+        targetAnswer: {
+          pt: 'Ponte e fuga de quadril',
+          en: 'Bridge and shrimp',
+        },
+        hint: {
+          pt: 'Upa e movimento de quadril.',
+          en: 'Hip extension followed by hip escape.',
+        },
+        explanation: {
+          pt: '"Bridge and shrimp" combina a ponte explosiva com o deslocamento do quadril para recompor a guarda.',
+          en: '"Ponte e fuga de quadril" pairs the explosive bridge with a hip escape to recover guard.',
+        },
+      },
+      {
+        id: 'ex-2-2-recall2',
+        type: 'translation-recall',
+        prompt: {
+          pt: 'Como você diz a instrução "Mantenha a postura" em inglês?',
+          en: 'How do you say the coaching call "Keep your posture" in Portuguese?',
+        },
+        targetAnswer: {
+          pt: 'Mantenha a postura',
+          en: 'Keep your posture',
+        },
+        hint: {
+          pt: 'Coluna ereta e cabeça erguida.',
+          en: 'Straight spine and upright head.',
+        },
+        explanation: {
+          pt: '"Keep your posture" é o comando para evitar que a cabeça e a coluna sejam puxadas para baixo.',
+          en: '"Mantenha a postura" is the instruction to keep your spine upright and prevent being broken down.',
+        },
+      },
+    ],
+  },
 };
 
 // Also alias lesson-1-1-pt, lesson-1-2-pt, etc. to ensure unit-1-pt from mock course works seamlessly
@@ -437,3 +642,4 @@ MOCK_LESSONS['lesson-1-1-pt'] = MOCK_LESSONS['lesson-1-1'];
 MOCK_LESSONS['lesson-1-2-pt'] = MOCK_LESSONS['lesson-1-2'];
 MOCK_LESSONS['lesson-1-3-pt'] = MOCK_LESSONS['lesson-1-3'];
 MOCK_LESSONS['lesson-2-1-pt'] = MOCK_LESSONS['lesson-2-1'];
+MOCK_LESSONS['lesson-2-2-pt'] = MOCK_LESSONS['lesson-2-2'];
