@@ -28,7 +28,7 @@ describe('HomeScreen Component', () => {
     expect(getByText('Aprenda Inglês para Jiu-Jitsu')).toBeTruthy();
 
     expect(getByTestId('overall-course-progress-text').props.children).toBe(
-      '0 of 5 complete (0%)'
+      '0 of 6 complete (0%)'
     );
     expect(getByTestId('unit-progress-text-unit-1-en').props.children).toBe(
       '0 of 3 complete'
@@ -92,7 +92,7 @@ describe('HomeScreen Component', () => {
     );
 
     expect(getByTestId('overall-course-progress-text').props.children).toBe(
-      '1 of 5 complete (20%)'
+      '1 of 6 complete (17%)'
     );
     expect(getByTestId('unit-progress-text-unit-1-en').props.children).toBe(
       '1 of 3 complete'
@@ -116,7 +116,7 @@ describe('HomeScreen Component', () => {
     );
 
     expect(getByTestId('overall-course-progress-text').props.children).toBe(
-      '1 of 5 complete (20%)'
+      '1 of 6 complete (17%)'
     );
 
     // Click direction switch option
@@ -126,7 +126,7 @@ describe('HomeScreen Component', () => {
 
     expect(getByText('Learn Brazilian Portuguese for BJJ')).toBeTruthy();
     expect(getByTestId('overall-course-progress-text').props.children).toBe(
-      '2 of 5 complete (40%)'
+      '2 of 6 complete (33%)'
     );
   });
 
