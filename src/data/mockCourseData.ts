@@ -107,10 +107,10 @@ export const MOCK_COURSES: Record<CourseDirection, CourseData> = {
         lessons: [
           {
             id: 'lesson-3-1',
-            title: 'Ataques Básicos da Guarda',
-            description: 'Como explicar raspagens e ataques na guarda fechada.',
-            estimatedMinutes: 12,
-            conceptCount: 12,
+            title: 'Finalizações da Guarda',
+            description: 'Aprenda termos essenciais como armlock, triângulo e ataques da guarda.',
+            estimatedMinutes: 10,
+            conceptCount: 10,
             completed: false,
           },
         ],
@@ -194,10 +194,10 @@ export const MOCK_COURSES: Record<CourseDirection, CourseData> = {
         lessons: [
           {
             id: 'lesson-3-1-pt',
-            title: 'Submissions & Defense',
-            description: 'Key submission names and defensive communication.',
-            estimatedMinutes: 12,
-            conceptCount: 12,
+            title: 'Submissions from Guard',
+            description: 'Learn core submission names and attacking cues from guard such as armlock, triangle, and kimura.',
+            estimatedMinutes: 10,
+            conceptCount: 10,
             completed: false,
           },
         ],

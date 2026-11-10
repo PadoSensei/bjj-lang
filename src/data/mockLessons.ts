@@ -635,6 +635,232 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
       },
     ],
   },
+  'lesson-3-1': {
+    id: 'lesson-3-1',
+    unitId: 'unit-3',
+    title: {
+      pt: 'Finalizações da Guarda',
+      en: 'Submissions from Guard',
+    },
+    objective: {
+      pt: 'Aprenda os nomes das finalizações clássicas aplicadas a partir da guarda e a linguagem de ataque e controle no tatame.',
+      en: 'Learn the names of classic submissions applied from guard and key attacking cues and controls on the mats.',
+    },
+    vocabulary: [
+      {
+        id: 'vocab-3-1-1',
+        termPt: 'Chave de braço',
+        termEn: 'Armbar',
+        phonetic: 'SHAH-vee jee BRAH-soo',
+        context: {
+          pt: 'Finalização que aplica uma alavanca articular estendendo a articulação do cotovelo do adversário contra o quadril.',
+          en: 'Joint lock submission that isolates and hyperextends the opponent\'s elbow joint using the hips as a fulcrum.',
+        },
+        examplePt: 'Ele laçou o braço do adversário da guarda fechada e encaixou a chave de braço com firmeza.',
+        exampleEn: 'He trapped the opponent\'s arm from closed guard and locked in a tight armbar.',
+      },
+      {
+        id: 'vocab-3-1-2',
+        termPt: 'Triângulo',
+        termEn: 'Triangle',
+        phonetic: 'tree-AHN-goo-loo',
+        context: {
+          pt: 'Estrangulamento com as pernas em formato triangular que comprime as artérias carótidas com a própria coxa e o ombro do adversário.',
+          en: 'Strangulation using the legs locked in a figure-four triangle around the neck and one arm, compressing the carotid arteries.',
+        },
+        examplePt: 'Quando o oponente colocou um braço para dentro e outro para fora, ele fechou o triângulo.',
+        exampleEn: 'When the opponent left one arm in and one arm out, he snapped the triangle closed.',
+      },
+      {
+        id: 'vocab-3-1-3',
+        termPt: 'Kimura',
+        termEn: 'Kimura',
+        phonetic: 'kee-MOO-rah',
+        context: {
+          pt: 'Alavanca articular de ombro com pegada em quatro (dupla no punho) que gira o braço do oponente para trás de suas costas.',
+          en: 'Shoulder lock utilizing a figure-four double-wrist grip to rotate the opponent\'s humerus and shoulder behind their back.',
+        },
+        examplePt: 'Ele quebrou a postura, segurou o punho e atacou uma kimura rápida da guarda fechada.',
+        exampleEn: 'He broke the posture, isolated the wrist, and attacked a quick kimura from closed guard.',
+      },
+      {
+        id: 'vocab-3-1-4',
+        termPt: 'Omoplata',
+        termEn: 'Omoplata',
+        phonetic: 'oh-moh-PLAH-tah',
+        context: {
+          pt: 'Chave de ombro executada com o uso das pernas, isolando o braço do adversário e forçando a rotação ao sentar paralelamente.',
+          en: 'Shoulder lock executed using the legs to entangle the opponent\'s arm and apply rotation as the guard player sits up alongside.',
+        },
+        examplePt: 'O adversário escondeu o braço para defender o triângulo e acabou caindo na omoplata.',
+        exampleEn: 'The opponent hid their arm to defend the triangle and transitioned right into an omoplata.',
+      },
+      {
+        id: 'vocab-3-1-5',
+        termPt: 'Guilhotina',
+        termEn: 'Guillotine',
+        phonetic: 'gee-lyoh-CHEE-nah',
+        context: {
+          pt: 'Estrangulamento frontal que envolve o pescoço do adversário por baixo do braço do atacante quando a cabeça é abaixada.',
+          en: 'Front headlock choke wrapping an arm around the opponent\'s trachea or carotid arteries when their head is low.',
+        },
+        examplePt: 'Ele aproveitou que o adversário mergulhou no quadril sem postura e puxou para a guilhotina.',
+        exampleEn: 'He capitalized on the opponent shooting in with broken posture and snapped on a guillotine.',
+      },
+      {
+        id: 'vocab-3-1-6',
+        termPt: 'Estrangulamento cruzado',
+        termEn: 'Cross-collar choke',
+        phonetic: 'es-trang-goo-lah-MEN-too kroo-ZAH-doo',
+        context: {
+          pt: 'Estrangulamento tradicional de kimono com as mãos cruzadas nas golas profundas do adversário a partir da guarda.',
+          en: 'Traditional gi collar choke executed with four fingers deep in opposite collars from inside closed guard.',
+        },
+        examplePt: 'Com duas pegadas fundas na gola cruzada, ele puxou o oponente com as pernas para finalizar.',
+        exampleEn: 'With two deep cross-collar grips, he pulled with his legs to finish the choke.',
+      },
+      {
+        id: 'vocab-3-1-7',
+        termPt: 'Quebrar a postura',
+        termEn: 'Break posture',
+        phonetic: 'kay-BRAHR ah pohs-TOO-rah',
+        context: {
+          pt: 'Ação técnica essencial da guarda de puxar o oponente para frente com braços e pernas, impedindo que mantenha a coluna ereta.',
+          en: 'Essential guard action of pulling the opponent forward with arms and legs, destroying their upright spinal alignment.',
+        },
+        examplePt: 'Antes de atacar qualquer finalização da guarda fechada, você deve quebrar a postura do adversário.',
+        exampleEn: 'Before attacking any submission from closed guard, you must break the opponent\'s posture.',
+      },
+      {
+        id: 'vocab-3-1-8',
+        termPt: 'Pegada na gola',
+        termEn: 'Collar grip',
+        phonetic: 'peh-GAH-dah nah GOH-lah',
+        context: {
+          pt: 'Controle firme de mão segurando a lapela ou gola do kimono para guiar a cabeça do adversário e controlar a distância.',
+          en: 'Firm hand grip securing the gi collar or lapel to manage head distance, control balance, and establish chokes.',
+        },
+        examplePt: 'Faça uma pegada forte na gola alta para manter o oponente colado e controlar a distância.',
+        exampleEn: 'Secure a high collar grip to keep the opponent pulled tight and manage the distance.',
+      },
+      {
+        id: 'vocab-3-1-9',
+        termPt: 'Ajustar o ângulo',
+        termEn: 'Adjust the angle',
+        phonetic: 'ah-zhoos-TAHR oo AHN-goo-loo',
+        context: {
+          pt: 'Movimentação de quadril para sair do alinhamento frontal com o adversário, criando um ângulo favorável para encaixar ataques.',
+          en: 'Hip shift to move perpendicular or offset from the opponent\'s centerline, creating an optimal angle to lock attacks.',
+        },
+        examplePt: 'Saia o quadril de lado para ajustar o ângulo e fechar o triângulo sem esforço.',
+        exampleEn: 'Shift your hips sideways to adjust the angle and lock the triangle choke effortlessly.',
+      },
+      {
+        id: 'vocab-3-1-10',
+        termPt: 'Finalização',
+        termEn: 'Submission',
+        phonetic: 'fee-nah-lee-zah-SOW',
+        context: {
+          pt: 'Desfecho de um golpe articular ou estrangulamento que força o adversário a sinalizar desistência (bater).',
+          en: 'The successful completion of a choke or joint lock that obligates the opponent to concede the match by tapping.',
+        },
+        examplePt: 'Ele manteve a posição justa com paciência até conseguir a finalização.',
+        exampleEn: 'He held the tight position patiently until he secured the submission.',
+      },
+    ],
+    exercises: [
+      {
+        id: 'ex-3-1-mc1',
+        type: 'multiple-choice',
+        prompt: {
+          pt: 'Qual finalização da guarda isola o braço do oponente e estende a articulação do cotovelo?',
+          en: 'Which guard submission isolates the opponent\'s arm and hyperextends the elbow joint?',
+        },
+        options: [
+          { pt: 'Chave de braço', en: 'Armbar' },
+          { pt: 'Guilhotina', en: 'Guillotine' },
+          { pt: 'Quebrar a postura', en: 'Break posture' },
+          { pt: 'Pegada na gola', en: 'Collar grip' },
+        ],
+        correctIndex: 0,
+        explanation: {
+          pt: 'A chave de braço (armbar) é a finalização que hiperextende o cotovelo usando o quadril como alavanca.',
+          en: 'The armbar (chave de braço) is the joint lock that hyperextends the elbow using the hips as a fulcrum.',
+        },
+      },
+      {
+        id: 'ex-3-1-mc2',
+        type: 'multiple-choice',
+        prompt: {
+          pt: 'Por que é fundamental "quebrar a postura" do adversário antes de atacar da guarda?',
+          en: 'Why is it crucial to "break posture" before attacking submissions from the guard?',
+        },
+        options: [
+          {
+            pt: 'Para permitir que ele passe a sua guarda mais facilmente',
+            en: 'To allow them to pass your guard more easily',
+          },
+          {
+            pt: 'Para tirar o equilíbrio e a distância do oponente, abrindo espaço para ataques',
+            en: 'To take away the opponent\'s balance and distance, opening up attacks',
+          },
+          {
+            pt: 'Para descansar enquanto o adversário fica de pé',
+            en: 'To rest while the opponent stands up',
+          },
+          {
+            pt: 'Para avisar ao juiz que a luta acabou',
+            en: 'To signal the referee that the round is finished',
+          },
+        ],
+        correctIndex: 1,
+        explanation: {
+          pt: 'Quebrar a postura do oponente anula a base dele e aproxima a cabeça e os braços para as finalizações.',
+          en: 'Breaking posture breaks the opponent\'s structural base and brings their head and arms within submission range.',
+        },
+      },
+      {
+        id: 'ex-3-1-recall1',
+        type: 'translation-recall',
+        prompt: {
+          pt: 'Como você traduz o comando de ataque "Ajustar o ângulo para o triângulo" em inglês?',
+          en: 'How do you say "Adjust the angle for the triangle" in Portuguese?',
+        },
+        targetAnswer: {
+          pt: 'Ajustar o ângulo para o triângulo',
+          en: 'Adjust the angle for the triangle',
+        },
+        hint: {
+          pt: 'Mudar a posição do quadril para fechar o estrangulamento.',
+          en: 'Shifting the hips to lock the choke.',
+        },
+        explanation: {
+          pt: '"Adjust the angle" significa sair do alinhamento reto para travar as pernas no triângulo.',
+          en: '"Ajustar o ângulo" describes shifting off the centerline to lock the legs around the neck and shoulder.',
+        },
+      },
+      {
+        id: 'ex-3-1-recall2',
+        type: 'translation-recall',
+        prompt: {
+          pt: 'Como você traduz a instrução essencial "Quebrar a postura com a pegada na gola" em inglês?',
+          en: 'How do you say "Break posture with the collar grip" in Portuguese?',
+        },
+        targetAnswer: {
+          pt: 'Quebrar a postura com a pegada na gola',
+          en: 'Break posture with the collar grip',
+        },
+        hint: {
+          pt: 'Puxar o oponente para baixo usando o kimono.',
+          en: 'Pulling the opponent forward and down using the gi.',
+        },
+        explanation: {
+          pt: '"Break posture with the collar grip" orienta o uso da gola para desestabilizar o adversário na guarda.',
+          en: '"Quebrar a postura com a pegada na gola" instructs using the collar to disrupt the opponent\'s spine and balance from guard.',
+        },
+      },
+    ],
+  },
 };
 
 // Also alias lesson-1-1-pt, lesson-1-2-pt, etc. to ensure unit-1-pt from mock course works seamlessly
@@ -643,3 +869,4 @@ MOCK_LESSONS['lesson-1-2-pt'] = MOCK_LESSONS['lesson-1-2'];
 MOCK_LESSONS['lesson-1-3-pt'] = MOCK_LESSONS['lesson-1-3'];
 MOCK_LESSONS['lesson-2-1-pt'] = MOCK_LESSONS['lesson-2-1'];
 MOCK_LESSONS['lesson-2-2-pt'] = MOCK_LESSONS['lesson-2-2'];
+MOCK_LESSONS['lesson-3-1-pt'] = MOCK_LESSONS['lesson-3-1'];
