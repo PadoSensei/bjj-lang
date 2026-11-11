@@ -87,14 +87,14 @@ describe('CourseContext', () => {
     );
 
     expect(getByTestId('completed-ids').props.children).toBe('');
-    expect(getByTestId('course-progress').props.children).toBe('0/6 (0%)');
+    expect(getByTestId('course-progress').props.children).toBe('0/7 (0%)');
 
     await act(async () => {
       fireEvent.press(getByTestId('complete-lesson-1-1-btn'));
     });
 
     expect(getByTestId('completed-ids').props.children).toBe('lesson-1-1');
-    expect(getByTestId('course-progress').props.children).toBe('1/6 (17%)');
+    expect(getByTestId('course-progress').props.children).toBe('1/7 (14%)');
 
     // Verify written to AsyncStorage
     const storedStr = await AsyncStorage.getItem(PROGRESS_STORAGE_KEY);
@@ -122,7 +122,7 @@ describe('CourseContext', () => {
       expect(getByTestId('completed-ids').props.children).toBe('lesson-1-1,lesson-1-2');
     });
 
-    expect(getByTestId('course-progress').props.children).toBe('2/6 (33%)');
+    expect(getByTestId('course-progress').props.children).toBe('2/7 (29%)');
     expect(getByTestId('unit-1-progress').props.children).toBeCloseTo(2 / 3); // 2 of 3 completed
   });
 });
