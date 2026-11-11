@@ -59,7 +59,8 @@
         "expo-constants",
         "expo-linking",
         "jest-expo",
-        "react-native-safe-area-context"
+        "react-native-safe-area-context",
+        "expo-status-bar"
       ]
     }
   }

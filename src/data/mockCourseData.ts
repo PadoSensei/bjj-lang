@@ -50,7 +50,7 @@ export const MOCK_COURSES: Record<CourseDirection, CourseData> = {
             title: 'Saudações e Regras do Tatame',
             description: 'Aprenda como cumprimentar parceiros e o professor (OSS, Shake hands, Bow).',
             estimatedMinutes: 5,
-            conceptCount: 6,
+            conceptCount: 3,
             completed: true,
           },
           {
@@ -58,7 +58,7 @@ export const MOCK_COURSES: Record<CourseDirection, CourseData> = {
             title: 'Comandos de Treino',
             description: 'Compreenda ordens como "Line up", "Time", "Break", e "Tap out".',
             estimatedMinutes: 7,
-            conceptCount: 8,
+            conceptCount: 3,
             completed: false,
           },
           {
@@ -84,7 +84,7 @@ export const MOCK_COURSES: Record<CourseDirection, CourseData> = {
             title: 'Guardas e Passagens',
             description: 'Closed guard, open guard, guard pass e side control.',
             estimatedMinutes: 10,
-            conceptCount: 10,
+            conceptCount: 2,
             completed: false,
           },
           {
@@ -145,15 +145,15 @@ export const MOCK_COURSES: Record<CourseDirection, CourseData> = {
             title: 'Mat Greetings & Etiquette',
             description: 'Learn terms like "Bom dia", "Com licença", and "Por favor".',
             estimatedMinutes: 5,
-            conceptCount: 6,
+            conceptCount: 3,
             completed: true,
           },
           {
             id: 'lesson-1-2-pt',
             title: 'Coaching Commands',
             description: 'Understand calls like "Parou!", "Troca!", and "Mais um!".',
-            estimatedMinutes: 8,
-            conceptCount: 8,
+            estimatedMinutes: 7,
+            conceptCount: 3,
             completed: false,
           },
           {
@@ -179,7 +179,7 @@ export const MOCK_COURSES: Record<CourseDirection, CourseData> = {
             title: 'Core Position Names',
             description: 'Guarda, Passagem, Meia-guarda, and Controle Lateral.',
             estimatedMinutes: 10,
-            conceptCount: 10,
+            conceptCount: 2,
             completed: false,
           },
           {
