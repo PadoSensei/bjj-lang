@@ -16,7 +16,7 @@ describe('HomeScreen Component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders title, course header, and empty state (0 of 5 completed)', () => {
+  it('renders title, course header, and empty state (0 of 7 completed)', () => {
     const { getByTestId, getByText, getAllByText } = render(
       <CourseProvider initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}>
         <HomeScreen />
@@ -28,7 +28,7 @@ describe('HomeScreen Component', () => {
     expect(getByText('Aprenda Inglês para Jiu-Jitsu')).toBeTruthy();
 
     expect(getByTestId('overall-course-progress-text').props.children).toBe(
-      '0 of 6 complete (0%)'
+      '0 of 7 complete (0%)'
     );
     expect(getByTestId('unit-progress-text-unit-1-en').props.children).toBe(
       '0 of 3 complete'
@@ -92,7 +92,7 @@ describe('HomeScreen Component', () => {
     );
 
     expect(getByTestId('overall-course-progress-text').props.children).toBe(
-      '1 of 6 complete (17%)'
+      '1 of 7 complete (14%)'
     );
     expect(getByTestId('unit-progress-text-unit-1-en').props.children).toBe(
       '1 of 3 complete'
@@ -116,7 +116,7 @@ describe('HomeScreen Component', () => {
     );
 
     expect(getByTestId('overall-course-progress-text').props.children).toBe(
-      '1 of 6 complete (17%)'
+      '1 of 7 complete (14%)'
     );
 
     // Click direction switch option
@@ -126,7 +126,7 @@ describe('HomeScreen Component', () => {
 
     expect(getByText('Learn Brazilian Portuguese for BJJ')).toBeTruthy();
     expect(getByTestId('overall-course-progress-text').props.children).toBe(
-      '2 of 6 complete (33%)'
+      '2 of 7 complete (29%)'
     );
   });
 
