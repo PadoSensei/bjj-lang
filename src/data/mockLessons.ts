@@ -861,6 +861,244 @@ export const MOCK_LESSONS: Record<string, LessonData> = {
       },
     ],
   },
+  'lesson-3-2': {
+    id: 'lesson-3-2',
+    unitId: 'unit-3',
+    title: {
+      pt: 'Sparring e Diálogo no Tatame',
+      en: 'Sparring & Mat Dialogue',
+    },
+    objective: {
+      pt: 'Aprenda expressões essenciais de comunicação, ritmo e etiqueta durante o rola e treinos no tatame.',
+      en: 'Learn essential phrases for communication, pace, and etiquette during rolling and sparring on the mats.',
+    },
+    vocabulary: [
+      {
+        id: 'vocab-3-2-1',
+        termPt: 'Rola / Rolar',
+        termEn: 'Roll / Rolling (Sparring)',
+        phonetic: 'HOH-lah / hoh-LAHR',
+        context: {
+          pt: 'Termo central do Jiu-Jitsu que designa o combate livre e a prática de sparring entre parceiros na academia.',
+          en: 'Core BJJ term referring to free sparring practice and live rounds between partners at the academy.',
+        },
+        examplePt: 'Depois da parte técnica, teremos trinta minutos de rola livre.',
+        exampleEn: 'After the technique portion, we will have thirty minutes of live rolling.',
+      },
+      {
+        id: 'vocab-3-2-2',
+        termPt: 'Quer rolar? / Vamos rolar?',
+        termEn: 'Want to roll? / Would you like to roll?',
+        phonetic: 'KEHR hoh-LAHR / VAH-mohs hoh-LAHR',
+        context: {
+          pt: 'Convite cortês e tradicional feito a um companheiro de treino para iniciar um round de sparring.',
+          en: 'Polite and customary invitation extended to a training partner to begin a sparring round together.',
+        },
+        examplePt: 'Ele cumprimentou o colega de treino e perguntou: "Quer rolar este round?".',
+        exampleEn: 'He greeted his training partner and asked: "Want to roll this round?".',
+      },
+      {
+        id: 'vocab-3-2-3',
+        termPt: 'Soltinho / Treino leve',
+        termEn: 'Flow roll / Light roll',
+        phonetic: 'sohl-CHEEN-yoo / TRAY-noo LEH-vee',
+        context: {
+          pt: 'Expressão informal de academia usada para combinar um rola soltinho focado em transições fluidas e técnica, com pouca força e ritmo controlado.',
+          en: 'Informal academy expression used to agree on a light flow roll focused on fluid transitions and technique, with low strength and controlled pacing.',
+        },
+        examplePt: 'Estou voltando de lesão no joelho, vamos fazer só um soltinho hoje?',
+        exampleEn: 'I am coming back from a knee injury, can we just do a light flow roll today?',
+      },
+      {
+        id: 'vocab-3-2-4',
+        termPt: 'Pegou!',
+        termEn: 'Got me! / It caught!',
+        phonetic: 'peh-GOH',
+        context: {
+          pt: 'Reconhecimento verbal usado no rola para sinalizar que a finalização foi encaixada com firmeza, funcionando como aviso de segurança e reset do round quando não é possível bater com as mãos.',
+          en: 'Verbal acknowledgement used during rolling to signal that a submission is cleanly locked in, serving as a safety reset when hands are trapped.',
+        },
+        examplePt: 'Quando a guilhotina ajustou no pescoço e os braços estavam presos, ele avisou claramente: "Pegou!".',
+        exampleEn: 'When the guillotine tightened and his arms were trapped, he called out clearly: "Got me!".',
+      },
+      {
+        id: 'vocab-3-2-5',
+        termPt: 'Mais um?',
+        termEn: 'One more round?',
+        phonetic: 'MY-eez OOM',
+        context: {
+          pt: 'Pergunta natural ao fim de um round para convidar o mesmo parceiro a continuar treinando no round seguinte.',
+          en: 'Natural question at the end of a round asking your partner if they want to keep training for another round.',
+        },
+        examplePt: 'O cronômetro apitou, os dois beberam água e ele perguntou: "Aguenta mais um?".',
+        exampleEn: 'The timer went off, both had a sip of water, and he asked: "Up for one more round?".',
+      },
+      {
+        id: 'vocab-3-2-6',
+        termPt: 'Volta no meio',
+        termEn: 'Reset to the center / Back to center',
+        phonetic: 'VOHL-tah noo MAY-oo',
+        context: {
+          pt: 'Pedido feito ao parceiro para interromper a luta e retornar ao centro da área de treino por segurança quando chegam perto da parede ou de outras duplas.',
+          en: 'Call made to your partner to halt action and return to the center of the mat area for safety when drifting close to walls or other pairs.',
+        },
+        examplePt: 'Estamos encostando na parede do tatame, vamos parar e voltar no meio.',
+        exampleEn: 'We are getting too close to the mat wall, let us pause and reset to the center.',
+      },
+      {
+        id: 'vocab-3-2-7',
+        termPt: 'Começa de pé ou de baixo?',
+        termEn: 'Start standing or on the knees/ground?',
+        phonetic: 'koh-MEH-sah jee PEH oh jee BY-shoo',
+        context: {
+          pt: 'Diálogo prévio ao rola para combinar se a disputa iniciará em pé (com quedas) ou se um dos dois puxará para a guarda por segurança e espaço.',
+          en: 'Pre-roll conversation to agree whether to begin standing (with takedowns) or starting from the knees/guard for safety and mat space.',
+        },
+        examplePt: 'O tatame está cheio hoje, então perguntou: "Começa de pé ou de baixo?".',
+        exampleEn: 'The mat is crowded today, so he asked: "Start standing or on the ground?".',
+      },
+      {
+        id: 'vocab-3-2-8',
+        termPt: 'Posso passar ou você puxa?',
+        termEn: 'Can I pass or are you pulling?',
+        phonetic: 'POH-soo pah-SAHR oh voh-SEH POO-shah',
+        context: {
+          pt: 'Frase conversacional comum no início do treino para definir amigavelmente quem começará jogando por cima passando e quem fará guarda.',
+          en: 'Common conversational phrase at the start of a roll to casually establish who plays top passing and who pulls guard.',
+        },
+        examplePt: 'Ao cumprimentar de joelhos, ele combinou com o parceiro: "Posso passar ou você puxa?".',
+        exampleEn: 'Slapping hands from the knees, he asked his partner: "Can I pass or are you pulling guard?".',
+      },
+      {
+        id: 'vocab-3-2-9',
+        termPt: 'Devagar / Com calma',
+        termEn: 'Slow down / Take it easy',
+        phonetic: 'deh-vah-GAHR / kohm KAHL-mah',
+        context: {
+          pt: 'Comunicação direta para pedir ao parceiro que diminua a velocidade ou a intensidade excessiva, priorizando o controle técnico.',
+          en: 'Direct communication asking a partner to lower excessive intensity or speed, prioritizing technical control.',
+        },
+        examplePt: 'Se o parceiro estiver afobado e usando muita força, respire e fale: "Com calma, devagar".',
+        exampleEn: 'If your partner is rushing and using too much force, breathe and say: "Take it easy, slow down".',
+      },
+      {
+        id: 'vocab-3-2-10',
+        termPt: 'Obrigado pelo treino',
+        termEn: 'Thank you for the roll / training',
+        phonetic: 'oh-bree-GAH-doo PEH-loo TRAY-noo',
+        context: {
+          pt: 'Agradecimento cordial indispensável e sinal de respeito mútuo ao encerrar o rola com um colega de tatame.',
+          en: 'Essential polite acknowledgement and sign of mutual respect when concluding a roll with a training partner.',
+        },
+        examplePt: 'Ao término do round de cinco minutos, aperte a mão do colega e diga: "Obrigado pelo treino".',
+        exampleEn: 'At the end of the five-minute round, shake your partner\'s hand and say: "Thank you for the roll".',
+      },
+    ],
+    exercises: [
+      {
+        id: 'ex-3-2-mc1',
+        type: 'multiple-choice',
+        prompt: {
+          pt: 'Quando seu colega de tatame pergunta: "Vamos fazer um soltinho?", o que ele está propondo para o rola?',
+          en: 'When your training partner asks "Vamos fazer um soltinho?", what kind of roll are they proposing?',
+        },
+        options: [
+          {
+            pt: 'Um treino em ritmo de final de campeonato, com força máxima e disputa de pontos',
+            en: 'A tournament-finals pace with maximum force and intense score battle',
+          },
+          {
+            pt: 'Um treino leve e fluido, com ritmo controlado e foco em movimentação técnica',
+            en: 'A light, relaxed flow roll with controlled pace and focus on technical movement',
+          },
+          {
+            pt: 'Uma sessão apenas de flexões e abdominais fora do tatame',
+            en: 'A conditioning workout of push-ups and sit-ups off the mat',
+          },
+          {
+            pt: 'Encerrar a aula e não lutar mais naquele dia',
+            en: 'End class and stop training for the day',
+          },
+        ],
+        correctIndex: 1,
+        explanation: {
+          pt: '"Soltinho" é uma expressão comum no Jiu-Jitsu que indica um rola mais leve e técnico, sem disputa de força excessiva.',
+          en: '"Soltinho" is a colloquial BJJ term indicating a lighter, technical flow roll rather than a high-intensity battle.',
+        },
+      },
+      {
+        id: 'ex-3-2-mc2',
+        type: 'multiple-choice',
+        prompt: {
+          pt: 'Por que durante o rola um dos parceiros diz "Volta no meio"?',
+          en: 'Why would a partner say "Volta no meio" during a roll?',
+        },
+        options: [
+          {
+            pt: 'Para indicar que desistiu do treino e quer ir embora',
+            en: 'To signal they are quitting the roll and going home',
+          },
+          {
+            pt: 'Para pedir que reiniciem a movimentação no centro do tatame por segurança, evitando paredes ou colisões',
+            en: 'To request resetting in the center of the mat for safety, avoiding walls or collisions',
+          },
+          {
+            pt: 'Para solicitar que o parceiro aumente a velocidade dos ataques',
+            en: 'To request that the partner speed up their submission attacks',
+          },
+          {
+            pt: 'Para pedir que o professor cronometre o tempo do round',
+            en: 'To ask the coach to start timing the round',
+          },
+        ],
+        correctIndex: 1,
+        explanation: {
+          pt: '"Volta no meio" é o aviso de segurança para reposicionar a luta no centro da área de combate e evitar acidentes.',
+          en: '"Volta no meio" is the safety call to reset the sparring round toward the mat center away from hazards.',
+        },
+      },
+      {
+        id: 'ex-3-2-recall1',
+        type: 'translation-recall',
+        prompt: {
+          pt: 'Como você agradece cordialmente ao parceiro ao término de um rola em inglês?',
+          en: 'How do you politely thank your partner at the end of a roll in Portuguese?',
+        },
+        targetAnswer: {
+          pt: 'Obrigado pelo treino',
+          en: 'Thank you for the roll',
+        },
+        hint: {
+          pt: 'Gratidão respeitosa após a luta.',
+          en: 'Respectful appreciation after rolling.',
+        },
+        explanation: {
+          pt: '"Obrigado pelo treino" / "Thank you for the roll" expressa gratidão e respeito mútuo ao fim do combate.',
+          en: '"Obrigado pelo treino" / "Thank you for the roll" expresses gratitude and sportsmanship after training together.',
+        },
+      },
+      {
+        id: 'ex-3-2-recall2',
+        type: 'translation-recall',
+        prompt: {
+          pt: 'Quando você é pego em uma finalização justa e suas mãos estão presas, que palavra você fala para reconhecer o golpe com segurança?',
+          en: 'When caught in a tight submission with hands trapped, what Portuguese call acknowledges that the hold is secured?',
+        },
+        targetAnswer: {
+          pt: 'Pegou!',
+          en: 'Got me!',
+        },
+        hint: {
+          pt: 'Aviso verbal de submissão e segurança no tatame.',
+          en: 'Verbal reset cue signaling the hold is locked in.',
+        },
+        explanation: {
+          pt: '"Pegou!" é o aviso verbal imediato indicando que o golpe encaixou, protegendo a integridade física dos parceiros.',
+          en: '"Pegou!" ("Got me!") is the immediate verbal cue signaling the submission is secured and the round resets safely.',
+        },
+      },
+    ],
+  },
 };
 
 // Also alias lesson-1-1-pt, lesson-1-2-pt, etc. to ensure unit-1-pt from mock course works seamlessly
@@ -870,3 +1108,4 @@ MOCK_LESSONS['lesson-1-3-pt'] = MOCK_LESSONS['lesson-1-3'];
 MOCK_LESSONS['lesson-2-1-pt'] = MOCK_LESSONS['lesson-2-1'];
 MOCK_LESSONS['lesson-2-2-pt'] = MOCK_LESSONS['lesson-2-2'];
 MOCK_LESSONS['lesson-3-1-pt'] = MOCK_LESSONS['lesson-3-1'];
+MOCK_LESSONS['lesson-3-2-pt'] = MOCK_LESSONS['lesson-3-2'];
