@@ -26,8 +26,8 @@ Mocked behavior, static fixtures, and local `AsyncStorage` implementations are e
 
 | Status Category | Count | Requirements |
 |---|:---:|---|
-| **Fully Implemented & Accepted (Local Foundation)** | 3 | • Expo app shell and navigation<br>• Onboarding and course direction<br>• Lesson interaction and answer feedback |
-| **Partially Implemented (Mock / Local-Only)** | 4 | • Published course, units, lessons, and structured content<br>• Separate learning state by concept, course, and direction<br>• Review queue and session completion<br>• Progress, belt-inspired milestones, and XP |
+| **Fully Implemented & Accepted (Local Foundation)** | 4 | • Expo app shell and navigation<br>• Onboarding and course direction<br>• Published course, units, lessons, and structured content<br>• Lesson interaction and answer feedback |
+| **Partially Implemented (Mock / Local-Only)** | 3 | • Separate learning state by concept, course, and direction<br>• Review queue and session completion<br>• Progress, belt-inspired milestones, and XP |
 | **Not Implemented / Placeholder** | 7 | • Authentication/account flow appropriate to age/privacy requirements<br>• FSRS scheduling integration with tests<br>• Audio playback for selected content<br>• Offline lesson/review capability and safe event sync<br>• Purchase and entitlement flow for paid course, including restore<br>• Account deletion and privacy disclosures<br>• Error monitoring, analytics with privacy review, release process |
 | **Total P0 Requirements** | **14** | |
 
@@ -154,23 +154,22 @@ The following section audits all 14 P0 requirements from `MVP_SCOPE.md` across t
 ### Requirement 4: Published course, units, lessons, and structured content
 - **Track:** Curriculum
 - **Description:** Provide complete, published curriculum across Units 1, 2, and 3 for both learning directions, covering greetings, mat commands, numbers, positions, and submissions.
-- **Implemented:** Partially implemented (Unit 1 has 3 complete lessons; Unit 2 has 1 lesson; Unit 3 has 0 lessons implemented in `mockLessons.ts`).
-- **Tracked:** Yes (Issues [#6](https://github.com/PadoSensei/bjj-lang/issues/6), [#14](https://github.com/PadoSensei/bjj-lang/issues/14), [#16](https://github.com/PadoSensei/bjj-lang/issues/16), [#18](https://github.com/PadoSensei/bjj-lang/issues/18); PRs [#7](https://github.com/PadoSensei/bjj-lang/pull/7), [#15](https://github.com/PadoSensei/bjj-lang/pull/15), [#17](https://github.com/PadoSensei/bjj-lang/pull/17), [#19](https://github.com/PadoSensei/bjj-lang/pull/19)).
-- **Accepted:** Partially accepted (M1.1 through M1.8 verified existing lessons, but curriculum remains unfinished).
+- **Implemented:** Yes. All 7 planned lessons across Units 1, 2, and 3 are implemented in `src/data/mockLessons.ts` and cataloged in `src/data/mockCourseData.ts` for both `pt-BR->en` and `en->pt-BR` directions (14 lesson representations total).
+- **Tracked:** Yes (Issues [#6](https://github.com/PadoSensei/bjj-lang/issues/6), [#14](https://github.com/PadoSensei/bjj-lang/issues/14), [#16](https://github.com/PadoSensei/bjj-lang/issues/16), [#18](https://github.com/PadoSensei/bjj-lang/issues/18), [#23](https://github.com/PadoSensei/bjj-lang/issues/23), [#25](https://github.com/PadoSensei/bjj-lang/issues/25), [#27](https://github.com/PadoSensei/bjj-lang/issues/27), [#29](https://github.com/PadoSensei/bjj-lang/issues/29); PRs [#7](https://github.com/PadoSensei/bjj-lang/pull/7), [#15](https://github.com/PadoSensei/bjj-lang/pull/15), [#17](https://github.com/PadoSensei/bjj-lang/pull/17), [#19](https://github.com/PadoSensei/bjj-lang/pull/19), [#24](https://github.com/PadoSensei/bjj-lang/pull/24), [#26](https://github.com/PadoSensei/bjj-lang/pull/26), [#28](https://github.com/PadoSensei/bjj-lang/pull/28), [#30](https://github.com/PadoSensei/bjj-lang/pull/30)).
+- **Accepted:** Yes. Verified by 11 curriculum integrity tests in `__tests__/curriculum/CurriculumIntegrity.test.tsx` verifying parity, ID uniqueness, schema bounds, and playability.
 - **Code Evidence:**
-  - `src/data/mockCourseData.ts` (Metadata for 3 units per direction)
-  - `src/data/mockLessons.ts` (`lesson-1-1`, `lesson-1-2`, `lesson-1-3`, `lesson-2-1`)
+  - `src/data/mockCourseData.ts` (Metadata for Units 1–3 in both directions with exact `conceptCount` parity)
+  - `src/data/mockLessons.ts` (`lesson-1-1`, `lesson-1-2`, `lesson-1-3`, `lesson-2-1`, `lesson-2-2`, `lesson-3-1`, `lesson-3-2` and their `-pt` aliases)
+  - `__tests__/curriculum/CurriculumIntegrity.test.tsx` (Automated curriculum-wide integrity test suite)
   - `docs/content/CURRICULUM.md` (Curriculum specification)
-- **Gaps:**
-  - `lesson-3-1` (Unit 3: Submissions & Sparring) is defined in course metadata but missing from `mockLessons.ts`.
-  - Further lessons in Unit 2 (`lesson-2-2`) and Unit 3 (`lesson-3-2`) required by `CURRICULUM.md` are not implemented.
-  - Curriculum is currently hardcoded in client TypeScript files rather than loaded from CMS/backend or versioned content bundles.
+  - `docs/roadmap/M2_COMPLETION_AUDIT.md` (Full curriculum completion audit)
+- **Gaps:** None for local MVP curriculum structured data. Remote CMS/OTA curriculum updates deferred to post-MVP.
 - **Acceptance Criteria:**
   - Units 1, 2, and 3 have 100% of planned lessons implemented with vocabulary, context, examples, and exercises.
   - All lessons functional in both learning directions.
-  - Automated content integrity tests validate vocabulary IDs, non-empty audio references, and exercise completeness.
-- **Dependencies:** None for content authoring.
-- **Proposed Milestone:** M2 — Curriculum Completion.
+  - Automated content integrity tests validate vocabulary IDs, option bounds, and exercise completeness.
+- **Dependencies:** Milestone 1 foundation.
+- **Proposed Milestone:** M2 — Curriculum Completion (Completed).
 
 ---
 
