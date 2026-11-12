@@ -14,15 +14,15 @@ The project's milestone structure spans two layers: the **actual GitHub mileston
 To avoid ambiguity, milestones are explicitly labeled as follows:
 - **GitHub milestone #1:** `M0 — Project Bootstrap`
 - **GitHub milestone #2:** `M1 — Learning Experience Foundation`
-- **Proposed project milestone M2:** `M2 — Curriculum Completion`
-- **Proposed project milestone M3:** `M3 — Authentication & Backend Foundation`
+- **GitHub milestone #3:** `M2 — Curriculum Completion`
+- **GitHub milestone #4:** `M3 — Authentication & Backend Foundation`
 
 | Actual GitHub Milestone | GitHub Milestone ID | GitHub State | Roadmap Equivalent | Status & Relationship |
 |---|:---:|:---:|---|---|
-| **GitHub milestone #1: M0 — Project Bootstrap** | 1 (`#1`) | Open | M0 | **Complete in code (100% issue completion: 1/1 issue closed).** Milestone object remains open pending owner administrative closure. |
-| **GitHub milestone #2: M1 — Learning Experience Foundation** | 2 (`#2`) | Open | M1 | **Functionally Complete on `master`.** All 6 acceptance criteria met. Displays 0% completion on GitHub due to unlinked issues; eligible for administrative closure after issue reconciliation. |
-| *(None)* | — | Not Created | **Project milestone M2: Curriculum Completion** | **Complete on `master` (100% curriculum implemented & verified).** All 7 planned lessons across Units 1–3 implemented, bidirectional, and verified by curriculum integrity suite (171 tests). |
-| *(None)* | — | Not Created | **M3 — Authentication & Backend Foundation** | **Ready to begin.** Cloud backend, Supabase Auth, profiles, age-gate safeguards. Unblocked by M1 & M2. |
+| **GitHub milestone #1: M0 — Project Bootstrap** | 1 (`#1`) | Closed | M0 | **Complete (100% issue completion: 1/1 issue closed).** Milestone closed. |
+| **GitHub milestone #2: M1 — Learning Experience Foundation** | 2 (`#2`) | Closed | M1 | **Complete (100% issue completion: 8/8 issues closed).** Milestone reconciled and closed. |
+| **GitHub milestone #3: M2 — Curriculum Completion** | 3 (`#3`) | Closed | M2 | **Complete (100% issue completion: 4/4 issues closed).** All 7 planned lessons across Units 1–3 implemented, bidirectional, and verified by curriculum integrity suite (171 tests). |
+| **GitHub milestone #4: M3 — Authentication & Backend Foundation** | 4 (`#4`) | Open | M3 | **Ready to begin.** Cloud backend, Supabase Auth, profiles, age-gate safeguards. Unblocked by M1 & M2. |
 | *(None)* | — | Not Created | **M4 — Learning Engine: FSRS & Offline Sync** | **Proposed.** Production FSRS algorithm, offline review sessions, safe cloud sync. Requires M3. |
 | *(None)* | — | Not Created | **M5 — Audio, Pronunciation & Progression** | **Proposed.** Native audio playback, XP accumulation engine, belt promotions. Unblocked by M2. |
 | *(None)* | — | Not Created | **M6 — Purchases, Entitlements & Account Lifecycle** | **Proposed.** In-app purchases (`en->pt-BR`), free path preservation (`pt-BR->en`), account deletion. Requires M3. |

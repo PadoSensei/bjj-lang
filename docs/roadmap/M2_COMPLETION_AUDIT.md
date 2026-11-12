@@ -14,17 +14,17 @@ This document provides a comprehensive audit of Proposed Project Milestone M2 (`
 
 ### Milestone Progression Overview
 
-- **GitHub milestone #1: `M0 — Project Bootstrap`** — Complete in code (PR #2). Eligible for administrative closure.
-- **GitHub milestone #2: `M1 — Learning Experience Foundation`** — Complete on `master` (PRs #4–#21). All 6 acceptance criteria met; 106 tests passing.
-- **Project milestone M2: `M2 — Curriculum Completion`** — **100% Complete on `master`**. All planned lessons across Units 1, 2, and 3 are authored, bidirectional, and verified by 171 automated tests across 26 test suites.
-- **Project milestone M3: `M3 — Authentication & Backend Foundation`** — **Ready to Begin**.
+- **GitHub milestone #1: `M0 — Project Bootstrap`** — Closed (1/1 issue closed).
+- **GitHub milestone #2: `M1 — Learning Experience Foundation`** — Closed (8/8 canonical issues linked and closed).
+- **GitHub milestone #3: `M2 — Curriculum Completion`** — **Closed (4/4 issues linked and closed; 100% completion)**. All planned lessons across Units 1, 2, and 3 are authored, bidirectional, and verified by 171 automated tests across 26 test suites.
+- **GitHub milestone #4: `M3 — Authentication & Backend Foundation`** — **Open / Ready to Begin**.
 
 ### Core Findings
 
 1. **Implementation Status:** **Complete (100% satisfied for M2 scope).** All planned lessons across Units 1, 2, and 3 are implemented in `src/data/mockLessons.ts`, cataloged in `src/data/mockCourseData.ts`, and verified playable to 100% completion through `useLesson` in both language directions (`pt-BR->en` and `en->pt-BR`).
 2. **Curriculum-Wide Automated Integrity Suite:** Pull request #30 added a dedicated 8-category integrity test suite (`__tests__/curriculum/CurriculumIntegrity.test.tsx`) that enforces strict curriculum-wide invariants: 1:1 metadata-to-implementation parity, exact `conceptCount` matching, globally unique vocabulary and exercise IDs, bounded multiple-choice options, valid answer indices, non-empty explanations, and bidirectional review queue isolation.
-3. **GitHub Tracking Status (Administrative Discrepancy):** The 4 implementation issues for M2 ([#23](https://github.com/PadoSensei/bjj-lang/issues/23), [#25](https://github.com/PadoSensei/bjj-lang/issues/25), [#27](https://github.com/PadoSensei/bjj-lang/issues/27), [#29](https://github.com/PadoSensei/bjj-lang/issues/29)) remain open on GitHub despite their corresponding pull requests ([#24](https://github.com/PadoSensei/bjj-lang/pull/24), [#26](https://github.com/PadoSensei/bjj-lang/pull/26), [#28](https://github.com/PadoSensei/bjj-lang/pull/28), [#30](https://github.com/PadoSensei/bjj-lang/pull/30)) having been merged into `master`. This is strictly an administrative tracking artifact.
-4. **Recommendation:** Qualifies for closure. Close issues #23, #25, #27, #29 with verified closing summaries, reconcile GitHub milestone objects, and authorize the start of Milestone 3.
+3. **GitHub Tracking Reconciled:** The 4 implementation issues for M2 ([#23](https://github.com/PadoSensei/bjj-lang/issues/23), [#25](https://github.com/PadoSensei/bjj-lang/issues/25), [#27](https://github.com/PadoSensei/bjj-lang/issues/27), [#29](https://github.com/PadoSensei/bjj-lang/issues/29)) have been updated with closing verification summaries and closed. GitHub Milestone #3 (`M2 — Curriculum Completion`) was created, linked to all 4 closed issues (100% completion), and closed.
+4. **Recommendation:** Milestone 2 is officially closed across code, tests, documentation, and GitHub tracking. Milestone 3 is created on GitHub (#4) and ready to begin.
 
 ---
 
@@ -34,10 +34,10 @@ This document provides a comprehensive audit of Proposed Project Milestone M2 (`
 
 | Milestone | Tracking ID | GitHub State | Issue State | Codebase Reality |
 |---|:---:|:---:|:---:|---|
-| **M0 — Project Bootstrap** | 1 (`#1`) | Open | 1/1 Closed (100%) | Fully complete on `master` (PR #2). Pending administrative closure. |
-| **M1 — Learning Foundation** | 2 (`#2`) | Open | 0/0 Assigned | Fully complete on `master` (PRs #4–#21). 8 canonical issues closed but unlinked. |
-| **M2 — Curriculum Completion** | Uncreated | — | 4 Open Issues | **100% Complete in code.** PRs #24, #26, #28, and #30 merged. 171 tests passing. |
-| **M3 — Auth & Backend Foundation** | Uncreated | — | — | **Ready to begin.** Foundation and curriculum prerequisites met. |
+| **M0 — Project Bootstrap** | 1 (`#1`) | Closed | 1/1 Closed (100%) | Fully complete on `master` (PR #2). Milestone closed. |
+| **M1 — Learning Foundation** | 2 (`#2`) | Closed | 8/8 Closed (100%) | Fully complete on `master` (PRs #4–#21). All 8 canonical issues assigned and milestone closed. |
+| **M2 — Curriculum Completion** | 3 (`#3`) | Closed | 4/4 Closed (100%) | **100% Complete in code.** PRs #24, #26, #28, and #30 merged. All 4 issues assigned and milestone closed. |
+| **M3 — Auth & Backend Foundation** | 4 (`#4`) | Open | 0 Open Issues | **Ready to begin.** Foundation and curriculum prerequisites met. |
 
 ### Canonical M2 Implementation Issues & Merged Pull Requests
 
@@ -159,28 +159,28 @@ The automated suite in `__tests__/curriculum/CurriculumIntegrity.test.tsx` valid
 
 ---
 
-## 7. GitHub Administrative Actions Checklist (Owner Action Plan)
+## 7. GitHub Administrative Actions Reconciliation
 
-The repository owner can execute the following workflow to reconcile GitHub tracking:
+The administrative tracking workflow has been fully executed:
 
-- [ ] **Step 1: Add Closing Comments and Close M2 Issues**
-  - **Issue #23 (M2.1):** Close with reference to merged PR #24 (`eff5b62`).
-  - **Issue #25 (M2.2):** Close with reference to merged PR #26 (`3f57e6b`).
-  - **Issue #27 (M2.3):** Close with reference to merged PR #28 (`5e0c8fb`).
-  - **Issue #29 (M2.4):** Close with reference to merged PR #30 (`8d995bb`).
+- [x] **Step 1: Add Closing Comments and Close M2 Issues**
+  - **Issue #23 (M2.1):** Verified and closed with reference to merged PR #24 (`eff5b62`).
+  - **Issue #25 (M2.2):** Verified and closed with reference to merged PR #26 (`3f57e6b`).
+  - **Issue #27 (M2.3):** Verified and closed with reference to merged PR #28 (`5e0c8fb`).
+  - **Issue #29 (M2.4):** Verified and closed with reference to merged PR #30 (`8d995bb`).
 
-- [ ] **Step 2: Close GitHub Milestone #1 (`M0 — Project Bootstrap`)**
-  - Confirm 1/1 issues closed; set milestone state to **Closed**.
+- [x] **Step 2: Close GitHub Milestone #1 (`M0 — Project Bootstrap`)**
+  - Confirmed 1/1 issue closed; milestone closed.
 
-- [ ] **Step 3: Reconcile and Close GitHub Milestone #2 (`M1 — Learning Experience Foundation`)**
-  - Assign closed canonical issues (#3, #6, #8, #10, #12, #14, #16, #18) to Milestone #2; set milestone state to **Closed**.
+- [x] **Step 3: Reconcile and Close GitHub Milestone #2 (`M1 — Learning Experience Foundation`)**
+  - Assigned closed canonical issues (#3, #6, #8, #10, #12, #14, #16, #18) to Milestone #2 (8/8 closed, 100% completion); milestone closed.
 
-- [ ] **Step 4: Create and Close Milestone `M2 — Curriculum Completion`**
-  - Create milestone `M2 — Curriculum Completion`.
-  - Assign issues #23, #25, #27, #29 to M2; set milestone state to **Closed** (100% completion).
+- [x] **Step 4: Create and Close Milestone `M2 — Curriculum Completion`**
+  - Created milestone `M2 — Curriculum Completion` (GitHub Milestone #3).
+  - Assigned issues #23, #25, #27, #29 to M2 (4/4 closed, 100% completion); milestone closed.
 
-- [ ] **Step 5: Create Milestone `M3 — Authentication & Backend Foundation`**
-  - Register the M3 milestone on GitHub to track upcoming Supabase auth, profile schema, and guest-conversion deliverables.
+- [x] **Step 5: Create Milestone `M3 — Authentication & Backend Foundation`**
+  - Registered GitHub Milestone #4 (`M3 — Authentication & Backend Foundation`) as open and ready to track upcoming Supabase auth, profile schema, and guest-conversion deliverables.
 
 ---
 
