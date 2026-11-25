@@ -2,6 +2,7 @@ module.exports = {
   preset: 'jest-expo',
   setupFiles: ['./jest.setup.js'],
   testTimeout: 15000,
+  maxWorkers: '50%',
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   testPathIgnorePatterns: ['/node_modules/', '/__tests__/curriculum/curriculumTestHelpers.ts'],
   transformIgnorePatterns: [
