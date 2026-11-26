@@ -31,7 +31,7 @@ export function useReviewSession(
   options?: UseReviewSessionOptions
 ) {
   const getNow = options?.getNow || Date.now;
-  const { activeReviewRecords, recordReviewOutcome } = useCourse();
+  const { activeReviewRecords, recordReviewOutcome, isLoadingProgress } = useCourse();
 
   const [sessionQueue, setSessionQueue] = useState<ReviewRecord[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -46,8 +46,12 @@ export function useReviewSession(
 
   const lastDirectionRef = useRef<CourseDirection | null>(null);
 
-  // Initialize review session queue ONCE when direction changes or on initial mount
+  // Initialize review session queue ONCE per direction, after stored progress has loaded.
+  // Building it earlier would snapshot the empty defaults and never pick up the stored records.
   useEffect(() => {
+    if (isLoadingProgress) {
+      return;
+    }
     if (lastDirectionRef.current !== direction) {
       const now = getNow();
       const dueRecords = getDueItems(activeRecordsRef.current, now);
@@ -60,7 +64,7 @@ export function useReviewSession(
       setIsInitialized(true);
       lastDirectionRef.current = direction;
     }
-  }, [direction, getNow]);
+  }, [direction, getNow, isLoadingProgress]);
 
   const currentRecord = useMemo(() => {
     if (currentIndex < 0 || currentIndex >= sessionQueue.length) {

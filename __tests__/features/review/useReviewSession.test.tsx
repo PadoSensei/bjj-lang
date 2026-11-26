@@ -1,5 +1,7 @@
 import React from 'react';
-import { renderHook, act } from '@testing-library/react-native';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { useCourse } from '../../../src/context/CourseContext';
+import { reviewStorage } from '../../../src/services/storage/reviewStorage';
 import { CourseProvider } from '../../../src/context/CourseContext';
 import { useReviewSession } from '../../../src/features/review/useReviewSession';
 import { DirectionReviewMap } from '../../../src/types/review';
@@ -171,5 +173,59 @@ describe('useReviewSession', () => {
     act(() => result.current.nextItem());
 
     expect(result.current.isSessionComplete).toBe(true);
+  });
+
+  describe('after hydrating from storage (no initial props)', () => {
+    const hydratingWrapper = ({ children }: { children: React.ReactNode }) => (
+      <CourseProvider initialDirection="pt-BR->en">{children}</CourseProvider>
+    );
+
+    const useSessionWithLoading = () => {
+      const session = useReviewSession('pt-BR->en', { getNow: mockGetNow });
+      const { isLoadingProgress } = useCourse();
+      return { session, isLoadingProgress };
+    };
+
+    test('builds the session queue from records loaded from AsyncStorage', async () => {
+      await reviewStorage.saveReviewRecords(initialReviews);
+
+      const { result } = renderHook(useSessionWithLoading, { wrapper: hydratingWrapper });
+
+      await waitFor(() => expect(result.current.isLoadingProgress).toBe(false));
+
+      expect(result.current.session.isInitialized).toBe(true);
+      expect(result.current.session.totalSessionItems).toBe(2);
+      expect(result.current.session.currentRecord?.vocabId).toBe('vocab-1-1-1');
+    });
+
+    test('is not initialized while storage is still loading', async () => {
+      await reviewStorage.saveReviewRecords(initialReviews);
+
+      const { result } = renderHook(useSessionWithLoading, { wrapper: hydratingWrapper });
+
+      // First render happens before the stored records arrive.
+      expect(result.current.isLoadingProgress).toBe(true);
+      expect(result.current.session.isInitialized).toBe(false);
+      expect(result.current.session.totalSessionItems).toBe(0);
+
+      await waitFor(() => expect(result.current.session.isInitialized).toBe(true));
+    });
+
+    test('does not rebuild the queue when records change mid-session', async () => {
+      await reviewStorage.saveReviewRecords(initialReviews);
+
+      const { result } = renderHook(useSessionWithLoading, { wrapper: hydratingWrapper });
+      await waitFor(() => expect(result.current.session.isInitialized).toBe(true));
+
+      act(() => result.current.session.revealAnswer());
+      await act(async () => {
+        await result.current.session.submitOutcome('remembered');
+      });
+
+      // Reviewing changed the stored record; the queue keeps its original order and size.
+      expect(result.current.session.totalSessionItems).toBe(2);
+      expect(result.current.session.currentRecord?.vocabId).toBe('vocab-1-1-1');
+      expect(result.current.session.isSubmitted).toBe(true);
+    });
   });
 });
