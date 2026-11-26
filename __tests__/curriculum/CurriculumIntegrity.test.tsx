@@ -4,6 +4,9 @@ import { render, act } from '@testing-library/react-native';
 import { Text, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MOCK_COURSES } from '../../src/data/mockCourseData';
+import { validateRegistry, getContentSet, contentIndex } from '../../src/content/registry';
+import { validateAll } from '../../src/domain/content/validate';
+import type { Story } from '../../src/domain/content/types';
 import { MOCK_LESSONS } from '../../src/data/mockLessons';
 import { useLesson, getFormattedExerciseData } from '../../src/features/lesson/useLesson';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
@@ -421,6 +424,29 @@ describe('Curriculum-Wide Integrity Suite (M2.4)', () => {
           expect(canonicalData.unitId).toBe(`unit-${uIdx + 1}`);
         });
       });
+    });
+  });
+
+  describe('9. Content Registry Validators (ADR-008, issue #38)', () => {
+    it('the whole content registry passes every content validator', () => {
+      const issues = validateRegistry();
+      // On failure, the issue messages say exactly what to fix.
+      expect(issues.map((i) => `${i.code} in ${i.contentId}: ${i.message}`)).toEqual([]);
+    });
+
+    it('validation runs over real registry content (a broken story would be caught)', () => {
+      const brokenStory: Story = {
+        id: 'story-white-broken',
+        belt: 'white',
+        title: { en: 'Broken', pt: 'Quebrada' },
+        pages: [{ id: 'p1', pt: '', tokens: [{ text: 'Shrimp', itemId: 'vocab-2-2-1' }] }],
+        comprehensionExerciseIds: [],
+        review: { status: 'draft' },
+      };
+      const content = getContentSet();
+      const issues = validateAll({ ...content, stories: [...content.stories, brokenStory] }, contentIndex);
+      // vocab-2-2-1 is a Blue Belt item used in White Belt content.
+      expect(issues.map((i) => i.code)).toEqual(['belt-ceiling']);
     });
   });
 });
