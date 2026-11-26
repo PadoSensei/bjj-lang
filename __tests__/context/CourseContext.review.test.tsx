@@ -1,8 +1,12 @@
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react-native';
+import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import { Text, Button } from 'react-native';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MOCK_LESSONS } from '../../src/data/mockLessons';
+import { reviewStorage } from '../../src/services/storage/reviewStorage';
+import { progressStorage } from '../../src/services/storage/progressStorage';
+import { historyStorage } from '../../src/services/storage/historyStorage';
 
 const ReviewTestComponent = () => {
   const {
@@ -136,3 +140,150 @@ describe('CourseContext Review Queue Integration', () => {
     expect(getByTestId('total-records-count').props.children).toBe(1);
   });
 });
+
+/**
+ * Issue #33 (P0-2): writes must never be computed from stale state.
+ * Each test reproduces a way the old code lost learner data.
+ */
+describe('CourseContext concurrent and early writes', () => {
+  let api: ReturnType<typeof useCourse>;
+  const ApiCapture = () => {
+    api = useCourse();
+    return null;
+  };
+
+  const emptyMap = () => ({ 'pt-BR->en': [], 'en->pt-BR': [] });
+
+  const renderInjectedEmpty = () =>
+    render(
+      <CourseProvider
+        initialDirection="pt-BR->en"
+        initialCompletedLessons={emptyMap()}
+        initialReviewRecords={emptyMap()}
+        initialHistoryRecords={emptyMap()}
+      >
+        <ApiCapture />
+      </CourseProvider>
+    );
+
+  const vocabCount = (lessonId: string) => MOCK_LESSONS[lessonId].vocabulary.length;
+
+  beforeEach(async () => {
+    await AsyncStorage.clear();
+    jest.restoreAllMocks();
+  });
+
+  it('keeps every record when two lessons are completed in the same tick', async () => {
+    renderInjectedEmpty();
+    const expected = vocabCount('lesson-1-1') + vocabCount('lesson-1-2');
+
+    let results: boolean[] = [];
+    await act(async () => {
+      results = await Promise.all([
+        api.markLessonComplete('lesson-1-1'),
+        api.markLessonComplete('lesson-1-2'),
+      ]);
+    });
+
+    expect(results).toEqual([true, true]);
+    expect(api.activeReviewRecords).toHaveLength(expected);
+    expect(api.completedLessonIds).toEqual(['lesson-1-1', 'lesson-1-2']);
+
+    const stored = await reviewStorage.loadReviewRecords();
+    expect(stored['pt-BR->en']).toHaveLength(expected);
+  });
+
+  it('does not overwrite stored progress when a lesson completes before loading finishes', async () => {
+    // Progress saved in an earlier session.
+    await progressStorage.markLessonCompleteInStorage('pt-BR->en', 'lesson-2-1');
+    await reviewStorage.enqueueLessonVocabulary(
+      'pt-BR->en',
+      'lesson-2-1',
+      MOCK_LESSONS['lesson-2-1'].vocabulary
+    );
+
+    // Real launch: no injected state, so the provider hydrates from storage.
+    render(
+      <CourseProvider initialDirection="pt-BR->en">
+        <ApiCapture />
+      </CourseProvider>
+    );
+    expect(api.isLoadingProgress).toBe(true);
+
+    // Fire the completion before hydration has finished.
+    let completion!: Promise<boolean>;
+    act(() => {
+      completion = api.markLessonComplete('lesson-1-1');
+    });
+
+    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    await act(async () => {
+      await expect(completion).resolves.toBe(true);
+    });
+
+    const expected = vocabCount('lesson-2-1') + vocabCount('lesson-1-1');
+    expect(api.activeReviewRecords).toHaveLength(expected);
+    expect([...api.completedLessonIds].sort()).toEqual(['lesson-1-1', 'lesson-2-1']);
+
+    const storedReviews = await reviewStorage.loadReviewRecords();
+    expect(storedReviews['pt-BR->en']).toHaveLength(expected);
+    const storedProgress = await progressStorage.loadCompletedLessons();
+    expect([...storedProgress['pt-BR->en']].sort()).toEqual(['lesson-1-1', 'lesson-2-1']);
+  });
+
+  it('persists both outcomes when two cards are reviewed in the same tick', async () => {
+    renderInjectedEmpty();
+    await act(async () => {
+      await api.markLessonComplete('lesson-1-1');
+    });
+    const [first, second] = MOCK_LESSONS['lesson-1-1'].vocabulary.map((v) => v.id);
+    const later = Date.now() + 86400000;
+
+    let results: boolean[] = [];
+    await act(async () => {
+      results = await Promise.all([
+        api.recordReviewOutcome(first, 'remembered', later),
+        api.recordReviewOutcome(second, 'needs-practice', later),
+      ]);
+    });
+
+    expect(results).toEqual([true, true]);
+    const byId = (id: string) => api.activeReviewRecords.find((r) => r.vocabId === id)!;
+    expect(byId(first).reviewCount).toBe(1);
+    expect(byId(first).rememberedCount).toBe(1);
+    expect(byId(second).reviewCount).toBe(1);
+    expect(byId(second).needsPracticeCount).toBe(1);
+    expect(api.activeHistory).toHaveLength(2);
+
+    const stored = await reviewStorage.loadReviewRecords();
+    const storedById = (id: string) => stored['pt-BR->en'].find((r) => r.vocabId === id)!;
+    expect(storedById(first).reviewCount).toBe(1);
+    expect(storedById(second).reviewCount).toBe(1);
+    const storedHistory = await historyStorage.loadHistoryRecords();
+    expect(storedHistory['pt-BR->en']).toHaveLength(2);
+  });
+
+  it('reports a failed save as false and still runs the next write', async () => {
+    renderInjectedEmpty();
+    const setItemSpy = jest
+      .spyOn(AsyncStorage, 'setItem')
+      .mockImplementationOnce(() => Promise.reject(new Error('disk full')));
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    let firstResult: boolean | undefined;
+    let secondResult: boolean | undefined;
+    await act(async () => {
+      [firstResult, secondResult] = await Promise.all([
+        api.markLessonComplete('lesson-1-1'),
+        api.markLessonComplete('lesson-1-2'),
+      ]);
+    });
+
+    expect(firstResult).toBe(false);
+    expect(secondResult).toBe(true);
+    expect(setItemSpy).toHaveBeenCalled();
+    const stored = await reviewStorage.loadReviewRecords();
+    expect(stored['pt-BR->en'].length).toBeGreaterThan(0);
+  });
+});
+

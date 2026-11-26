@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { CourseDirection } from '../components/ui/CourseDirectionSelector';
 import { CourseData, MOCK_COURSES } from '../data/mockCourseData';
 import { MOCK_LESSONS } from '../data/mockLessons';
 import { progressStorage, DirectionProgressMap } from '../services/storage/progressStorage';
 import { reviewStorage, DEFAULT_REVIEWS } from '../services/storage/reviewStorage';
 import { historyStorage, DEFAULT_HISTORY } from '../services/storage/historyStorage';
+import { createWriteQueue, WriteQueue } from '../services/learner/writeQueue';
 import { DirectionReviewMap, ReviewOutcome, ReviewRecord } from '../types/review';
 import { DirectionHistoryMap, ReviewHistoryEntry } from '../types/history';
 import { getDueItems, getNextReviewTimestamp } from '../features/review/reviewScheduler';
@@ -78,32 +79,68 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
   );
   const [isLoadingProgress, setIsLoadingProgress] = useState<boolean>(!initialCompletedLessons);
 
+  // Latest committed state, read by writes instead of render-time closures,
+  // so a write never starts from a stale snapshot (issue #33).
+  const completedMapRef = useRef(completedMap);
+  const reviewMapRef = useRef(reviewMap);
+  const historyMapRef = useRef(historyMap);
+
+  const commitCompletedMap = useCallback((next: DirectionProgressMap) => {
+    completedMapRef.current = next;
+    setCompletedMap(next);
+  }, []);
+  const commitReviewMap = useCallback((next: DirectionReviewMap) => {
+    reviewMapRef.current = next;
+    setReviewMap(next);
+  }, []);
+  const commitHistoryMap = useCallback((next: DirectionHistoryMap) => {
+    historyMapRef.current = next;
+    setHistoryMap(next);
+  }, []);
+
+  // All writes run one at a time. With no injected state the queue stays closed
+  // until stored progress has loaded, so early writes cannot overwrite it.
+  const writeQueueRef = useRef<WriteQueue | null>(null);
+  if (!writeQueueRef.current) {
+    writeQueueRef.current = createWriteQueue({ open: !!initialCompletedLessons });
+  }
+  const writeQueue = writeQueueRef.current;
+
   // Load progress, review records, and history from persistent storage on mount if not provided as initial props
   useEffect(() => {
     if (initialCompletedLessons) {
       if (initialReviewRecords) {
-        setReviewMap(initialReviewRecords);
+        commitReviewMap(initialReviewRecords);
       }
       if (initialHistoryRecords) {
-        setHistoryMap(initialHistoryRecords);
+        commitHistoryMap(initialHistoryRecords);
       }
       setIsLoadingProgress(false);
+      writeQueue.open();
       return;
     }
 
     let isMounted = true;
     async function loadStoredData() {
-      const [storedProgress, storedReviews, storedHistory] = await Promise.all([
-        progressStorage.loadCompletedLessons(),
-        reviewStorage.loadReviewRecords(),
-        historyStorage.loadHistoryRecords(),
-      ]);
+      try {
+        const [storedProgress, storedReviews, storedHistory] = await Promise.all([
+          progressStorage.loadCompletedLessons(),
+          reviewStorage.loadReviewRecords(),
+          historyStorage.loadHistoryRecords(),
+        ]);
 
-      if (isMounted) {
-        setCompletedMap(storedProgress);
-        setReviewMap(storedReviews);
-        setHistoryMap(storedHistory);
-        setIsLoadingProgress(false);
+        if (isMounted) {
+          commitCompletedMap(storedProgress);
+          commitReviewMap(storedReviews);
+          commitHistoryMap(storedHistory);
+        }
+      } finally {
+        // Writes stay held if we unmounted before loading: running them now
+        // would save the empty defaults over the learner's stored progress.
+        if (isMounted) {
+          setIsLoadingProgress(false);
+          writeQueue.open();
+        }
       }
     }
 
@@ -111,17 +148,33 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [initialCompletedLessons, initialReviewRecords, initialHistoryRecords]);
+  }, [
+    initialCompletedLessons,
+    initialReviewRecords,
+    initialHistoryRecords,
+    commitCompletedMap,
+    commitReviewMap,
+    commitHistoryMap,
+    writeQueue,
+  ]);
 
-  const refreshReviews = useCallback(async () => {
-    const storedReviews = await reviewStorage.loadReviewRecords();
-    setReviewMap(storedReviews);
-  }, []);
+  const refreshReviews = useCallback(
+    () =>
+      writeQueue.enqueue(async () => {
+        const storedReviews = await reviewStorage.loadReviewRecords();
+        commitReviewMap(storedReviews);
+      }),
+    [writeQueue, commitReviewMap]
+  );
 
-  const refreshHistory = useCallback(async () => {
-    const storedHistory = await historyStorage.loadHistoryRecords();
-    setHistoryMap(storedHistory);
-  }, []);
+  const refreshHistory = useCallback(
+    () =>
+      writeQueue.enqueue(async () => {
+        const storedHistory = await historyStorage.loadHistoryRecords();
+        commitHistoryMap(storedHistory);
+      }),
+    [writeQueue, commitHistoryMap]
+  );
 
   const activeCompletedIds = useMemo(() => {
     return completedMap[direction] || [];
@@ -158,83 +211,82 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
   );
 
   const markLessonComplete = useCallback(
-    async (lessonId: string): Promise<boolean> => {
-      if (!lessonId) return false;
+    (lessonId: string): Promise<boolean> => {
+      if (!lessonId) return Promise.resolve(false);
+      const dir = direction;
 
-      // Idempotently add to completed map
-      setCompletedMap((prevMap) => {
-        const currentList = prevMap[direction] || [];
-        if (currentList.includes(lessonId)) {
-          return prevMap;
+      return writeQueue.enqueue(async () => {
+        // Idempotently add to completed map
+        const completed = completedMapRef.current;
+        const currentList = completed[dir] || [];
+        if (!currentList.includes(lessonId)) {
+          commitCompletedMap({ ...completed, [dir]: [...currentList, lessonId] });
         }
-        return {
-          ...prevMap,
-          [direction]: [...currentList, lessonId],
-        };
-      });
 
-      // Save lesson completion to storage
-      const progressResult = await progressStorage.markLessonCompleteInStorage(direction, lessonId);
+        // Save lesson completion to storage
+        const progressResult = await progressStorage.markLessonCompleteInStorage(dir, lessonId);
 
-      // Automatically enqueue vocabulary from completed lesson into review state & storage
-      const lessonData = MOCK_LESSONS[lessonId];
-      if (lessonData && lessonData.vocabulary && lessonData.vocabulary.length > 0) {
-        const currentRecords = reviewMap[direction] || [];
-        const existingVocabIds = new Set(currentRecords.map((r) => r.vocabId));
-        const newRecords: ReviewRecord[] = [];
-        const now = Date.now();
+        // Automatically enqueue vocabulary from completed lesson into review state & storage
+        const lessonData = MOCK_LESSONS[lessonId];
+        if (lessonData && lessonData.vocabulary && lessonData.vocabulary.length > 0) {
+          const reviews = reviewMapRef.current;
+          const currentRecords = reviews[dir] || [];
+          const existingVocabIds = new Set(currentRecords.map((r) => r.vocabId));
+          const newRecords: ReviewRecord[] = [];
+          const now = Date.now();
 
-        for (const item of lessonData.vocabulary) {
-          if (!existingVocabIds.has(item.id)) {
-            newRecords.push({
-              id: item.id,
-              vocabId: item.id,
-              lessonId,
-              direction,
-              addedAt: now,
-              lastReviewedAt: null,
-              dueAt: now,
-              reviewCount: 0,
-              rememberedCount: 0,
-              needsPracticeCount: 0,
-            });
-            existingVocabIds.add(item.id);
+          for (const item of lessonData.vocabulary) {
+            if (!existingVocabIds.has(item.id)) {
+              newRecords.push({
+                id: item.id,
+                vocabId: item.id,
+                lessonId,
+                direction: dir,
+                addedAt: now,
+                lastReviewedAt: null,
+                dueAt: now,
+                reviewCount: 0,
+                rememberedCount: 0,
+                needsPracticeCount: 0,
+              });
+              existingVocabIds.add(item.id);
+            }
+          }
+
+          if (newRecords.length > 0) {
+            const updatedMap: DirectionReviewMap = {
+              ...reviews,
+              [dir]: [...currentRecords, ...newRecords],
+            };
+            commitReviewMap(updatedMap);
+            await reviewStorage.saveReviewRecords(updatedMap);
           }
         }
 
-        if (newRecords.length > 0) {
-          const updatedMap: DirectionReviewMap = {
-            ...reviewMap,
-            [direction]: [...currentRecords, ...newRecords],
-          };
-          setReviewMap(updatedMap);
-          // Await save to ensure storage consistency and avoid unhandled promise timings in tests
-          await reviewStorage.saveReviewRecords(updatedMap);
-        }
-      }
-
-      return progressResult.success;
+        return progressResult.success;
+      });
     },
-    [direction, reviewMap]
+    [direction, writeQueue, commitCompletedMap, commitReviewMap]
   );
 
-  const recordHistoryEntry = useCallback(
-    async (vocabId: string, outcome: ReviewOutcome, completedAt: number = Date.now()): Promise<boolean> => {
+  /** Append a history entry. Must only be called from inside a queued write. */
+  const appendHistoryEntry = useCallback(
+    async (
+      dir: CourseDirection,
+      vocabId: string,
+      outcome: ReviewOutcome,
+      completedAt: number
+    ): Promise<boolean> => {
       const newEntry: ReviewHistoryEntry = {
         id: generateHistoryId(),
         vocabId,
-        direction,
+        direction: dir,
         outcome,
         completedAt,
       };
 
-      setHistoryMap((prevMap) => {
-        const currentEntries = prevMap[direction] || [];
-        return {
-          ...prevMap,
-          [direction]: [...currentEntries, newEntry],
-        };
-      });
+      const history = historyMapRef.current;
+      commitHistoryMap({ ...history, [dir]: [...(history[dir] || []), newEntry] });
 
       try {
         const { success } = await historyStorage.addHistoryEntry(newEntry);
@@ -244,48 +296,58 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
         return false;
       }
     },
-    [direction]
+    [commitHistoryMap]
+  );
+
+  const recordHistoryEntry = useCallback(
+    (vocabId: string, outcome: ReviewOutcome, completedAt: number = Date.now()): Promise<boolean> => {
+      const dir = direction;
+      return writeQueue.enqueue(() => appendHistoryEntry(dir, vocabId, outcome, completedAt));
+    },
+    [direction, writeQueue, appendHistoryEntry]
   );
 
   const recordReviewOutcome = useCallback(
-    async (vocabId: string, outcome: ReviewOutcome, nextDueAt: number): Promise<boolean> => {
-      const currentList = reviewMap[direction] || [];
-      const existingIndex = currentList.findIndex((r) => r.vocabId === vocabId);
+    (vocabId: string, outcome: ReviewOutcome, nextDueAt: number): Promise<boolean> => {
+      const dir = direction;
 
-      if (existingIndex === -1) {
-        return false;
-      }
+      return writeQueue.enqueue(async () => {
+        const reviews = reviewMapRef.current;
+        const currentList = reviews[dir] || [];
+        const existingIndex = currentList.findIndex((r) => r.vocabId === vocabId);
 
-      const now = Date.now();
-      const targetRecord = currentList[existingIndex];
-      const updatedRecord: ReviewRecord = {
-        ...targetRecord,
-        lastReviewedAt: now,
-        dueAt: nextDueAt,
-        reviewCount: targetRecord.reviewCount + 1,
-        rememberedCount: targetRecord.rememberedCount + (outcome === 'remembered' ? 1 : 0),
-        needsPracticeCount: targetRecord.needsPracticeCount + (outcome === 'needs-practice' ? 1 : 0),
-      };
+        if (existingIndex === -1) {
+          return false;
+        }
 
-      const updatedList = [...currentList];
-      updatedList[existingIndex] = updatedRecord;
+        const now = Date.now();
+        const targetRecord = currentList[existingIndex];
+        const updatedRecord: ReviewRecord = {
+          ...targetRecord,
+          lastReviewedAt: now,
+          dueAt: nextDueAt,
+          reviewCount: targetRecord.reviewCount + 1,
+          rememberedCount: targetRecord.rememberedCount + (outcome === 'remembered' ? 1 : 0),
+          needsPracticeCount: targetRecord.needsPracticeCount + (outcome === 'needs-practice' ? 1 : 0),
+        };
 
-      const updatedMap: DirectionReviewMap = {
-        ...reviewMap,
-        [direction]: updatedList,
-      };
+        const updatedList = [...currentList];
+        updatedList[existingIndex] = updatedRecord;
+        const updatedMap: DirectionReviewMap = { ...reviews, [dir]: updatedList };
 
-      setReviewMap(updatedMap);
+        commitReviewMap(updatedMap);
 
-      // Record scheduling outcome
-      const savedReview = await reviewStorage.saveReviewRecords(updatedMap);
+        // Record scheduling outcome
+        const savedReview = await reviewStorage.saveReviewRecords(updatedMap);
 
-      // Also record history entry (fails gracefully without interrupting review flow)
-      await recordHistoryEntry(vocabId, outcome, now);
+        // Also record history entry (fails gracefully without interrupting review flow).
+        // Called directly, not re-enqueued: this task already holds the queue.
+        await appendHistoryEntry(dir, vocabId, outcome, now);
 
-      return savedReview;
+        return savedReview;
+      });
     },
-    [direction, reviewMap, recordHistoryEntry]
+    [direction, writeQueue, commitReviewMap, appendHistoryEntry]
   );
 
   // Derive dynamic courseData with recalculated unit progress & lesson completion statuses
