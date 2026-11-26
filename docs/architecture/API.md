@@ -1,5 +1,7 @@
 # API Strategy
 
+**Status:** Deferred (November 2026). The POC has no backend (ADR-002); these are the planned contracts for later.
+
 Use Supabase's typed client for ordinary authenticated, user-scoped reads/writes under RLS. Use Edge Functions for privileged or multi-step workflows.
 
 ## Direct queries

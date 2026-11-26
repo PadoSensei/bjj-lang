@@ -1,5 +1,7 @@
 # Bootstrap Task — M0
 
+> **Historical — pre-pivot.** This document describes BJJ_Lang before the November 2026 English-learning pivot and is kept as a record. For the current plan see `docs/product/MVP_SCOPE.md` and `docs/roadmap/PROPOSED_MILESTONES.md`.
+
 ## Objective
 Create the minimum professional engineering foundation for BJJ_Lang.
 

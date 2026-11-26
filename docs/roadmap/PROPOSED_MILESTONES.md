@@ -1,238 +1,77 @@
-# Proposed MVP Milestones Roadmap
+# Milestones Roadmap
 
 **Repository:** [PadoSensei/bjj-lang](https://github.com/PadoSensei/bjj-lang/)
-**Baseline Document:** `docs/product/MVP_SCOPE.md`
-**Companion Audits:** `docs/roadmap/P0_ROADMAP_AUDIT.md`, `docs/roadmap/M1_COMPLETION_AUDIT.md` & `docs/roadmap/M2_COMPLETION_AUDIT.md`
-**Status:** Proposal (Pending Administrative Review)
+**Scope:** `docs/product/MVP_SCOPE.md` (POC scope, English-learning pivot)
+**Status:** Current (November 2026). Supersedes the pre-pivot M3–M7 plan, kept below under *Parked*.
 
----
+Milestones run in order. Content authoring for P2 can start as soon as the P1-1 content types merge.
 
-## 1. Relationship Between GitHub Milestones & Proposed Roadmap
+## P0 — Pivot Foundations
+Safe learner state and agreed direction semantics.
 
-The project's milestone structure spans two layers: the **actual GitHub milestones** registered in the repository issue tracker, and the **proposed milestone roadmap** designed to guide the project through MVP completion.
+| Issue | Title | Status |
+| --- | --- | --- |
+| [#32](https://github.com/PadoSensei/bjj-lang/issues/32) | P0-1 Build the flashcard session after storage hydration | Done (PR #52) |
+| [#33](https://github.com/PadoSensei/bjj-lang/issues/33) | P0-2 Serialize learner-state writes | Done (PR #53) |
+| [#34](https://github.com/PadoSensei/bjj-lang/issues/34) | P0-3 Direction-isolation coverage in both directions | Done (PR #51) |
+| [#35](https://github.com/PadoSensei/bjj-lang/issues/35) | P0-4 Persist the last-used direction | In review |
+| [#36](https://github.com/PadoSensei/bjj-lang/issues/36) | P0-5 Pivot documentation, ADR-008, ADR-009 | In review |
 
-To avoid ambiguity, milestones are explicitly labeled as follows:
-- **GitHub milestone #1:** `M0 — Project Bootstrap`
-- **GitHub milestone #2:** `M1 — Learning Experience Foundation`
-- **GitHub milestone #3:** `M2 — Curriculum Completion`
-- **GitHub milestone #4:** `M3 — Authentication & Backend Foundation`
+**Exit:** all five merged; ADR-008 and ADR-009 accepted.
 
-| Actual GitHub Milestone | GitHub Milestone ID | GitHub State | Roadmap Equivalent | Status & Relationship |
-|---|:---:|:---:|---|---|
-| **GitHub milestone #1: M0 — Project Bootstrap** | 1 (`#1`) | Closed | M0 | **Complete (100% issue completion: 1/1 issue closed).** Milestone closed. |
-| **GitHub milestone #2: M1 — Learning Experience Foundation** | 2 (`#2`) | Closed | M1 | **Complete (100% issue completion: 8/8 issues closed).** Milestone reconciled and closed. |
-| **GitHub milestone #3: M2 — Curriculum Completion** | 3 (`#3`) | Closed | M2 | **Complete (100% issue completion: 4/4 issues closed).** All 7 planned lessons across Units 1–3 implemented, bidirectional, and verified by curriculum integrity suite (171 tests). |
-| **GitHub milestone #4: M3 — Authentication & Backend Foundation** | 4 (`#4`) | Open | M3 | **Ready to begin.** Cloud backend, Supabase Auth, profiles, age-gate safeguards. Unblocked by M1 & M2. |
-| *(None)* | — | Not Created | **M4 — Learning Engine: FSRS & Offline Sync** | **Proposed.** Production FSRS algorithm, offline review sessions, safe cloud sync. Requires M3. |
-| *(None)* | — | Not Created | **M5 — Audio, Pronunciation & Progression** | **Proposed.** Native audio playback, XP accumulation engine, belt promotions. Unblocked by M2. |
-| *(None)* | — | Not Created | **M6 — Purchases, Entitlements & Account Lifecycle** | **Proposed.** In-app purchases (`en->pt-BR`), free path preservation (`pt-BR->en`), account deletion. Requires M3. |
-| *(None)* | — | Not Created | **M7 — Production Readiness & Release** | **Proposed.** Sentry crash monitoring, EAS build pipelines, store release review. |
+## P1 — Canonical Content & Vocabulary Core
+Every mode can read content by ID and feed flashcards.
 
----
+| Issue | Title |
+| --- | --- |
+| [#37](https://github.com/PadoSensei/bjj-lang/issues/37) | P1-1 Content types and registry, seeded from existing data |
+| [#38](https://github.com/PadoSensei/bjj-lang/issues/38) | P1-2 Content integrity validators |
+| [#39](https://github.com/PadoSensei/bjj-lang/issues/39) | P1-3 `recordEncounter` and the encounter store |
+| [#40](https://github.com/PadoSensei/bjj-lang/issues/40) | P1-4 Deck switch and registry-backed cards |
 
-## 2. Roadmap Architecture & Planning Tracks
+**Exit:** registry and validators in CI; `recordEncounter` enqueues both decks; existing lessons unchanged for the learner.
 
-To balance learner value, technical prerequisites, and dependency risks, the MVP roadmap is organized across **six distinct planning tracks**:
+## P2 — White Belt Vertical Slice
+Reader, Games, Adventure and Flashcards connected around "My first class" (Pre-A1 to A1).
 
-1. **Curriculum:** Courses, units, lessons, contextual examples, and content completeness. Content authoring is decoupled from infrastructure so curriculum development is never blocked by backend readiness.
-2. **Learning Experience:** Interactive exercise runners, flashcard review UI, audio pronunciation, and belt progression.
-3. **Platform Foundation:** Authentication, Supabase infrastructure, user account lifecycle, and age verification.
-4. **Learning Infrastructure:** Real FSRS spaced repetition algorithms, offline mutation queues, and idempotent cloud event synchronization.
-5. **Business:** In-app purchases, entitlement validation, paywalls, and cross-device purchase restoration.
-6. **Release Readiness:** Security & privacy audit, self-service account deletion, error monitoring, legal disclosures, and production app store deployments.
+| Issue | Title |
+| --- | --- |
+| [#41](https://github.com/PadoSensei/bjj-lang/issues/41) | P2-1 White Belt "My first class" content pack |
+| [#42](https://github.com/PadoSensei/bjj-lang/issues/42) | P2-2 Story reader with tap-to-understand |
+| [#43](https://github.com/PadoSensei/bjj-lang/issues/43) | P2-3 Exercise-set runner, sentence builder, comprehension |
+| [#44](https://github.com/PadoSensei/bjj-lang/issues/44) | P2-4 Choose Your Own Adventure engine and screen |
+| [#45](https://github.com/PadoSensei/bjj-lang/issues/45) | P2-5 White Belt hub with four mode tiles |
+| [#46](https://github.com/PadoSensei/bjj-lang/issues/46) | P2-6 White Belt slice end-to-end integration test |
 
----
+**Exit:** the White Belt integration test passes; manual web and mobile evidence in `docs/engineering/evidence/p2/`.
 
-## 3. Milestone Sequence & Dependency Graph
+## P3 — Blue Belt Demonstration
+The same engines with A2 content, plus dialogue completion.
 
-```mermaid
-graph TD
-    M0[GitHub milestone #1: M0 — Project Bootstrap<br>COMPLETED IN CODE] --> M1[GitHub milestone #2: M1 — Learning Experience Foundation<br>COMPLETED IN CODE]
-    M1 --> M2[Project milestone M2: Curriculum Completion<br>COMPLETED IN CODE]
-    M1 --> M3[M3 — Authentication & Backend Foundation<br>READY TO BEGIN]
-    M2 --> M5[M5 — Audio, Pronunciation & Progression]
-    M3 --> M4[M4 — Learning Engine: FSRS & Offline Sync]
-    M3 --> M6[M6 — Purchases, Entitlements & Account Lifecycle]
-    M4 --> M7[M7 — Production Readiness & Release]
-    M5 --> M7
-    M6 --> M7
-```
+| Issue | Title |
+| --- | --- |
+| [#47](https://github.com/PadoSensei/bjj-lang/issues/47) | P3-1 Blue Belt "Open mat" content pack |
+| [#48](https://github.com/PadoSensei/bjj-lang/issues/48) | P3-2 Dialogue-completion exercise type |
+| [#49](https://github.com/PadoSensei/bjj-lang/issues/49) | P3-3 Blue Belt demo access and integration test |
 
-### Sequence Recommendations & Parallelization
-- **M2 Complete & M3 Next:** With **Milestone 2 (Curriculum)** fully completed and verified on `master`, **Milestone 3 (Platform Foundation / Supabase Auth)** is the immediate technical priority.
-- **Dependency Gates:**
-  - **M4 (Learning Engine)** requires M3 for authenticated user schemas and cloud mutation tables.
-  - **M5 (Audio & Progression)** is now unblocked by M2 for the full curriculum vocabulary corpus to attach audio assets and XP triggers.
-  - **M6 (Monetization)** requires M3 for user entitlement persistence.
-  - **M7 (Release)** is the final release candidate gate depending on all prior milestones.
+**Exit:** the Blue Belt integration test passes.
 
----
+## Working an issue
+1. Branch from an up-to-date `master` (`fix/`, `feat/`, `test/`, `docs/`).
+2. Write the failing tests from the issue first; then implement.
+3. Run all gates: `pnpm lint && pnpm typecheck && pnpm test && pnpm run doctor && pnpm run build:web`.
+4. Check `git status` and `git log --oneline -2` before pushing: the commit must contain the intended files.
+5. Open a PR with `Closes #<issue>`; merge only when CI is green.
 
-## 4. Milestone Specifications
+## Parked (pre-pivot plan)
+Re-plan after the POC. GitHub milestone #4 holds no issues.
 
----
+| Old milestone | Content | Now |
+| --- | --- | --- |
+| M3 — Authentication & Backend Foundation | Supabase, guest mode, age verification | Deferred (ADR-002) |
+| M4 — Learning Engine: FSRS & Offline Sync | FSRS, offline mutation queue, sync | Deferred (ADR-004, ADR-005) |
+| M5 — Audio, Pronunciation & Progression | Audio, XP, belt promotion | Deferred |
+| M6 — Purchases, Entitlements & Account Lifecycle | Paid course, account deletion | On hold (ADR-006) |
+| M7 — Production Readiness & Release | Monitoring, EAS, store review | Deferred |
 
-### GitHub milestone #2: M1 — Learning Experience Foundation (Completed in Code)
-- **Objective:** Establish the Expo application shell, reusable design system tokens, bidirectional course navigation, interactive lesson mechanics, local progress persistence, and a basic vocabulary review queue.
-- **GitHub Tracking Status:** Displays 0% completion due to unlinked issues; eligible for administrative closure following issue reconciliation.
-- **Included Requirements:**
-  - P0 #1: Expo app shell and navigation
-  - P0 #2: Onboarding and course direction
-  - P0 #5: Lesson interaction and answer feedback
-  - P0 #6: Separate learning state (local AsyncStorage partitioning)
-  - P0 #8: Review queue and session completion (local heuristic queue: +24h / +4h, distinct from production FSRS)
-- **Closure Criteria:**
-  - [x] Responsive app shell running on iOS, Android, and Web (`dist/`).
-  - [x] Course direction switcher with isolated state for `pt-BR->en` and `en->pt-BR`.
-  - [x] Multiple-choice and translation-recall exercise runners with feedback and score calculation.
-  - [x] Local review queue with card flip, self-rating, and session completion screen (heuristic scheduler).
-  - [x] Comprehensive test suite (106 tests passing) and automated CI pipeline.
-  - [ ] **Administrative Closure Action:** Reassign canonical closed issues (#3, #6, #8, #10, #12, #14, #16, #18) to GitHub milestone #2, then close GitHub milestone #2.
-
----
-
-### Project Milestone M2: Curriculum Completion (Completed on `master`)
-- **Objective:** Complete the published curriculum for all units and lessons across both course directions (`pt-BR->en` and `en->pt-BR`), authoring authentic BJJ mat vocabulary, contextual coaching explanations, and exercise pairings.
-- **Included Requirements:**
-  - P0 #4: Published course, units, lessons, and structured content
-- **Dependencies:** Milestone 1 foundation.
-- **Track:** Curriculum.
-- **Status:** **100% Complete in code.** Audited in `docs/roadmap/M2_COMPLETION_AUDIT.md`.
-- **Curriculum-Wide Integrity Criteria:**
-  - Every lesson listed in course metadata resolves to an implemented, playable lesson in both learning directions.
-  - Every lesson contains authentic contextual explanations and academy training usage examples in both languages.
-  - All vocabulary IDs (`vocab-*`) and exercise IDs (`ex-*`) are valid and unique.
-  - Exercises have non-empty prompts, valid options, correct target indices, and non-empty explanations.
-  - Lessons complete cleanly through `useLesson` and automatically enqueue vocabulary into the direction-specific review queue.
-  - Automated tests systematically cover all newly added content and verify bidirectional parity.
-- **Implemented Issue Breakdown:**
-  1. `M2.1`: Author and implement Unit 2 Lesson 2 (`lesson-2-2` / `lesson-2-2-pt` — Escapes & Defensive Postures) with bidirectional translations, contextual notes, and exercises. (Merged via PR #24).
-  2. `M2.2`: Author and implement Unit 3 Lesson 1 (`lesson-3-1` / `lesson-3-1-pt` — Submissions from Guard) with bidirectional translations, contextual notes, and exercises. (Merged via PR #26).
-  3. `M2.3`: Author and implement Unit 3 Lesson 2 (`lesson-3-2` / `lesson-3-2-pt` — Sparring & Mat Dialogue) with bidirectional translations, contextual notes, and exercises. (Merged via PR #28).
-  4. `M2.4`: Update course metadata in `mockCourseData.ts` and author comprehensive curriculum integrity test suite (`CurriculumIntegrity.test.tsx`). (Merged via PR #30).
-- **Definition of Done:**
-  - [x] 100% of planned lessons across Units 1, 2, and 3 are implemented, playable, and navigable in both course directions (`pt-BR->en` and `en->pt-BR`).
-  - [x] Automated content integrity tests pass with zero missing lesson references, ID duplicates, or broken exercise indices (11 tests in `CurriculumIntegrity.test.tsx`).
-  - [x] Quality gates pass: `pnpm lint`, `pnpm typecheck`, `pnpm test` (171 tests passing), `pnpm run doctor`, `pnpm run build:web`.
-  - [ ] **Administrative Closure Action:** Add closing summaries to issues #23, #25, #27, #29, create GitHub milestone `M2 — Curriculum Completion`, and close it.
-
----
-
-### Project Milestone M3: Authentication & Backend Foundation (Ready to Begin)
-- **Objective:** Establish the Supabase cloud backend foundation, integrating Supabase Auth with anonymous/guest mode, session management, user profile records, and age verification safeguards.
-- **Included Requirements:**
-  - P0 #3: Authentication/account flow appropriate to age/privacy requirements
-  - P0 #6: Cloud user state schema (preparation for remote sync)
-- **Dependencies:** Milestone 1 foundation and Milestone 2 curriculum completion.
-- **Track:** Platform Foundation.
-- **Key Deliverables:**
-  - Install and configure `@supabase/supabase-js` with secure credential storage (`expo-secure-store`).
-  - Implement anonymous/guest learning session by default (no friction for new students).
-  - Build optional sign-up/sign-in screens (email/magic link) with age-gate validation for COPPA/GDPR compliance.
-  - Build seamless guest-to-authenticated account conversion preserving all existing local progress.
-  - Database migrations for `profiles` table with strict Row Level Security (RLS) policies.
-- **Definition of Done:**
-  - [ ] App launches in guest mode without blocking the user with authentication modals.
-  - [ ] Users can register or log in, receiving a persistent JWT stored securely.
-  - [ ] Local progress created in guest mode is automatically linked to the user account upon sign-in.
-  - [ ] Unit and component tests verify auth state transitions, error alerts, and token refresh.
-
----
-
-### Milestone 4: Learning Engine: FSRS & Offline Synchronization
-- **Objective:** Replace the primitive heuristic scheduler with the production Free Spaced Repetition Scheduler (FSRS) algorithm, and implement offline-first review session handling with idempotent cloud mutation synchronization.
-- **Included Requirements:**
-  - P0 #6: Separate learning state by concept, course, and direction (cloud sync)
-  - P0 #7: FSRS scheduling integration with tests
-  - P0 #8: Review queue and session completion (engine integration)
-  - P0 #11: Offline lesson/review capability and safe event sync
-- **Dependencies:** Milestone 2 (Curriculum), Milestone 3 (Backend & Auth Foundation).
-- **Track:** Learning Infrastructure.
-- **Key Deliverables:**
-  - Integrate a verified FSRS implementation (`ts-fsrs`) behind a clean `SpacedRepetitionScheduler` interface.
-  - Extend review outcomes to standard FSRS rating levels (Again, Hard, Good, Easy) with card stability and difficulty tracking.
-  - Implement network connectivity listener (`@react-native-community/netinfo`).
-  - Implement an append-only offline mutation outbox for completed reviews and lesson completions.
-  - Build bidirectional sync worker: pushes local review events to Supabase and pulls remote state changes with safe timestamp conflict resolution.
-- **Definition of Done:**
-  - [ ] Comprehensive unit tests verify FSRS scheduling mathematics, interval bounds, and deterministic outcomes against reference test vectors.
-  - [ ] Full review sessions can be conducted in airplane mode with zero errors.
-  - [ ] Restoring network connectivity drains the outbox to Supabase idempotently without data loss or duplicate records.
-
----
-
-### Milestone 5: Audio, Pronunciation & Progression
-- **Objective:** Integrate native audio playback for vocabulary and dialogue, implement XP rewards and streak tracking, and tie belt-inspired milestones directly to user learning achievements.
-- **Included Requirements:**
-  - P0 #9: Progress, belt-inspired milestones, and XP
-  - P0 #10: Audio playback for selected content
-- **Dependencies:** Milestone 2 (Curriculum), Milestone 4 (Learning Engine).
-- **Track:** Learning Experience.
-- **Key Deliverables:**
-  - Install `expo-av` (or `expo-audio`) and build a reusable `AudioPlayerButton` component with playback state, caching, and fallback handling.
-  - Connect pronunciation audio assets/CDN URLs to vocabulary models in both Portuguese and English.
-  - Implement XP (Experience Points) accumulation engine awarding points for lesson steps, perfect recall, and review completions.
-  - Build belt promotion engine calculating current learner rank (White → Blue → Purple → Brown → Black) and stripe progress.
-  - Add celebration modals / milestone feedback animations upon completing units or earning stripes.
-- **Definition of Done:**
-  - [ ] Tapping the audio button plays clear audio for supported vocabulary items with visual playing indicators.
-  - [ ] Offline audio playback succeeds for previously cached lessons.
-  - [ ] XP and belt rank update dynamically in the learner's profile and persist across app reloads.
-  - [ ] Unit and component tests verify audio failure handling and XP mathematical formulas.
-
----
-
-### Milestone 6: Purchases, Entitlements & Account Lifecycle
-- **Objective:** Implement in-app purchase infrastructure for the commercial English → Brazilian Portuguese course (while strictly keeping Portuguese → English 100% free), purchase restoration, and self-service account deletion.
-- **Included Requirements:**
-  - P0 #12: Purchase and entitlement flow for paid course, including restore
-  - P0 #13: Account deletion and privacy disclosures
-- **Dependencies:** Milestone 3 (Platform Foundation / Supabase Auth).
-- **Track:** Business / Platform Foundation.
-- **Key Deliverables:**
-  - Integrate In-App Purchases SDK (`react-native-purchases` / RevenueCat) for App Store and Google Play.
-  - Implement course entitlement gating: `pt-BR->en` remains permanently unlocked; `en->pt-BR` offers free preview (Unit 1) with paywall gating for subsequent units.
-  - Build "Restore Purchases" button with receipt validation and error feedback.
-  - Implement self-service "Delete Account" flow in settings with two-step confirmation.
-  - Build Supabase database trigger / RPC function to permanently purge user profile, progress, reviews, and sync records upon account deletion.
-  - Add in-app Privacy Policy, Terms of Service, and child safety disclosure views.
-- **Definition of Done:**
-  - [ ] `pt-BR->en` course is verified completely free with zero monetization hurdles.
-  - [ ] `en->pt-BR` course paywall displays correct localized store pricing and handles purchase/restore flows in sandbox test environments.
-  - [ ] Account deletion completely purges remote user data and resets local state to clean guest status.
-  - [ ] Privacy disclosures are accessible offline and adhere to App Store Review Guideline 5.1.1(v).
-
----
-
-### Milestone 7: Production Readiness & Release
-- **Objective:** Deploy crash monitoring, privacy-reviewed telemetry, automated mobile build pipelines (EAS), and prepare production release candidate builds for App Store and Google Play review.
-- **Included Requirements:**
-  - P0 #14: Error monitoring, analytics with privacy review, release process
-- **Dependencies:** Milestones 1 through 6.
-- **Track:** Release Readiness.
-- **Key Deliverables:**
-  - Integrate Sentry crash reporting (`@sentry/react-native`) configured with privacy filters that strip sensitive user inputs.
-  - Implement privacy-compliant telemetry tracking only core milestone events (lesson completed, review finished) with child-safe defaults.
-  - Configure Expo Application Services (`eas.json`) for automated iOS and Android production builds.
-  - Conduct full pre-flight release checklist: bundle size audit, deep link verification, privacy label compliance, and store metadata review.
-- **Definition of Done:**
-  - [ ] Sentry captures unhandled runtime errors in staging/production builds with verified sourcemaps.
-  - [ ] EAS production builds generate passing `.ipa` and `.aab` artifacts.
-  - [ ] Release candidate passes all automated checks: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm run doctor`, and `pnpm run build:web`.
-  - [ ] Documentation updated with operational runbooks for emergency releases and rollback procedures.
-
----
-
-## 5. Governance & Implementation Guidelines
-
-1. **Owner Administrative Reconciliation Sequence:** With M1 and M2 complete in code, the repository owner should execute the administrative reconciliation steps in `docs/roadmap/M2_COMPLETION_AUDIT.md`:
-   - Step 1: Add closing verification summaries to issues #23, #25, #27, #29 and close them.
-   - Step 2: Assign confirmed M1 issues to GitHub milestone #2.
-   - Step 3: Close GitHub milestone #1 (`M0 — Project Bootstrap`).
-   - Step 4: Close GitHub milestone #2 (`M1 — Learning Experience Foundation`).
-   - Step 5: Create and close GitHub milestone `M2 — Curriculum Completion` (100% completion).
-   - Step 6: Create GitHub milestone `M3 — Authentication & Backend Foundation`.
-   - Step 7: Approve and create M3 implementation issues.
-   - Step 8: Begin M3 feature branch implementation.
-2. **Issue Hygiene:** When creating M3 issues on GitHub, each issue must link to its corresponding deliverable in this document and be explicitly assigned to the M3 milestone object.
-3. **Traceability:** Follow the established PR workflow (`AGENTS.md` and `DEVELOPMENT_WORKFLOW.md`): scoped branches, clean quality gates, zero secrets, and companion docs updates.
+Closed pre-pivot milestones: M0 — Project Bootstrap (#1), M1 — Learning Experience Foundation (#2), M2 — Curriculum Completion (#3). See the historical audits in this folder.

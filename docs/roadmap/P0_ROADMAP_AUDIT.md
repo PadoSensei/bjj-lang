@@ -1,5 +1,7 @@
 # P0 Roadmap & Implementation Audit
 
+> **Historical — pre-pivot.** This document describes BJJ_Lang before the November 2026 English-learning pivot and is kept as a record. For the current plan see `docs/product/MVP_SCOPE.md` and `docs/roadmap/PROPOSED_MILESTONES.md`.
+
 **Repository:** [PadoSensei/bjj-lang](https://github.com/PadoSensei/bjj-lang/)
 **Baseline Document:** `docs/product/MVP_SCOPE.md`
 **Audit Date:** November 2026

@@ -1,5 +1,22 @@
 # M2 Milestone Completion Audit & M3 Readiness Assessment
 
+> **Historical — pre-pivot.** This document describes BJJ_Lang before the November 2026 English-learning pivot and is kept as a record. For the current plan see `docs/product/MVP_SCOPE.md` and `docs/roadmap/PROPOSED_MILESTONES.md`.
+
+> **Correction (November 2026).** The vocabulary and exercise counts in this audit are wrong. The data in `src/data/mockLessons.ts` holds **46 vocabulary items and 22 exercises**, not 29 and 26:
+>
+> | Lesson | Vocabulary | Exercises |
+> | --- | --- | --- |
+> | `lesson-1-1` | 3 | 3 |
+> | `lesson-1-2` | 3 | 2 |
+> | `lesson-1-3` | 9 | 4 |
+> | `lesson-2-1` | 2 | 1 |
+> | `lesson-2-2` | 9 | 4 |
+> | `lesson-3-1` | 10 | 4 |
+> | `lesson-3-2` | 10 | 4 |
+> | **Total** | **46** | **22** |
+>
+> The rest of the audit is unchanged.
+
 **Repository:** [PadoSensei/bjj-lang](https://github.com/PadoSensei/bjj-lang/)  
 **Audit Target:** Proposed project milestone M2: Curriculum Completion  
 **Readiness Target:** Milestone 3: Authentication & Backend Foundation  
