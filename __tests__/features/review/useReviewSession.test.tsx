@@ -1,5 +1,6 @@
 import React from 'react';
-import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { renderHook, act } from '@testing-library/react-native';
+import { flushAsync } from '../../../test-utils/flushAsync';
 import { useCourse } from '../../../src/context/CourseContext';
 import { reviewStorage } from '../../../src/services/storage/reviewStorage';
 import { CourseProvider } from '../../../src/context/CourseContext';
@@ -191,8 +192,9 @@ describe('useReviewSession', () => {
 
       const { result } = renderHook(useSessionWithLoading, { wrapper: hydratingWrapper });
 
-      await waitFor(() => expect(result.current.isLoadingProgress).toBe(false));
+      await flushAsync();
 
+      expect(result.current.isLoadingProgress).toBe(false);
       expect(result.current.session.isInitialized).toBe(true);
       expect(result.current.session.totalSessionItems).toBe(2);
       expect(result.current.session.currentRecord?.vocabId).toBe('vocab-1-1-1');
@@ -208,15 +210,17 @@ describe('useReviewSession', () => {
       expect(result.current.session.isInitialized).toBe(false);
       expect(result.current.session.totalSessionItems).toBe(0);
 
-      await waitFor(() => expect(result.current.session.isInitialized).toBe(true));
+      await flushAsync();
+
+      expect(result.current.session.isInitialized).toBe(true);
     });
 
     test('does not rebuild the queue when records change mid-session', async () => {
       await reviewStorage.saveReviewRecords(initialReviews);
 
       const { result } = renderHook(useSessionWithLoading, { wrapper: hydratingWrapper });
-      await waitFor(() => expect(result.current.session.isInitialized).toBe(true));
-
+      await flushAsync();
+      expect(result.current.session.isInitialized).toBe(true);
       act(() => result.current.session.revealAnswer());
       await act(async () => {
         await result.current.session.submitOutcome('remembered');

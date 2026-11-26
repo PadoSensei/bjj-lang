@@ -352,7 +352,7 @@ describe('M2.1 Escapes & Defensive Postures (Unit 2 Lesson 2) Content & Integrat
       );
     };
 
-    it('enqueues all 9 vocabulary items into the review queue on completing lesson-2-2 without leaking to en->pt-BR', async () => {
+    it('enqueues all 9 vocabulary items into both decks on completing lesson-2-2, with no duplicates when completed again in en->pt-BR', async () => {
       const { getByTestId } = render(
         <CourseProvider
           initialDirection="pt-BR->en"
@@ -376,21 +376,21 @@ describe('M2.1 Escapes & Defensive Postures (Unit 2 Lesson 2) Content & Integrat
       expect(getByTestId('due-count').props.children).toBe(9);
       expect(getByTestId('total-records-count').props.children).toBe(9);
 
-      // Switch to en->pt-BR direction: queue should remain completely empty (direction isolation)
+      // ADR-009: the en->pt-BR deck already has its own 9 cards for these words.
       await act(async () => {
         fireEvent.press(getByTestId('switch-to-pt-btn'));
       });
 
       expect(getByTestId('direction-text').props.children).toBe('en->pt-BR');
-      expect(getByTestId('due-count').props.children).toBe(0);
-      expect(getByTestId('total-records-count').props.children).toBe(0);
+      expect(getByTestId('due-count').props.children).toBe(9);
+      expect(getByTestId('total-records-count').props.children).toBe(9);
 
       // Complete lesson-2-2-pt in en->pt-BR
       await act(async () => {
         fireEvent.press(getByTestId('complete-lesson-2-2-pt-btn'));
       });
 
-      // Now en->pt-BR should also have 9 review records
+      // Completing the lesson again in en->pt-BR adds no duplicate cards
       expect(getByTestId('due-count').props.children).toBe(9);
       expect(getByTestId('total-records-count').props.children).toBe(9);
     });

@@ -340,7 +340,7 @@ describe('Curriculum-Wide Integrity Suite (M2.4)', () => {
     ];
 
     it.each(isolationCases)(
-      'enqueues vocabulary on lesson completion in $source without leaking to $other across every published lesson',
+      'completing every published lesson in $source fills both decks, with no duplicate cards in $other',
       async ({ source, other }) => {
         let harnessActions!: {
           setDirection: (dir: CourseDirection) => void;
@@ -383,12 +383,13 @@ describe('Curriculum-Wide Integrity Suite (M2.4)', () => {
           expect(getByTestId('current-direction').props.children).toBe(source);
           expect(Number(getByTestId('records-count').props.children)).toBe(cumulativeSourceVocab);
 
-          // The other direction's review queue must stay empty.
+          // ADR-009: the other deck gets its own card for each new word, exactly once.
+          // Review isolation between decks is tested in CourseContext.isolation.test.tsx.
           await act(async () => {
             harnessActions.setDirection(other);
           });
           expect(getByTestId('current-direction').props.children).toBe(other);
-          expect(Number(getByTestId('records-count').props.children)).toBe(0);
+          expect(Number(getByTestId('records-count').props.children)).toBe(cumulativeSourceVocab);
         }
       }
     );

@@ -21,7 +21,8 @@ Dependencies point inward. Domain logic must not import React Native, Expo, Supa
 - Zod validates everything read from storage.
 
 ### Persistence (local only)
-- AsyncStorage keys, one per store, all `_v1`: `bjj_lang_completed_lessons_v1`, `bjj_lang_review_records_v1`, `bjj_lang_review_history_v1`, `bjj_lang_preferences_v1` (selected direction, from #35).
+- AsyncStorage keys, one per store, all `_v1`: `bjj_lang_completed_lessons_v1`, `bjj_lang_review_records_v1`, `bjj_lang_review_history_v1`, `bjj_lang_preferences_v1` (selected direction, #35), `bjj_lang_vocab_encounters_v1` (every word met and where, #39).
+- **Encounters:** `useCourse().recordEncounter(itemId, source, contentId?)` records a word met in any mode and, the first time a reviewable word is met, adds a card to both decks (pure policy in `src/domain/review/enqueue.ts`). Lesson completion uses the same path.
 - Stored progress is loaded once on launch. Until it has loaded, `isLoadingProgress` is true and screens show a loading state.
 - **Single write path:** every learner-state write runs through `src/services/learner/writeQueue.ts`. Writes run one at a time, start from the latest state (not a render-time snapshot), and wait until stored progress has loaded.
 - Storage shapes change additively only (ADR-008).

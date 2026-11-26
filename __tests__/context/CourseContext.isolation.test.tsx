@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { render, act, waitFor } from '@testing-library/react-native';
+import { render, act } from '@testing-library/react-native';
+import { flushAsync } from '../../test-utils/flushAsync';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
 import { CourseDirection } from '../../src/components/ui/CourseDirectionSelector';
@@ -110,7 +111,7 @@ describe('CourseContext review-direction isolation', () => {
   );
 
   it.each(directionPairs)(
-    'persists $first progress across a remount without leaking into $second',
+    'persists $first progress across a remount; $second keeps its own untouched cards and progress',
     async ({ first, second }) => {
       const lessonId = firstLessonId(first);
       const expectedVocabCount = MOCK_LESSONS[lessonId].vocabulary.length;
@@ -121,8 +122,8 @@ describe('CourseContext review-direction isolation', () => {
           <ApiCapture />
         </CourseProvider>
       );
-      await waitFor(() => expect(api.isLoadingProgress).toBe(false));
-
+      await flushAsync();
+      expect(api.isLoadingProgress).toBe(false);
       await act(async () => {
         await api.markLessonComplete(lessonId);
       });
@@ -134,17 +135,20 @@ describe('CourseContext review-direction isolation', () => {
           <ApiCapture />
         </CourseProvider>
       );
-      await waitFor(() => expect(api.isLoadingProgress).toBe(false));
-
+      await flushAsync();
+      expect(api.isLoadingProgress).toBe(false);
       expect(api.completedLessonIds).toEqual([lessonId]);
       expect(api.activeReviewRecords).toHaveLength(expectedVocabCount);
       expect(api.activeReviewRecords.every((r) => r.direction === first)).toBe(true);
 
+      // ADR-009: the lesson's words are in the other deck too, as fresh cards of
+      // that direction. Lesson progress and history stay per direction.
       await act(async () => {
         api.setDirection(second);
       });
       expect(api.completedLessonIds).toEqual([]);
-      expect(api.activeReviewRecords).toHaveLength(0);
+      expect(api.activeReviewRecords).toHaveLength(expectedVocabCount);
+      expect(api.activeReviewRecords.every((r) => r.direction === second && r.reviewCount === 0)).toBe(true);
       expect(api.activeHistory).toHaveLength(0);
     }
   );

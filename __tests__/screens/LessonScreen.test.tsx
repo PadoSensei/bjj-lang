@@ -1,5 +1,9 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
+import { flushAsync } from '../../test-utils/flushAsync';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { progressStorage } from '../../src/services/storage/progressStorage';
+import { reviewStorage } from '../../src/services/storage/reviewStorage';
 import LessonScreen from '../../app/lesson/[id]';
 import { CourseProvider } from '../../src/context/CourseContext';
 
@@ -17,7 +21,8 @@ jest.mock('expo-router', () => ({
 }));
 
 describe('LessonScreen Integration', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    await AsyncStorage.clear();
     jest.clearAllMocks();
     mockParams = { id: 'lesson-1-1' };
   });
@@ -41,7 +46,7 @@ describe('LessonScreen Integration', () => {
     expect(mockBack).toHaveBeenCalledTimes(1);
   });
 
-  it('navigates through vocabulary, multiple choice, translation recall, and completion screen', () => {
+  it('navigates through vocabulary, multiple choice, translation recall, and completion screen', async () => {
     const { getByTestId, getByText } = render(
       <CourseProvider
         initialDirection="pt-BR->en"
@@ -94,6 +99,14 @@ describe('LessonScreen Integration', () => {
     // 5. Lesson Completion View
     expect(getByTestId('lesson-completion-view')).toBeTruthy();
     expect(getByTestId('score-percentage')).toBeTruthy();
+
+    // Completion is saved in the background: let it finish, so no update lands after the test.
+    await flushAsync();
+    const progress = await progressStorage.loadCompletedLessons();
+    expect(progress['pt-BR->en']).toContain('lesson-1-1');
+    const decks = await reviewStorage.loadReviewRecords();
+    expect(decks['pt-BR->en']).toHaveLength(3);
+    expect(decks['en->pt-BR']).toHaveLength(3);
 
     // Test Retry Lesson
     fireEvent.press(getByTestId('retry-lesson-btn'));
