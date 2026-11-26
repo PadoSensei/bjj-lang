@@ -18,6 +18,7 @@ import {
   Scenario,
   Story,
 } from '../domain/content/types';
+import { ContentIndex, ContentIssue, ContentSet, validateAll } from '../domain/content/validate';
 
 const lexicalItems = new Map<string, LexicalItem>();
 const exercises = new Map<string, Exercise>();
@@ -106,3 +107,21 @@ export const listAllContentIds = (): string[] => [
   ...stories.keys(),
   ...scenarios.keys(),
 ];
+
+/** How validators look content up in this registry. */
+export const contentIndex: ContentIndex = {
+  getItemBelt: (id) => lexicalItems.get(id)?.belt,
+  hasExercise: (id) => exercises.has(id),
+};
+
+/** Everything in the registry, in the shape the validators take. */
+export const getContentSet = (): ContentSet => ({
+  lexicalItems: listLexicalItems(),
+  lessons: listLessons(),
+  stories: listStories(),
+  scenarios: listScenarios(),
+  allIds: listAllContentIds(),
+});
+
+/** Run every content validator over the registry. An empty list means valid. */
+export const validateRegistry = (): ContentIssue[] => validateAll(getContentSet(), contentIndex);
