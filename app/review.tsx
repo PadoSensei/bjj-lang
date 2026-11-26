@@ -9,6 +9,7 @@ import {
   ReviewCard,
   ReviewEmptyView,
   ReviewCompletionView,
+  ReviewLoadingView,
 } from '../src/features/review/components';
 import { spacing } from '../src/theme/tokens';
 
@@ -50,7 +51,9 @@ export default function ReviewScreen() {
         />
 
         <View style={styles.content}>
-          {session.totalSessionItems === 0 && (
+          {!session.isInitialized && <ReviewLoadingView />}
+
+          {session.isInitialized && session.totalSessionItems === 0 && (
             <ReviewEmptyView
               nextReviewTimestamp={nextReviewTimestamp}
               onReturnToCourse={handleReturnToCourse}
