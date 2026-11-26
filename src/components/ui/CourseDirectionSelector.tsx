@@ -2,7 +2,10 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, radii, spacing, typography } from '../../theme/tokens';
 
-export type CourseDirection = 'pt-BR->en' | 'en->pt-BR';
+import type { CourseDirection } from '../../domain/direction';
+
+// Re-exported so existing imports keep working; the type lives in src/domain (ADR-003).
+export type { CourseDirection };
 
 export interface CourseDirectionSelectorProps {
   activeDirection: CourseDirection;

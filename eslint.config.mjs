@@ -36,6 +36,24 @@ export default tseslint.config(
     },
   },
   {
+    // Domain code stays independent of UI and platform (ADR-003, ADR-008).
+    files: ['src/domain/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { group: ['react', 'react/*', 'react-dom', 'react-dom/*'], message: 'src/domain must not depend on React.' },
+            { group: ['react-native', 'react-native/*', '@react-native/*', '@react-native-*/*'], message: 'src/domain must not depend on React Native.' },
+            { group: ['expo', 'expo-*', 'expo/*', '@expo/*'], message: 'src/domain must not depend on Expo.' },
+            { group: ['**/components', '**/components/*', '**/components/**'], message: 'src/domain must not import UI components.' },
+            { group: ['**/context', '**/context/*', '**/services/*', '**/services/**', '**/theme', '**/theme/*'], message: 'src/domain must not import app state, storage or theme.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
     ignores: [
       'node_modules/',
       '.expo/',

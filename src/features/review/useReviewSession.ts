@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { CourseDirection } from '../../components/ui/CourseDirectionSelector';
 import { useCourse } from '../../context/CourseContext';
-import { MOCK_LESSONS } from '../../data/mockLessons';
+import { getLexicalItem, toVocabularyItem } from '../../content/registry';
 import { VocabularyItem } from '../../types/lesson';
 import { ReviewOutcome, ReviewRecord } from '../../types/review';
 import {
@@ -11,15 +11,13 @@ import {
   getDueItems,
 } from './reviewScheduler';
 
+/** Look a vocabulary item up in the content registry (ADR-008). */
 export function findVocabItemById(vocabId: string): { vocab: VocabularyItem; lessonId: string } | null {
-  for (const lesson of Object.values(MOCK_LESSONS)) {
-    if (!lesson.vocabulary) continue;
-    const vocab = lesson.vocabulary.find((v) => v.id === vocabId);
-    if (vocab) {
-      return { vocab, lessonId: lesson.id };
-    }
+  const item = getLexicalItem(vocabId);
+  if (!item || !item.sourceLessonId) {
+    return null;
   }
-  return null;
+  return { vocab: toVocabularyItem(item), lessonId: item.sourceLessonId };
 }
 
 export interface UseReviewSessionOptions {
