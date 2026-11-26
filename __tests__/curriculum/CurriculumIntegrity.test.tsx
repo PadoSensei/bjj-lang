@@ -331,49 +331,64 @@ describe('Curriculum-Wide Integrity Suite (M2.4)', () => {
       );
     };
 
-    it('enqueues vocabulary on lesson completion in pt-BR->en without leaking to en->pt-BR across all canonical lessons', async () => {
-      let harnessActions!: {
-        setDirection: (dir: CourseDirection) => void;
-        markComplete: (id: string) => Promise<boolean>;
-      };
+    const isolationCases: { source: CourseDirection; other: CourseDirection }[] = [
+      { source: 'pt-BR->en', other: 'en->pt-BR' },
+      { source: 'en->pt-BR', other: 'pt-BR->en' },
+    ];
 
-      const { getByTestId } = render(
-        <CourseProvider
-          initialDirection="pt-BR->en"
-          initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
-          initialReviewRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
-          initialHistoryRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
-        >
-          <ReviewIsolationTestHarness onMount={(actions) => { harnessActions = actions; }} />
-        </CourseProvider>
-      );
+    it.each(isolationCases)(
+      'enqueues vocabulary on lesson completion in $source without leaking to $other across every published lesson',
+      async ({ source, other }) => {
+        let harnessActions!: {
+          setDirection: (dir: CourseDirection) => void;
+          markComplete: (id: string) => Promise<boolean>;
+        };
 
-      const canonicalKeys = getCanonicalLessonKeys();
-      let cumulativePtEnVocab = 0;
+        const { getByTestId } = render(
+          <CourseProvider
+            initialDirection={source}
+            initialCompletedLessons={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+            initialReviewRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+            initialHistoryRecords={{ 'pt-BR->en': [], 'en->pt-BR': [] }}
+          >
+            <ReviewIsolationTestHarness onMount={(actions) => { harnessActions = actions; }} />
+          </CourseProvider>
+        );
 
-      for (const lessonId of canonicalKeys) {
-        const lesson = resolveLessonData(lessonId);
-        cumulativePtEnVocab += lesson.vocabulary.length;
+        // Use the lesson IDs the source course actually publishes
+        // (canonical IDs for pt-BR->en, '-pt' aliases for en->pt-BR).
+        const publishedLessonIds = getAllPublishedLessonSummaries()
+          .filter((ref) => ref.direction === source)
+          .map((ref) => ref.lessonSummary.id);
 
-        // Ensure we are in pt-BR->en
-        await act(async () => {
-          harnessActions.setDirection('pt-BR->en');
-        });
+        expect(publishedLessonIds.length).toBe(getCanonicalLessonKeys().length);
 
-        // Complete lesson in pt-BR->en
-        await act(async () => {
-          await harnessActions.markComplete(lessonId);
-        });
+        let cumulativeSourceVocab = 0;
 
-        expect(Number(getByTestId('records-count').props.children)).toBe(cumulativePtEnVocab);
+        for (const lessonId of publishedLessonIds) {
+          const lesson = resolveLessonData(lessonId);
+          cumulativeSourceVocab += lesson.vocabulary.length;
 
-        // Switch to en->pt-BR: review queue should remain 0
-        await act(async () => {
-          harnessActions.setDirection('en->pt-BR');
-        });
-        expect(Number(getByTestId('records-count').props.children)).toBe(0);
+          await act(async () => {
+            harnessActions.setDirection(source);
+          });
+
+          await act(async () => {
+            await harnessActions.markComplete(lessonId);
+          });
+
+          expect(getByTestId('current-direction').props.children).toBe(source);
+          expect(Number(getByTestId('records-count').props.children)).toBe(cumulativeSourceVocab);
+
+          // The other direction's review queue must stay empty.
+          await act(async () => {
+            harnessActions.setDirection(other);
+          });
+          expect(getByTestId('current-direction').props.children).toBe(other);
+          expect(Number(getByTestId('records-count').props.children)).toBe(0);
+        }
       }
-    });
+    );
   });
 
   // =========================================================================
