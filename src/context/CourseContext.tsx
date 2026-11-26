@@ -5,6 +5,7 @@ import { MOCK_LESSONS } from '../data/mockLessons';
 import { progressStorage, DirectionProgressMap } from '../services/storage/progressStorage';
 import { reviewStorage, DEFAULT_REVIEWS } from '../services/storage/reviewStorage';
 import { historyStorage, DEFAULT_HISTORY } from '../services/storage/historyStorage';
+import { preferencesStorage } from '../services/storage/preferencesStorage';
 import { createWriteQueue, WriteQueue } from '../services/learner/writeQueue';
 import { DirectionReviewMap, ReviewOutcome, ReviewRecord } from '../types/review';
 import { DirectionHistoryMap, ReviewHistoryEntry } from '../types/history';
@@ -47,6 +48,10 @@ const CourseContext = createContext<CourseContextType | undefined>(undefined);
 
 export interface CourseProviderProps {
   children: React.ReactNode;
+  /**
+   * Start in this direction and ignore the saved preference.
+   * When omitted, a real launch restores the learner's last selected direction.
+   */
   initialDirection?: CourseDirection;
   initialCompletedLessons?: DirectionProgressMap;
   initialReviewRecords?: DirectionReviewMap;
@@ -59,12 +64,14 @@ function generateHistoryId(): string {
 
 export const CourseProvider: React.FC<CourseProviderProps> = ({
   children,
-  initialDirection = 'pt-BR->en',
+  initialDirection,
   initialCompletedLessons,
   initialReviewRecords,
   initialHistoryRecords,
 }) => {
-  const [direction, setDirection] = useState<CourseDirection>(initialDirection);
+  const [direction, setDirectionState] = useState<CourseDirection>(initialDirection ?? 'pt-BR->en');
+  // Once the learner picks a direction, a slower-loading saved value must not replace it.
+  const hasChosenDirectionRef = useRef(false);
   const [completedMap, setCompletedMap] = useState<DirectionProgressMap>(
     initialCompletedLessons || {
       'pt-BR->en': [],
@@ -123,16 +130,22 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
     let isMounted = true;
     async function loadStoredData() {
       try {
-        const [storedProgress, storedReviews, storedHistory] = await Promise.all([
+        const [storedProgress, storedReviews, storedHistory, storedPreferences] = await Promise.all([
           progressStorage.loadCompletedLessons(),
           reviewStorage.loadReviewRecords(),
           historyStorage.loadHistoryRecords(),
+          preferencesStorage.loadPreferences(),
         ]);
 
         if (isMounted) {
           commitCompletedMap(storedProgress);
           commitReviewMap(storedReviews);
           commitHistoryMap(storedHistory);
+
+          const savedDirection = storedPreferences.lastDirection;
+          if (!initialDirection && savedDirection && !hasChosenDirectionRef.current) {
+            setDirectionState(savedDirection);
+          }
         }
       } finally {
         // Writes stay held if we unmounted before loading: running them now
@@ -149,6 +162,7 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
       isMounted = false;
     };
   }, [
+    initialDirection,
     initialCompletedLessons,
     initialReviewRecords,
     initialHistoryRecords,
@@ -157,6 +171,18 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
     commitHistoryMap,
     writeQueue,
   ]);
+
+  const setDirection = useCallback(
+    (next: CourseDirection) => {
+      hasChosenDirectionRef.current = true;
+      setDirectionState(next);
+      // Remember it for the next launch. A failed save keeps the in-memory choice.
+      writeQueue.enqueue(() => preferencesStorage.saveLastDirection(next)).catch((error) => {
+        console.warn('Failed to remember selected direction:', error);
+      });
+    },
+    [writeQueue]
+  );
 
   const refreshReviews = useCallback(
     () =>
