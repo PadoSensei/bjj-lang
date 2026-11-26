@@ -4,6 +4,10 @@ import { Text, Button } from 'react-native';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PROGRESS_STORAGE_KEY } from '../../src/services/storage/progressStorage';
+import {
+  preferencesStorage,
+  PREFERENCES_STORAGE_KEY,
+} from '../../src/services/storage/preferencesStorage';
 
 const TestComponent = () => {
   const {
@@ -126,3 +130,110 @@ describe('CourseContext', () => {
     expect(getByTestId('unit-1-progress').props.children).toBeCloseTo(2 / 3); // 2 of 3 completed
   });
 });
+
+/** Issue #35 (P0-4): the selected direction persists across reloads. */
+describe('CourseContext direction persistence', () => {
+  let api: ReturnType<typeof useCourse>;
+  const ApiCapture = () => {
+    api = useCourse();
+    return null;
+  };
+
+  /** A real app launch: no props, so the provider hydrates from storage. */
+  const launch = async () => {
+    const view = render(
+      <CourseProvider>
+        <ApiCapture />
+      </CourseProvider>
+    );
+    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    return view;
+  };
+
+  beforeEach(async () => {
+    await AsyncStorage.clear();
+    jest.restoreAllMocks();
+  });
+
+  it('starts in pt-BR->en on a first launch', async () => {
+    await launch();
+    expect(api.direction).toBe('pt-BR->en');
+  });
+
+  it('restores the last selected direction after a reload', async () => {
+    const first = await launch();
+    act(() => api.setDirection('en->pt-BR'));
+    await waitFor(async () =>
+      expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('en->pt-BR')
+    );
+    first.unmount();
+
+    await launch();
+    expect(api.direction).toBe('en->pt-BR');
+  });
+
+  it('switching back is also remembered', async () => {
+    await preferencesStorage.saveLastDirection('en->pt-BR');
+    const first = await launch();
+    expect(api.direction).toBe('en->pt-BR');
+
+    act(() => api.setDirection('pt-BR->en'));
+    await waitFor(async () =>
+      expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('pt-BR->en')
+    );
+    first.unmount();
+
+    await launch();
+    expect(api.direction).toBe('pt-BR->en');
+  });
+
+  it('falls back to pt-BR->en when the saved preference is corrupt', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    await AsyncStorage.setItem(PREFERENCES_STORAGE_KEY, '{ broken');
+    await launch();
+    expect(api.direction).toBe('pt-BR->en');
+  });
+
+  it('an explicit initialDirection prop wins over the saved preference', async () => {
+    await preferencesStorage.saveLastDirection('en->pt-BR');
+    render(
+      <CourseProvider initialDirection="pt-BR->en">
+        <ApiCapture />
+      </CourseProvider>
+    );
+    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    expect(api.direction).toBe('pt-BR->en');
+  });
+
+  it('a direction chosen while loading is not overwritten by the saved one', async () => {
+    await preferencesStorage.saveLastDirection('pt-BR->en');
+    render(
+      <CourseProvider>
+        <ApiCapture />
+      </CourseProvider>
+    );
+    expect(api.isLoadingProgress).toBe(true);
+    act(() => api.setDirection('en->pt-BR'));
+
+    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    expect(api.direction).toBe('en->pt-BR');
+    await waitFor(async () =>
+      expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('en->pt-BR')
+    );
+  });
+
+  it('keeps the new direction in memory when saving it fails', async () => {
+    await launch();
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(AsyncStorage, 'setItem').mockImplementation(() => Promise.reject(new Error('disk full')));
+
+    act(() => api.setDirection('en->pt-BR'));
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
+
+    expect(api.direction).toBe('en->pt-BR');
+    expect(api.courseData.direction).toBe('en->pt-BR');
+  });
+});
+
