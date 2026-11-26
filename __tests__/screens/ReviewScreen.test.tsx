@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, act } from '@testing-library/react-native';
+import { flushAsync } from '../../test-utils/flushAsync';
 import { reviewStorage } from '../../src/services/storage/reviewStorage';
 import ReviewScreen from '../../app/review';
 import { CourseProvider } from '../../src/context/CourseContext';
@@ -125,31 +126,35 @@ describe('ReviewScreen', () => {
       expect(getByTestId('review-loading')).toBeTruthy();
       expect(queryByTestId('review-empty-view')).toBeNull();
 
-      await waitFor(() => expect(queryByTestId('review-loading')).toBeNull());
+      await flushAsync();
+
+      expect(queryByTestId('review-loading')).toBeNull();
     });
 
     test('shows the due card from storage once hydrated', async () => {
       await reviewStorage.saveReviewRecords(storedDueReviews);
 
-      const { findByTestId, queryByTestId } = render(
+      const { getByTestId, queryByTestId } = render(
         <CourseProvider initialDirection="pt-BR->en">
           <ReviewScreen />
         </CourseProvider>
       );
 
-      const prompt = await findByTestId('review-prompt-text');
+      await flushAsync();
+      const prompt = getByTestId('review-prompt-text');
       expect(prompt.props.children).toBe('OSS');
       expect(queryByTestId('review-empty-view')).toBeNull();
     });
 
     test('shows the empty view after hydrating when nothing is stored', async () => {
-      const { findByTestId, queryByTestId } = render(
+      const { getByTestId, queryByTestId } = render(
         <CourseProvider initialDirection="pt-BR->en">
           <ReviewScreen />
         </CourseProvider>
       );
 
-      expect(await findByTestId('review-empty-view')).toBeTruthy();
+      await flushAsync();
+      expect(getByTestId('review-empty-view')).toBeTruthy();
       expect(queryByTestId('review-loading')).toBeNull();
     });
   });

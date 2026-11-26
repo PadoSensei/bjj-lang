@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, act } from '@testing-library/react-native';
+import { flushAsync } from '../../test-utils/flushAsync';
 import { Text, Button } from 'react-native';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -218,7 +219,9 @@ describe('CourseContext concurrent and early writes', () => {
       completion = api.markLessonComplete('lesson-1-1');
     });
 
-    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    await flushAsync();
+
+    expect(api.isLoadingProgress).toBe(false);
     await act(async () => {
       await expect(completion).resolves.toBe(true);
     });

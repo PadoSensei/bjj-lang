@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { render, act, waitFor } from '@testing-library/react-native';
+import { render, act } from '@testing-library/react-native';
+import { flushAsync } from '../../test-utils/flushAsync';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
 import { CourseDirection } from '../../src/components/ui/CourseDirectionSelector';
@@ -121,8 +122,8 @@ describe('CourseContext review-direction isolation', () => {
           <ApiCapture />
         </CourseProvider>
       );
-      await waitFor(() => expect(api.isLoadingProgress).toBe(false));
-
+      await flushAsync();
+      expect(api.isLoadingProgress).toBe(false);
       await act(async () => {
         await api.markLessonComplete(lessonId);
       });
@@ -134,8 +135,8 @@ describe('CourseContext review-direction isolation', () => {
           <ApiCapture />
         </CourseProvider>
       );
-      await waitFor(() => expect(api.isLoadingProgress).toBe(false));
-
+      await flushAsync();
+      expect(api.isLoadingProgress).toBe(false);
       expect(api.completedLessonIds).toEqual([lessonId]);
       expect(api.activeReviewRecords).toHaveLength(expectedVocabCount);
       expect(api.activeReviewRecords.every((r) => r.direction === first)).toBe(true);

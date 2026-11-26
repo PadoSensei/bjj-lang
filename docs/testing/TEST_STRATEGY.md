@@ -32,7 +32,7 @@
 For behaviour fixes, briefly break the fix locally and check the new tests fail, then restore it.
 
 ## Quality gates
-`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm run doctor`, `pnpm run build:web`. Document the exact command and result; do not claim tests passed unless run. Jest runs with `maxWorkers: '50%'` and a 5s async-wait timeout so busy machines do not time out.
+`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm run doctor`, `pnpm run build:web`. Document the exact command and result; do not claim tests passed unless run. Jest runs with `maxWorkers: '50%'`. To wait for stored progress or a background save, use `flushAsync()` from `test-utils/flushAsync.ts`, not `waitFor`: the storage mock is promise-only, so flushing is exact and does not depend on machine speed. `waitFor` polls the clock and can fail on an overloaded machine.
 
 ## Deferred (after the POC)
 - FSRS adapter and state serialization (ADR-004).

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, act } from '@testing-library/react-native';
+import { flushAsync } from '../../test-utils/flushAsync';
 import { Text, Button } from 'react-native';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -122,9 +123,8 @@ describe('CourseContext', () => {
       </CourseProvider>
     );
 
-    await waitFor(() => {
-      expect(getByTestId('completed-ids').props.children).toBe('lesson-1-1,lesson-1-2');
-    });
+    await flushAsync();
+    expect(getByTestId('completed-ids').props.children).toBe('lesson-1-1,lesson-1-2');
 
     expect(getByTestId('course-progress').props.children).toBe('2/7 (29%)');
     expect(getByTestId('unit-1-progress').props.children).toBeCloseTo(2 / 3); // 2 of 3 completed
@@ -146,7 +146,8 @@ describe('CourseContext direction persistence', () => {
         <ApiCapture />
       </CourseProvider>
     );
-    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    await flushAsync();
+    expect(api.isLoadingProgress).toBe(false);
     return view;
   };
 
@@ -163,9 +164,8 @@ describe('CourseContext direction persistence', () => {
   it('restores the last selected direction after a reload', async () => {
     const first = await launch();
     act(() => api.setDirection('en->pt-BR'));
-    await waitFor(async () =>
-      expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('en->pt-BR')
-    );
+    await flushAsync();
+    expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('en->pt-BR');
     first.unmount();
 
     await launch();
@@ -178,9 +178,8 @@ describe('CourseContext direction persistence', () => {
     expect(api.direction).toBe('en->pt-BR');
 
     act(() => api.setDirection('pt-BR->en'));
-    await waitFor(async () =>
-      expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('pt-BR->en')
-    );
+    await flushAsync();
+    expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('pt-BR->en');
     first.unmount();
 
     await launch();
@@ -201,7 +200,8 @@ describe('CourseContext direction persistence', () => {
         <ApiCapture />
       </CourseProvider>
     );
-    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    await flushAsync();
+    expect(api.isLoadingProgress).toBe(false);
     expect(api.direction).toBe('pt-BR->en');
   });
 
@@ -215,11 +215,12 @@ describe('CourseContext direction persistence', () => {
     expect(api.isLoadingProgress).toBe(true);
     act(() => api.setDirection('en->pt-BR'));
 
-    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    await flushAsync();
+
+    expect(api.isLoadingProgress).toBe(false);
     expect(api.direction).toBe('en->pt-BR');
-    await waitFor(async () =>
-      expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('en->pt-BR')
-    );
+    await flushAsync();
+    expect((await preferencesStorage.loadPreferences()).lastDirection).toBe('en->pt-BR');
   });
 
   it('keeps the new direction in memory when saving it fails', async () => {

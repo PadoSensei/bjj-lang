@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, act, waitFor } from '@testing-library/react-native';
+import { render, act } from '@testing-library/react-native';
+import { flushAsync } from '../../test-utils/flushAsync';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CourseProvider, useCourse } from '../../src/context/CourseContext';
 import { MOCK_LESSONS } from '../../src/data/mockLessons';
@@ -40,7 +41,8 @@ const launch = async () => {
       <ApiCapture />
     </CourseProvider>
   );
-  await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+  await flushAsync();
+  expect(api.isLoadingProgress).toBe(false);
   return view;
 };
 
@@ -185,7 +187,8 @@ describe('CourseContext.recordEncounter', () => {
     act(() => {
       pending = api.recordEncounter('vocab-1-1-1', 'reader');
     });
-    await waitFor(() => expect(api.isLoadingProgress).toBe(false));
+    await flushAsync();
+    expect(api.isLoadingProgress).toBe(false);
     await act(async () => {
       await expect(pending).resolves.toBe(true);
     });
