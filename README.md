@@ -2,53 +2,49 @@
 
 **Learn the language. Understand the game. Connect through Jiu-Jitsu.**
 
-BJJ_Lang is a mobile-first language-learning platform for Brazilian Jiu-Jitsu vocabulary, coaching instructions, and culture. It supports Brazilian Portuguese (`pt-BR`) and English (`en`), with learning in both directions.
+BJJ_Lang is a mobile-first, scaffolded English-learning world for Brazilian Portuguese speakers, built around Brazilian Jiu-Jitsu. Four connected modes share the same content:
+
+| Mode | Purpose |
+| --- | --- |
+| **Reader** | Understand: level-appropriate BJJ stories with tap-to-understand words |
+| **Games** | Practise: vocabulary, sentence building, dialogue completion, comprehension |
+| **Adventure** | Apply: BJJ situations where language choices change what happens |
+| **Flashcards** | Remember: review of every word met in the other modes |
+
+The current goal is the **White Belt** (Pre-A1 to A1) vertical slice as a free intro tier, followed by a small **Blue Belt** (A2) demonstration. Belts are language milestones, not martial-arts rank.
 
 ## Product principles
 
-- Teach language that learners can use on the mat.
-- Support Portuguese → English as a free, donation-supported path.
-- Offer English → Brazilian Portuguese as a one-time purchase.
-- Use spaced repetition and belt-inspired learning progression.
+- Teach English that learners can use on the mat.
+- Portuguese interface and explanations for beginners.
+- One shared set of content across all modes, with stable IDs.
+- Two isolated flashcard decks per word: Português → English and English → Português.
 - Be approachable for young learners while remaining useful to adult practitioners.
 - Protect learner privacy, particularly for users under 18.
 - Keep the learning domain independent of UI and infrastructure.
 
 ## Project status & capabilities
 
-**Current Phase:** Curriculum Completion (Milestone 2 Completed).
+**Current phase:** English-learning pivot, milestone **P0 — Pivot Foundations**. See [POC scope](docs/product/MVP_SCOPE.md) and the [milestones](docs/roadmap/PROPOSED_MILESTONES.md).
 
-### Implemented & verified capabilities
-- **App shell & navigation:** Expo Router stack navigation across Home overview, Lesson runner, Review sessions, History timeline, and Course Direction selection.
-- **Directional learning & state isolation:** Learners can switch between `pt-BR->en` and `en->pt-BR` with local progress and review queues strictly partitioned.
-- **Published BJJ Curriculum (Units 1–3):** Complete launch curriculum across Units 1, 2, and 3 (7 canonical lessons, 14 bidirectional representations), 29 vocabulary concepts, and 26 exercises with contextual notes and mat usage examples.
-- **Curriculum-wide integrity validation:** Automated test suite (`CurriculumIntegrity.test.tsx`) asserting 1:1 metadata parity, ID uniqueness, schema bounds, and 100% playability.
-- **Interactive lesson mechanics:** Vocabulary cards with contextual explanations and academy examples, followed by multiple-choice and translation-recall exercises with answer feedback.
-- **Local vocabulary review queue:** Spaced-review flashcard workflow with answer reveal, self-assessment, bounded in-session retry, and review history tracking.
-- **Local persistence:** Offline persistence via React Native `AsyncStorage` for completed lessons, review cards, and historical outcomes.
-- **Web deployment readiness:** Static web export (`dist/`) configured for Vercel SPA hosting.
+### Implemented today
+- **App shell & navigation:** Expo Router stack across Home, Lesson runner, Review, Review history and direction selection.
+- **Lessons (pre-pivot content):** 7 lessons in Units 1–3, available in both directions, with 46 vocabulary items and 22 exercises (multiple choice and translation recall). Counts are checked by `__tests__/curriculum/CurriculumIntegrity.test.tsx`.
+- **Flashcard review:** reveal, self-rating, bounded in-session retry and history, in two isolated directions. The session waits for stored progress to load.
+- **Local persistence:** completed lessons, review cards and history persist across reloads (AsyncStorage). All writes go through one serialized queue.
+- **Web deployment:** static web export (`dist/`) for Vercel.
 
-### Next phase & planned capabilities
-- **Authentication & cloud backend (Milestone 3 — Next Up):** Supabase integration, guest mode, age verification for minors, and guest-to-authenticated account conversion.
-- **Spaced repetition algorithm (Milestone 4):** Review intervals currently use a lightweight heuristic (+24h / +4h); true FSRS mathematical scheduling and offline mutation queues planned for M4.
-- **Audio & pronunciation (Milestone 5):** Native audio playback engine for vocabulary and dialogue.
-- **Progression & XP (Milestone 5):** Belt color badges and lesson completion percentages are displayed; dynamic XP accumulation and belt rank promotion rules planned for M5.
-- **Purchases & monetization (Milestone 6):** In-app purchases for the commercial `en->pt-BR` course while permanently preserving the free `pt-BR->en` track.
-- **Production monitoring & release (Milestone 7):** Sentry crash reporting, privacy-reviewed telemetry, and EAS distribution pipelines.
+### Next (in order)
+- **P1 — Canonical Content & Vocabulary Core:** content registry, integrity validators, `recordEncounter`, deck toggle.
+- **P2 — White Belt Vertical Slice:** Reader, Games, Adventure and Flashcards connected around "My first class".
+- **P3 — Blue Belt Demonstration.**
 
-For the full requirement-by-requirement status and roadmap, see:
-- [M2 Completion Audit](docs/roadmap/M2_COMPLETION_AUDIT.md)
-- [M1 Completion Audit](docs/roadmap/M1_COMPLETION_AUDIT.md)
-- [P0 Roadmap & Implementation Audit](docs/roadmap/P0_ROADMAP_AUDIT.md)
-- [Proposed Milestones Roadmap](docs/roadmap/PROPOSED_MILESTONES.md)
+Deferred until after the POC: accounts and backend, FSRS, sync, audio, XP, paid tiers. See [POC scope](docs/product/MVP_SCOPE.md).
 
 ## Documentation
 
-- [MVP scope](docs/product/MVP_SCOPE.md)
-- [M2 Completion Audit](docs/roadmap/M2_COMPLETION_AUDIT.md)
-- [M1 Completion Audit](docs/roadmap/M1_COMPLETION_AUDIT.md)
-- [P0 Roadmap & Implementation Audit](docs/roadmap/P0_ROADMAP_AUDIT.md)
-- [Proposed Milestones Roadmap](docs/roadmap/PROPOSED_MILESTONES.md)
+- [POC scope](docs/product/MVP_SCOPE.md)
+- [Milestones](docs/roadmap/PROPOSED_MILESTONES.md)
 - [Product requirements](docs/product/PRD.md)
 - [Curriculum specification](docs/content/CURRICULUM.md)
 - [System architecture](docs/architecture/SYSTEM_ARCHITECTURE.md)
@@ -60,7 +56,8 @@ For the full requirement-by-requirement status and roadmap, see:
 - [Testing strategy](docs/testing/TEST_STRATEGY.md)
 - [Release process](docs/operations/RELEASE_PROCESS.md)
 - [Vercel deployment](docs/deployment/vercel.md)
-- [ADRs](docs/architecture/ADR/)
+- [ADRs](docs/architecture/ADR/) — start with ADR-008 (content and encounters) and ADR-009 (review directions)
+- Historical, pre-pivot: [M2 audit](docs/roadmap/M2_COMPLETION_AUDIT.md), [M1 audit](docs/roadmap/M1_COMPLETION_AUDIT.md), [P0 roadmap audit](docs/roadmap/P0_ROADMAP_AUDIT.md)
 
 ## Stack
 

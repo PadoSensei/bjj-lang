@@ -1,35 +1,43 @@
-# MVP Scope
+# POC Scope
 
-## P0 — Required for launch candidate
-- Expo app shell and navigation.
-- Onboarding and course direction.
-- Authentication/account flow appropriate to age/privacy requirements.
-- Published course, units, lessons, and structured content.
-- Lesson interaction and answer feedback.
-- Separate learning state by concept, course, and direction.
-- FSRS scheduling integration with tests.
-- Review queue and session completion.
-- Progress, belt-inspired milestones, and XP.
-- Audio playback for selected content.
-- Offline lesson/review capability and safe event sync.
-- Purchase and entitlement flow for paid course, including restore.
-- Account deletion and privacy disclosures.
-- Error monitoring, analytics with privacy review, release process.
+**Status:** Current (November 2026, English-learning pivot)
+**Milestones:** GitHub P0 → P3, worked in order. See `docs/roadmap/PROPOSED_MILESTONES.md`.
 
-## P1 — If capacity and policy allow
-- Donation information/flow.
-- Achievements and streaks.
-- More curriculum content.
-- Improved illustrations and audio coverage.
+## Required — White Belt vertical slice (milestones P0–P2; Pre-A1 to A1, free intro tier)
+- Safe learner state: hydration-aware review, serialized writes, persisted selected deck.
+- Canonical content registry with stable IDs, belt and CEFR level, validated in CI.
+- `recordEncounter` feeding both flashcard decks from any mode.
+- One White Belt theme ("My first class") in all four modes:
+  - Reader: one 5-page story, tap-to-understand with Portuguese explanations.
+  - Games: vocabulary multiple choice, sentence builder, comprehension.
+  - Adventure: one scenario, 3 decisions, 2 endings.
+  - Flashcards: both decks, deck toggle, Portuguese help text.
+- Home hub for White Belt with the four modes and progress.
+- Portuguese interface.
+- All progress persists across reloads.
+- Existing lessons stay available.
 
-## Out of scope for initial five-week release
-- Public social feed or chat.
-- Public leaderboards, especially for minors.
-- AI-generated live curriculum without editorial review.
+## Next — Blue Belt demonstration (milestone P3; about A2)
+- One story, one dialogue-completion set, one scenario with choice-dependent endings.
+- Blue items join the same flashcard decks without disturbing White Belt progress.
+
+## Deferred (after the POC)
+- Accounts, authentication, age-appropriate consent flow (ADR-002).
+- FSRS scheduling (ADR-004); the heuristic scheduler stays for now.
+- SQLite, offline sync, multi-device (ADR-005).
+- Audio and pronunciation.
+- XP, streaks, achievements, belt promotion rules.
+- Paid tiers, purchases, entitlements, donations (ADR-006, on hold).
+- The Portuguese course for English speakers.
+- Error monitoring, analytics with privacy review, store release.
+
+## Out of scope
+- Purple, Brown and Black Belt content.
+- Public social feed, chat or leaderboards, especially for minors.
+- AI-generated curriculum without editorial review.
 - AI conversation tutor.
 - Academy management and teacher dashboards.
 - Multiple martial arts.
-- Complex multi-device conflict UI.
 
 ## Release constraint
-Store review and payment-policy approvals can exceed the five-week schedule. Maintain a testable preview/beta path and do not represent an unapproved build as publicly available.
+The POC is shipped as a web preview (Vercel) and development builds. Do not represent a preview as a store release.

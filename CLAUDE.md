@@ -9,4 +9,4 @@ Before planning or reviewing:
 - Include scope, non-goals, acceptance criteria, tests, security considerations, and documentation impact in implementation issues.
 - For architecture changes, draft an ADR and identify trade-offs.
 - For code review, report findings with severity and file/line references; do not silently make changes unless explicitly requested.
-- Keep the five-week launch constraint in mind. Prefer a vertical slice over broad scaffolding.
+- The goal is the White Belt vertical slice (all four modes connected) as soon as possible. Prefer a vertical slice over broad scaffolding, and work the open GitHub milestones in order (P0 → P3).
