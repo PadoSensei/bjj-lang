@@ -26,8 +26,20 @@ Validate contrast, especially for white belt surfaces. Define semantic colors se
 ## Core components
 Button, Card, ProgressBar, BeltBadge, LessonNode, Flashcard, AudioControl, AnswerRating, EmptyState, ErrorState, LoadingState, Modal/Sheet.
 
+### Pivot components (P1–P3)
+- **ModeTile:** one of the four modes on the belt hub (Ler, Praticar, Aventura, Revisar), with completion and due count.
+- **StoryPage** and **TappableToken:** story text where each reviewable word is a button (`accessibilityRole="button"`, label such as "{word}, toque para ver o significado", minimum 44pt / 48dp touch target).
+- **GlossSheet:** the tap-to-understand sheet; Portuguese explanation for White Belt.
+- **SentenceTiles:** tap tiles to build a sentence; tiles can be removed before checking.
+- **ChoiceCard:** an adventure choice with feedback shown before continuing.
+- **DeckToggle:** switch between the "Português → English" and "English → Português" flashcard decks.
+
+## Language
+The White Belt interface is Portuguese (ADR-009). Explanations for beginners are never in English above the learner's level.
+
 ## Core screens
-Onboarding, course direction selection, home/learning path, lesson session, answer feedback, review session, lesson completion, progress, profile/settings, purchase/restore, privacy/account deletion.
+POC: belt hub (home), story reader, game set, adventure, flashcards with deck toggle, review history, lesson session and completion.
+Later: onboarding, progress, profile/settings, purchase/restore, privacy/account deletion.
 
 ## Interaction
 Review ratings: Again, Hard, Good, Easy. Provide immediate clear feedback and audio controls. Motion is purposeful and nonessential.

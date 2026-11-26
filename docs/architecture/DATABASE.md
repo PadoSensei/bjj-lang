@@ -1,6 +1,8 @@
 # Database Design
 
-**Status:** Initial logical model; schema migrations are authoritative once created.
+**Status:** Deferred (November 2026). Target logical model for after the POC; schema migrations are authoritative once created.
+
+> The POC has no database: learner state is local (see `SYSTEM_ARCHITECTURE.md`). When this model is implemented, add entities for the pivot's content and learner state: `stories`, `scenarios`, `exercises` referencing `learning_concepts` by stable ID, and `vocab_encounters` (per user, concept and source). Keep existing content IDs (ADR-008).
 
 ## Main entities
 - `profiles`: minimal user profile linked to `auth.users`.

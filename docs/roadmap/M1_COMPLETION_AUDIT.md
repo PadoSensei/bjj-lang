@@ -1,5 +1,7 @@
 # M1 Milestone Completion Audit & M2 Readiness Assessment
 
+> **Historical — pre-pivot.** This document describes BJJ_Lang before the November 2026 English-learning pivot and is kept as a record. For the current plan see `docs/product/MVP_SCOPE.md` and `docs/roadmap/PROPOSED_MILESTONES.md`.
+
 **Repository:** [PadoSensei/bjj-lang](https://github.com/PadoSensei/bjj-lang/)
 **Audit Target:** GitHub milestone #2: M1 — Learning Experience Foundation
 **Readiness Target:** Proposed project milestone M2: Curriculum Completion
