@@ -133,4 +133,33 @@ describe('reviewStorage', () => {
     const saved = await reviewStorage.saveReviewRecords(DEFAULT_REVIEWS);
     expect(saved).toBe(false);
   });
+
+  describe('the optional source field (issue #39)', () => {
+    const base = {
+      id: 'vocab-1-1-1',
+      vocabId: 'vocab-1-1-1',
+      lessonId: 'lesson-1-1',
+      direction: 'pt-BR->en' as const,
+      addedAt: 1,
+      lastReviewedAt: null,
+      dueAt: 1,
+      reviewCount: 0,
+      rememberedCount: 0,
+      needsPracticeCount: 0,
+    };
+
+    test('records saved before the pivot, without source, still load unchanged', async () => {
+      await AsyncStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify({ 'pt-BR->en': [base], 'en->pt-BR': [] }));
+      const loaded = await reviewStorage.loadReviewRecords();
+      expect(loaded['pt-BR->en']).toEqual([base]);
+    });
+
+    test('a record\'s source survives a save and load', async () => {
+      const withSource = { ...base, source: 'reader' as const };
+      await reviewStorage.saveReviewRecords({ 'pt-BR->en': [withSource], 'en->pt-BR': [] });
+      const loaded = await reviewStorage.loadReviewRecords();
+      expect(loaded['pt-BR->en'][0].source).toBe('reader');
+    });
+  });
 });
+

@@ -110,7 +110,7 @@ describe('CourseContext review-direction isolation', () => {
   );
 
   it.each(directionPairs)(
-    'persists $first progress across a remount without leaking into $second',
+    'persists $first progress across a remount; $second keeps its own untouched cards and progress',
     async ({ first, second }) => {
       const lessonId = firstLessonId(first);
       const expectedVocabCount = MOCK_LESSONS[lessonId].vocabulary.length;
@@ -140,11 +140,14 @@ describe('CourseContext review-direction isolation', () => {
       expect(api.activeReviewRecords).toHaveLength(expectedVocabCount);
       expect(api.activeReviewRecords.every((r) => r.direction === first)).toBe(true);
 
+      // ADR-009: the lesson's words are in the other deck too, as fresh cards of
+      // that direction. Lesson progress and history stay per direction.
       await act(async () => {
         api.setDirection(second);
       });
       expect(api.completedLessonIds).toEqual([]);
-      expect(api.activeReviewRecords).toHaveLength(0);
+      expect(api.activeReviewRecords).toHaveLength(expectedVocabCount);
+      expect(api.activeReviewRecords.every((r) => r.direction === second && r.reviewCount === 0)).toBe(true);
       expect(api.activeHistory).toHaveLength(0);
     }
   );

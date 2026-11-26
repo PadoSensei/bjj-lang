@@ -6,6 +6,10 @@ import { progressStorage, DirectionProgressMap } from '../services/storage/progr
 import { reviewStorage, DEFAULT_REVIEWS } from '../services/storage/reviewStorage';
 import { historyStorage, DEFAULT_HISTORY } from '../services/storage/historyStorage';
 import { preferencesStorage } from '../services/storage/preferencesStorage';
+import { encounterStorage, DEFAULT_ENCOUNTERS } from '../services/storage/encounterStorage';
+import { getLexicalItem } from '../content/registry';
+import { addRecords, noteEncounter, planEnqueue } from '../domain/review/enqueue';
+import type { EncounterMap, EncounterSource } from '../types/encounter';
 import { createWriteQueue, WriteQueue } from '../services/learner/writeQueue';
 import { DirectionReviewMap, ReviewOutcome, ReviewRecord } from '../types/review';
 import { DirectionHistoryMap, ReviewHistoryEntry } from '../types/history';
@@ -42,6 +46,15 @@ export interface CourseContextType {
   reviewStatistics: ReviewStatistics;
   refreshHistory: () => Promise<void>;
   recordHistoryEntry: (vocabId: string, outcome: ReviewOutcome, completedAt?: number) => Promise<boolean>;
+
+  // Vocabulary encounters (ADR-008, ADR-009)
+  /** Every word the learner has met, in any mode, keyed by item ID. */
+  encounters: EncounterMap;
+  /**
+   * Report that the learner met a word. A reviewable word met for the first
+   * time gets a card in both flashcard decks. Returns false for unknown IDs.
+   */
+  recordEncounter: (itemId: string, source: EncounterSource, contentId?: string) => Promise<boolean>;
 }
 
 const CourseContext = createContext<CourseContextType | undefined>(undefined);
@@ -84,6 +97,7 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
   const [historyMap, setHistoryMap] = useState<DirectionHistoryMap>(
     initialHistoryRecords || DEFAULT_HISTORY
   );
+  const [encounters, setEncounters] = useState<EncounterMap>(DEFAULT_ENCOUNTERS);
   const [isLoadingProgress, setIsLoadingProgress] = useState<boolean>(!initialCompletedLessons);
 
   // Latest committed state, read by writes instead of render-time closures,
@@ -91,6 +105,7 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
   const completedMapRef = useRef(completedMap);
   const reviewMapRef = useRef(reviewMap);
   const historyMapRef = useRef(historyMap);
+  const encountersRef = useRef(encounters);
 
   const commitCompletedMap = useCallback((next: DirectionProgressMap) => {
     completedMapRef.current = next;
@@ -103,6 +118,10 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
   const commitHistoryMap = useCallback((next: DirectionHistoryMap) => {
     historyMapRef.current = next;
     setHistoryMap(next);
+  }, []);
+  const commitEncounters = useCallback((next: EncounterMap) => {
+    encountersRef.current = next;
+    setEncounters(next);
   }, []);
 
   // All writes run one at a time. With no injected state the queue stays closed
@@ -130,17 +149,20 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
     let isMounted = true;
     async function loadStoredData() {
       try {
-        const [storedProgress, storedReviews, storedHistory, storedPreferences] = await Promise.all([
-          progressStorage.loadCompletedLessons(),
-          reviewStorage.loadReviewRecords(),
-          historyStorage.loadHistoryRecords(),
-          preferencesStorage.loadPreferences(),
-        ]);
+        const [storedProgress, storedReviews, storedHistory, storedPreferences, storedEncounters] =
+          await Promise.all([
+            progressStorage.loadCompletedLessons(),
+            reviewStorage.loadReviewRecords(),
+            historyStorage.loadHistoryRecords(),
+            preferencesStorage.loadPreferences(),
+            encounterStorage.loadEncounters(),
+          ]);
 
         if (isMounted) {
           commitCompletedMap(storedProgress);
           commitReviewMap(storedReviews);
           commitHistoryMap(storedHistory);
+          commitEncounters(storedEncounters);
 
           const savedDirection = storedPreferences.lastDirection;
           if (!initialDirection && savedDirection && !hasChosenDirectionRef.current) {
@@ -169,6 +191,7 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
     commitCompletedMap,
     commitReviewMap,
     commitHistoryMap,
+    commitEncounters,
     writeQueue,
   ]);
 
@@ -236,6 +259,52 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
     [activeCompletedIds]
   );
 
+  /**
+   * Note encounters and add cards for newly met reviewable words, in both decks.
+   * Must only be called from inside a queued write. Unknown IDs are skipped.
+   */
+  const applyEncounters = useCallback(
+    async (itemIds: string[], source: EncounterSource, contentId?: string): Promise<boolean> => {
+      const now = Date.now();
+      let nextEncounters = encountersRef.current;
+      let nextDecks = reviewMapRef.current;
+
+      for (const itemId of itemIds) {
+        const item = getLexicalItem(itemId);
+        if (!item) continue;
+        nextEncounters = noteEncounter(nextEncounters, itemId, source, now);
+        nextDecks = addRecords(nextDecks, planEnqueue(item, nextDecks, { now, source, contentId }));
+      }
+
+      if (nextEncounters === encountersRef.current) {
+        return true;
+      }
+
+      const decksChanged = nextDecks !== reviewMapRef.current;
+      commitEncounters(nextEncounters);
+      if (decksChanged) {
+        commitReviewMap(nextDecks);
+      }
+
+      const [encountersSaved, decksSaved] = await Promise.all([
+        encounterStorage.saveEncounters(nextEncounters),
+        decksChanged ? reviewStorage.saveReviewRecords(nextDecks) : Promise.resolve(true),
+      ]);
+      return encountersSaved && decksSaved;
+    },
+    [commitEncounters, commitReviewMap]
+  );
+
+  const recordEncounter = useCallback(
+    (itemId: string, source: EncounterSource, contentId?: string): Promise<boolean> => {
+      if (!getLexicalItem(itemId)) {
+        return Promise.resolve(false);
+      }
+      return writeQueue.enqueue(() => applyEncounters([itemId], source, contentId));
+    },
+    [writeQueue, applyEncounters]
+  );
+
   const markLessonComplete = useCallback(
     (lessonId: string): Promise<boolean> => {
       if (!lessonId) return Promise.resolve(false);
@@ -252,47 +321,20 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
         // Save lesson completion to storage
         const progressResult = await progressStorage.markLessonCompleteInStorage(dir, lessonId);
 
-        // Automatically enqueue vocabulary from completed lesson into review state & storage
+        // The lesson's words count as encounters: each reviewable word gets a card in both decks (ADR-009).
         const lessonData = MOCK_LESSONS[lessonId];
         if (lessonData && lessonData.vocabulary && lessonData.vocabulary.length > 0) {
-          const reviews = reviewMapRef.current;
-          const currentRecords = reviews[dir] || [];
-          const existingVocabIds = new Set(currentRecords.map((r) => r.vocabId));
-          const newRecords: ReviewRecord[] = [];
-          const now = Date.now();
-
-          for (const item of lessonData.vocabulary) {
-            if (!existingVocabIds.has(item.id)) {
-              newRecords.push({
-                id: item.id,
-                vocabId: item.id,
-                lessonId,
-                direction: dir,
-                addedAt: now,
-                lastReviewedAt: null,
-                dueAt: now,
-                reviewCount: 0,
-                rememberedCount: 0,
-                needsPracticeCount: 0,
-              });
-              existingVocabIds.add(item.id);
-            }
-          }
-
-          if (newRecords.length > 0) {
-            const updatedMap: DirectionReviewMap = {
-              ...reviews,
-              [dir]: [...currentRecords, ...newRecords],
-            };
-            commitReviewMap(updatedMap);
-            await reviewStorage.saveReviewRecords(updatedMap);
-          }
+          await applyEncounters(
+            lessonData.vocabulary.map((item) => item.id),
+            'lesson',
+            lessonData.id // canonical ID, also for the '-pt' aliases
+          );
         }
 
         return progressResult.success;
       });
     },
-    [direction, writeQueue, commitCompletedMap, commitReviewMap]
+    [direction, writeQueue, commitCompletedMap, applyEncounters]
   );
 
   /** Append a history entry. Must only be called from inside a queued write. */
@@ -448,6 +490,8 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({
         reviewStatistics,
         refreshHistory,
         recordHistoryEntry,
+        encounters,
+        recordEncounter,
       }}
     >
       {children}

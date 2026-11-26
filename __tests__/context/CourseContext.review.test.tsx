@@ -74,7 +74,9 @@ describe('CourseContext Review Queue Integration', () => {
     expect(getByTestId('total-records-count').props.children).toBe(3);
   });
 
-  it('isolates review queues between directions', async () => {
+  // ADR-009: lesson words go into both decks, as separate cards. Review isolation
+  // (one deck's reviews never change the other) is covered in CourseContext.isolation.test.tsx.
+  it('adds the lesson\'s words to both decks as separate cards', async () => {
     const { getByTestId } = render(
       <CourseProvider
         initialDirection="pt-BR->en"
@@ -98,8 +100,8 @@ describe('CourseContext Review Queue Integration', () => {
     });
 
     expect(getByTestId('direction-text').props.children).toBe('en->pt-BR');
-    expect(getByTestId('due-count').props.children).toBe(0);
-    expect(getByTestId('total-records-count').props.children).toBe(0);
+    expect(getByTestId('due-count').props.children).toBe(3);
+    expect(getByTestId('total-records-count').props.children).toBe(3);
   });
 
   it('recording a review outcome updates due count when item dueAt is pushed into future', async () => {
