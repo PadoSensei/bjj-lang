@@ -5,7 +5,7 @@
  * content up) and returns a list of issues. An empty list means valid.
  * Level rules come from docs/content/CURRICULUM.md.
  */
-import type { Belt, ContentLesson, LexicalItem, Scenario, Story } from './types';
+import type { Belt, ContentLesson, Exercise, LexicalItem, Scenario, Story } from './types';
 
 export type ContentIssueCode =
   | 'dangling-reference'
@@ -201,6 +201,7 @@ export function validateUniqueIds(ids: string[]): ContentIssue[] {
 
 export interface ContentSet {
   lexicalItems: LexicalItem[];
+  exercises: Exercise[];
   lessons: ContentLesson[];
   stories: Story[];
   scenarios: Scenario[];

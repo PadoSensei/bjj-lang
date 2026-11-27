@@ -96,6 +96,7 @@ export const listLexicalItems = (): LexicalItem[] => [...lexicalItems.values()];
 export const listByBelt = (belt: Belt): LexicalItem[] =>
   listLexicalItems().filter((item) => item.belt === belt);
 export const listLessons = (): ContentLesson[] => [...lessons.values()];
+export const listExercises = (): Exercise[] => [...exercises.values()];
 export const listStories = (): Story[] => [...stories.values()];
 export const listScenarios = (): Scenario[] => [...scenarios.values()];
 
@@ -117,6 +118,7 @@ export const contentIndex: ContentIndex = {
 /** Everything in the registry, in the shape the validators take. */
 export const getContentSet = (): ContentSet => ({
   lexicalItems: listLexicalItems(),
+  exercises: listExercises(),
   lessons: listLessons(),
   stories: listStories(),
   scenarios: listScenarios(),

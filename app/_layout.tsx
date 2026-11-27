@@ -29,6 +29,14 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="curriculum"
+          options={{
+            // Editor tool at /curriculum; not linked from the learner app.
+            title: 'Curriculum review',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="select-direction"
           options={{
             title: 'Select Course Direction',
