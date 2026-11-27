@@ -49,6 +49,9 @@ Existing content maps onto this: Unit 1 (`lesson-1-1` to `lesson-1-3`) seeds Whi
 - New kinds: `story-<belt>-<slug>`, `scn-<belt>-<slug>` (for example `story-white-first-class`).
 - Never reuse or repurpose an ID.
 
+## Reviewing content
+Open **`/curriculum`** on the web preview to review the whole curriculum in one place: every item by belt, English and Portuguese side by side, its Portuguese explanation, review status and reviewer, plus any validation issues. Filter by belt or status, or search. When an item passes review, set `review.status` to `reviewed` and record the reviewer in the content file; the page and the integrity tests pick it up.
+
 ## Item metadata
 Each lexical item records: English headword (a clean form such as `OSS`, with the gloss in `support.pt`), Portuguese meaning, belt, CEFR level, `reviewable` (whether it becomes a flashcard), optional phonetic and examples, and review status (`draft` or `reviewed`, plus reviewer).
 
