@@ -33,6 +33,7 @@ The current goal is the **White Belt** (Pre-A1 to A1) vertical slice as a free i
 - **Flashcard review:** reveal, self-rating, bounded in-session retry and history, in two isolated decks (Português → English and English → Português) with a deck toggle on the review and history screens. Every word met (today: through lessons) gets a card in both decks, each with its own schedule. Help text is in Portuguese, and each card shows where the word was met. The session waits for stored progress to load.
 - **Local persistence:** completed lessons, review cards and history persist across reloads (AsyncStorage). All writes go through one serialized queue.
 - **Web deployment:** static web export (`dist/`) for Vercel.
+- **Curriculum content files:** all lessons and course structure are JSON files in `content/curriculum/`, validated on load. See [Curriculum](docs/content/CURRICULUM.md#content-data) for how to edit them.
 - **Curriculum review page:** open `/curriculum` on the web preview (or in a dev build) to see every word, lesson, exercise, story and adventure by belt, with English and Portuguese side by side, review status and validation issues. It's an editor tool: no learner screen links to it.
 
 ### Next (in order)

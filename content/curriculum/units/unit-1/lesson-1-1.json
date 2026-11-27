@@ -1,0 +1,127 @@
+{
+  "id": "lesson-1-1",
+  "unitId": "unit-1",
+  "title": {
+    "pt": "Saudações e Regras do Tatame",
+    "en": "Mat Greetings & Etiquette"
+  },
+  "objective": {
+    "pt": "Aprenda cumprimentos essenciais e etiqueta básica do tatame.",
+    "en": "Learn essential greetings and basic mat etiquette."
+  },
+  "vocabulary": [
+    {
+      "id": "vocab-1-1-1",
+      "termPt": "OSS",
+      "termEn": "OSS (Respect greeting)",
+      "context": {
+        "pt": "Saudação tradicional do Jiu-Jitsu usada para demonstrar respeito, confirmar entendimento e saudar colegas ou mestres no tatame.",
+        "en": "Traditional martial arts greeting used on the mat to show respect, acknowledge instructions, and greet instructors or partners."
+      },
+      "examplePt": "Diga OSS ao cumprimentar o professor no início e no final do treino.",
+      "exampleEn": "Say OSS when greeting the instructor at the start and end of class."
+    },
+    {
+      "id": "vocab-1-1-2",
+      "termPt": "Cumprimentar",
+      "termEn": "Bow / Shake hands",
+      "context": {
+        "pt": "Gesto de respeito mútuo realizado ao entrar no tatame ou antes de iniciar uma sequência de treinos e rolas.",
+        "en": "Mutual sign of respect performed when stepping onto the mat or before starting drills and sparring rounds."
+      },
+      "examplePt": "Vamos cumprimentar o parceiro com um toque de mãos antes de começar o rola.",
+      "exampleEn": "Let's slap hands and bump fists with our partner before starting the roll."
+    },
+    {
+      "id": "vocab-1-1-3",
+      "termPt": "Com licença",
+      "termEn": "Excuse me",
+      "context": {
+        "pt": "Expressão respeitosa obrigatória para pedir permissão ao professor antes de pisar no tatame ou atravessar a área de treino.",
+        "en": "Polite expression required to ask the instructor for permission before stepping onto the mat or walking across the training area."
+      },
+      "examplePt": "Com licença, professor, posso entrar no tatame?",
+      "exampleEn": "Excuse me, Professor, may I step onto the mat?"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "ex-1-1-mc1",
+      "type": "multiple-choice",
+      "prompt": {
+        "pt": "Como você saúda seu parceiro ou professor no tatame demonstrando respeito?",
+        "en": "How do you greet your training partner or instructor on the mat to show respect?"
+      },
+      "options": [
+        {
+          "pt": "OSS",
+          "en": "OSS"
+        },
+        {
+          "pt": "Tchau",
+          "en": "Goodbye"
+        },
+        {
+          "pt": "Parou",
+          "en": "Stop"
+        },
+        {
+          "pt": "Raspagem",
+          "en": "Sweep"
+        }
+      ],
+      "correctIndex": 0,
+      "explanation": {
+        "pt": "OSS é a saudação tradicional de respeito no Jiu-Jitsu.",
+        "en": "OSS is the traditional greeting of respect in BJJ."
+      }
+    },
+    {
+      "id": "ex-1-1-recall1",
+      "type": "translation-recall",
+      "prompt": {
+        "pt": "Com licença",
+        "en": "Excuse me"
+      },
+      "targetAnswer": {
+        "pt": "Com licença",
+        "en": "Excuse me"
+      },
+      "explanation": {
+        "pt": "Usado para pedir permissão ao entrar no tatame.",
+        "en": "Used to ask permission when stepping onto the mat."
+      }
+    },
+    {
+      "id": "ex-1-1-mc2",
+      "type": "multiple-choice",
+      "prompt": {
+        "pt": "Qual expressão significa fazer uma reverência ou apertar as mãos antes da luta?",
+        "en": "Which term means bowing or shaking hands before a match or spar?"
+      },
+      "options": [
+        {
+          "pt": "Bater",
+          "en": "Tap out"
+        },
+        {
+          "pt": "Cumprimentar",
+          "en": "Bow / Shake hands"
+        },
+        {
+          "pt": "Montada",
+          "en": "Mount"
+        },
+        {
+          "pt": "Passar",
+          "en": "Pass"
+        }
+      ],
+      "correctIndex": 1,
+      "explanation": {
+        "pt": "Cumprimentar indica a ação de saudar o parceiro antes do treino.",
+        "en": "Cumprimentar / Bowing signals mutual respect before starting."
+      }
+    }
+  ]
+}

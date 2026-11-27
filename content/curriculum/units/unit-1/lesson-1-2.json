@@ -1,0 +1,96 @@
+{
+  "id": "lesson-1-2",
+  "unitId": "unit-1",
+  "title": {
+    "pt": "Comandos de Treino",
+    "en": "Coaching Commands"
+  },
+  "objective": {
+    "pt": "Entenda os comandos verbais mais comuns dados pelo professor.",
+    "en": "Understand essential verbal calls made by instructors during practice."
+  },
+  "vocabulary": [
+    {
+      "id": "vocab-1-2-1",
+      "termPt": "Parou!",
+      "termEn": "Stop! / Break!",
+      "context": {
+        "pt": "Ordem verbal emitida pelo professor para congelar ou encerrar a movimentação imediatamente por razões técnicas ou de segurança.",
+        "en": "Verbal command from the coach to immediately freeze or stop action for technical instruction or safety."
+      },
+      "examplePt": "O professor gritou \"Parou!\" para evitar que as duplas se chocassem na borda.",
+      "exampleEn": "The coach shouted \"Stop!\" to keep the pairs from bumping into each other near the edge."
+    },
+    {
+      "id": "vocab-1-2-2",
+      "termPt": "Troca!",
+      "termEn": "Switch! / Change partners!",
+      "context": {
+        "pt": "Comando do instrutor indicando alternância de papéis (ataque e defesa) ou rotação para um novo companheiro de treino.",
+        "en": "Instructor command signaling a switch of roles (attacker and defender) or rotation to a new training partner."
+      },
+      "examplePt": "Acabou o tempo da posição; ouviu \"Troca!\", quem estava por baixo agora vai passar.",
+      "exampleEn": "Time is up for the drill; when you hear \"Switch!\", the person on the bottom now passes."
+    },
+    {
+      "id": "vocab-1-2-3",
+      "termPt": "Bater",
+      "termEn": "Tap out / Signal submission",
+      "context": {
+        "pt": "Ato de dar tapinhas no adversário ou no tatame (ou falar \"pegou\") para sinalizar submissão com segurança e evitar lesões.",
+        "en": "Act of tapping the partner or mat (or verbally tapping) to yield safely to a submission and prevent injury."
+      },
+      "examplePt": "Se a chave de braço estiver encaixada, bata com calma e logo para treinar com segurança.",
+      "exampleEn": "If the armbar is locked in, tap early and smoothly so everyone trains safely."
+    }
+  ],
+  "exercises": [
+    {
+      "id": "ex-1-2-mc1",
+      "type": "multiple-choice",
+      "prompt": {
+        "pt": "O que o professor quer dizer quando grita \"Parou!\"?",
+        "en": "What does the instructor mean when shouting \"Stop! / Break!\"?"
+      },
+      "options": [
+        {
+          "pt": "Aumentar a velocidade",
+          "en": "Speed up"
+        },
+        {
+          "pt": "Interromper a luta imediatamente",
+          "en": "Pause or stop the roll immediately"
+        },
+        {
+          "pt": "Mudar de posição",
+          "en": "Change position"
+        },
+        {
+          "pt": "Começar a lutar",
+          "en": "Start rolling"
+        }
+      ],
+      "correctIndex": 1,
+      "explanation": {
+        "pt": "Parou! / Break! significa parar o treino na hora.",
+        "en": "Parou! / Break! instructs everyone to halt immediately."
+      }
+    },
+    {
+      "id": "ex-1-2-recall1",
+      "type": "translation-recall",
+      "prompt": {
+        "pt": "Troca!",
+        "en": "Switch! / Change partners!"
+      },
+      "targetAnswer": {
+        "pt": "Troca!",
+        "en": "Switch!"
+      },
+      "explanation": {
+        "pt": "Usado para rotacionar parceiros de treino.",
+        "en": "Used to instruct athletes to switch partners."
+      }
+    }
+  ]
+}

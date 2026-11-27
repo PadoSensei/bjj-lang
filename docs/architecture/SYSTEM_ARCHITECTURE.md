@@ -28,8 +28,8 @@ Dependencies point inward. Domain logic must not import React Native, Expo, Supa
 - Storage shapes change additively only (ADR-008).
 
 ### Content
-- Today: typed data in `src/data/mockLessons.ts` and `src/data/mockCourseData.ts`.
-- Target for P1: one registry in `src/content/`, typed by `src/domain/content/types.ts`, with stable IDs, validated in CI (ADR-008). `MOCK_LESSONS` becomes a derived adapter during the transition.
+- Today: JSON files in `content/curriculum/` (`courses.json`, one file per lesson under `units/`), validated with Zod on load (`src/data/contentSchema.ts`) by the thin loaders `src/data/mockLessons.ts` and `src/data/mockCourseData.ts`.
+- The content registry (`src/content/registry.ts`, types in `src/domain/content/types.ts`) is built from those lessons at load and is what modes read by stable ID. Validators in `src/domain/content/validate.ts` run over it in CI (ADR-008). New content (stories, scenarios, the White Belt pack) is added to the registry from its own JSON files.
 
 ### The four modes (P1–P2)
 - **Reader, Games, Adventure** read content by ID and report vocabulary with `recordEncounter(itemId, source)`.

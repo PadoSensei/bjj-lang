@@ -56,4 +56,10 @@ Open **`/curriculum`** on the web preview to review the whole curriculum in one 
 Each lexical item records: English headword (a clean form such as `OSS`, with the gloss in `support.pt`), Portuguese meaning, belt, CEFR level, `reviewable` (whether it becomes a flashcard), optional phonetic and examples, and review status (`draft` or `reviewed`, plus reviewer).
 
 ## Content data
-Content is typed data, not hardcoded into screens. Lessons, stories, games and scenarios reference concept IDs.
+Content is data, not hardcoded into screens. Lessons, stories, games and scenarios reference concept IDs.
+
+**Where it lives:** JSON files in `content/curriculum/`:
+- `courses.json`: the course structure for each direction (units, belts, lesson order).
+- `units/unit-N/lesson-N-M.json`: one file per lesson, with its vocabulary and exercises.
+
+**Editing:** change the JSON file, then run `pnpm test`. Every file is validated when the app loads (`src/data/contentSchema.ts`). A mistake fails with the file name and the exact field, for example `Invalid curriculum file units/unit-1/lesson-1-1.json: vocabulary.1.termEn: Required`. The integrity tests then check IDs, references and level rules, and `/curriculum` shows the result. Never change an existing `id`.
