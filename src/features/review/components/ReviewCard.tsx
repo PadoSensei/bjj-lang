@@ -6,6 +6,15 @@ import { FormattedReviewItem } from '../reviewScheduler';
 import { ReviewOutcome } from '../../../types/review';
 import { colors, spacing, typography } from '../../../theme/tokens';
 import { ContextualVocabularyView } from '../../vocabulary/components/ContextualVocabularyView';
+import type { EncounterSource } from '../../../types/encounter';
+
+/** Where the word was met, in the learner's language. */
+const SOURCE_LABELS: Record<EncounterSource, string> = {
+  reader: 'Leitura',
+  game: 'Jogo',
+  adventure: 'Aventura',
+  lesson: 'Aula',
+};
 
 export interface ReviewCardProps {
   formattedItem: FormattedReviewItem;
@@ -33,7 +42,14 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({
       showsVerticalScrollIndicator={false}
     >
       <Card style={styles.promptCard} testID="review-prompt-card">
-        <Text style={styles.badgeText}>Vocabulary Prompt</Text>
+        <View style={styles.badgeRow}>
+          <Text style={styles.badgeText}>Vocabulary Prompt</Text>
+          {formattedItem.source ? (
+            <Text style={styles.sourceLabel} testID="review-source-label">
+              {SOURCE_LABELS[formattedItem.source]}
+            </Text>
+          ) : null}
+        </View>
         <Text style={styles.promptText} testID="review-prompt-text">
           {formattedItem.promptTerm}
         </Text>
@@ -67,6 +83,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({
             <ContextualVocabularyView
               vocab={formattedItem.rawVocab}
               showTermHeader={false}
+              explanation={formattedItem.helpTextPt}
+              explanationLabel="Explicação:"
               testID="review-contextual-vocab"
             />
           ) : formattedItem.contextText || formattedItem.examplePt ? (
@@ -82,6 +100,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({
                 exampleEn: formattedItem.exampleEn,
               }}
               showTermHeader={false}
+              explanation={formattedItem.helpTextPt}
+              explanationLabel="Explicação:"
               testID="review-contextual-vocab"
             />
           ) : null}
@@ -134,6 +154,17 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     padding: spacing.lg,
     alignItems: 'center',
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+  },
+  sourceLabel: {
+    color: colors.textSecondary,
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.medium,
   },
   badgeText: {
     color: colors.primary,

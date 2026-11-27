@@ -77,7 +77,11 @@ export function useReviewSession(
     if (!lookup) {
       return null;
     }
-    return formatVocabForReview(lookup.vocab, currentRecord.lessonId, direction);
+    const formatted = formatVocabForReview(lookup.vocab, currentRecord.lessonId, direction);
+    // Help text is always Portuguese: the learner's own explanation if the item has one,
+    // otherwise the lesson's Portuguese context (ADR-009).
+    const helpTextPt = getLexicalItem(currentRecord.vocabId)?.support?.pt ?? lookup.vocab.context?.pt;
+    return { ...formatted, helpTextPt, source: currentRecord.source };
   }, [currentRecord, direction]);
 
   const revealAnswer = useCallback(() => {
