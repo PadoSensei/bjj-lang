@@ -1,0 +1,69 @@
+{
+  "id": "lesson-2-1",
+  "unitId": "unit-2",
+  "title": {
+    "pt": "Guardas e Passagens",
+    "en": "Guards & Passes"
+  },
+  "objective": {
+    "pt": "Domine a nomenclatura de posições fundamentais de guarda.",
+    "en": "Master the terminology for fundamental guard positions."
+  },
+  "vocabulary": [
+    {
+      "id": "vocab-2-1-1",
+      "termPt": "Guarda Fechada",
+      "termEn": "Closed Guard",
+      "context": {
+        "pt": "Posição de guarda fundamental em que o atleta por baixo mantém as pernas cruzadas atrás da lombar do adversário para controlar sua postura e abrir ataques.",
+        "en": "Fundamental guard position where the bottom practitioner locks ankles around the opponent's lower back to break posture and launch attacks."
+      },
+      "examplePt": "Quebre a postura do adversário antes de tentar abrir ataques da guarda fechada.",
+      "exampleEn": "Break your opponent's posture before launching attacks from closed guard."
+    },
+    {
+      "id": "vocab-2-1-2",
+      "termPt": "Passagem de Guarda",
+      "termEn": "Guard Pass",
+      "context": {
+        "pt": "Manobra ofensiva do atleta por cima para transpor as pernas do guardeiro e estabelecer uma posição dominante de controle (como o cem quilos ou a montada).",
+        "en": "Offensive maneuver executed by the top player to clear the bottom player's legs and consolidate a dominant control position (such as side control or mount)."
+      },
+      "examplePt": "Ele conquistou três pontos ao concluir a passagem de guarda e estabilizar o cem quilos.",
+      "exampleEn": "He scored three points after finishing the guard pass and stabilizing side control."
+    }
+  ],
+  "exercises": [
+    {
+      "id": "ex-2-1-mc1",
+      "type": "multiple-choice",
+      "prompt": {
+        "pt": "Qual é a tradução de \"Closed Guard\"?",
+        "en": "What is the translation of \"Guarda Fechada\"?"
+      },
+      "options": [
+        {
+          "pt": "Guarda Fechada",
+          "en": "Closed Guard"
+        },
+        {
+          "pt": "Montada",
+          "en": "Mount"
+        },
+        {
+          "pt": "Controle Lateral",
+          "en": "Side Control"
+        },
+        {
+          "pt": "Raspagem",
+          "en": "Sweep"
+        }
+      ],
+      "correctIndex": 0,
+      "explanation": {
+        "pt": "Guarda Fechada equivale a Closed Guard.",
+        "en": "Guarda Fechada is Closed Guard in English."
+      }
+    }
+  ]
+}
