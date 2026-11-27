@@ -53,6 +53,7 @@ export const MultipleChoiceExerciseSchema = z
     options: z.array(MultipleChoiceOptionSchema).min(2),
     correctIndex: z.number().int().min(0),
     explanation: LocalizedTextSchema.optional(),
+    itemIds: z.array(z.string().min(1)).optional(),
   })
   .refine((exercise) => exercise.correctIndex < exercise.options.length, {
     message: 'correctIndex must point at one of the options',
@@ -66,6 +67,7 @@ export const TranslationRecallExerciseSchema = z.object({
   targetAnswer: LocalizedTextSchema,
   hint: LocalizedTextSchema.optional(),
   explanation: LocalizedTextSchema.optional(),
+  itemIds: z.array(z.string().min(1)).optional(),
 });
 
 // A plain union (not discriminatedUnion) so the multiple-choice refinement can apply.
@@ -127,6 +129,93 @@ const CourseDataSchema = z.object({
 export const CoursesSchema = z.record(CourseDirectionSchema, CourseDataSchema);
 
 export type CoursesContent = z.infer<typeof CoursesSchema>;
+
+// ---------------------------------------------------------------------------
+// Content packs (content/curriculum/<belt>/<theme>/), ADR-008
+// ---------------------------------------------------------------------------
+
+const BeltSchema = z.enum(['white', 'blue', 'purple', 'brown', 'black']);
+const CefrSchema = z.enum(['pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1']);
+const ReviewSchema = z.object({
+  status: z.enum(['draft', 'reviewed']),
+  reviewer: z.string().min(1).optional(),
+});
+const SupportSchema = z.object({ pt: z.string().min(1).optional(), en: z.string().min(1).optional() });
+
+/** A new word: the vocabulary fields plus registry metadata. */
+export const LexicalItemFileSchema = VocabularyItemSchema.extend({
+  belt: BeltSchema,
+  cefr: CefrSchema,
+  reviewable: z.boolean(),
+  support: SupportSchema.optional(),
+  review: ReviewSchema,
+});
+
+/** Extra metadata for an existing word, which keeps its text and ID. */
+export const AnnotationSchema = z.object({
+  id: z.string().min(1),
+  cefr: CefrSchema.optional(),
+  reviewable: z.boolean().optional(),
+  support: SupportSchema.optional(),
+  review: ReviewSchema.optional(),
+});
+
+export const LexiconFileSchema = z.object({
+  items: z.array(LexicalItemFileSchema),
+  annotations: z.array(AnnotationSchema),
+});
+
+export const ExercisesFileSchema = z.array(ExerciseSchema);
+
+export const StoryFileSchema = z.object({
+  id: z.string().regex(/^story-/, 'story IDs start with "story-"'),
+  belt: BeltSchema,
+  title: LocalizedTextSchema,
+  pages: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        pt: z.string().min(1),
+        tokens: z.array(z.object({ text: z.string().min(1), itemId: z.string().min(1).optional() })).min(1),
+      })
+    )
+    .min(1),
+  comprehensionExerciseIds: z.array(z.string().min(1)),
+  review: ReviewSchema,
+});
+
+const ScenarioChoiceSchema = z.object({
+  id: z.string().min(1),
+  text: z.string().min(1),
+  itemIds: z.array(z.string().min(1)),
+  feedback: LocalizedTextSchema,
+  nextNodeId: z.string().min(1),
+});
+
+export const ScenarioFileSchema = z.object({
+  id: z.string().regex(/^scn-/, 'scenario IDs start with "scn-"'),
+  belt: BeltSchema,
+  title: LocalizedTextSchema,
+  startNodeId: z.string().min(1),
+  nodes: z.record(
+    z.string(),
+    z.object({
+      narrative: LocalizedTextSchema,
+      ending: z.enum(['good', 'retry']).optional(),
+      choices: z.array(ScenarioChoiceSchema),
+    })
+  ),
+  review: ReviewSchema,
+});
+
+/** Validate any content file against a schema. Throws an error naming the file and each bad field. */
+export function parseContentFile<T>(schema: z.ZodType<T, z.ZodTypeDef, unknown>, raw: unknown, fileName: string): T {
+  const result = schema.safeParse(raw);
+  if (!result.success) {
+    throw new Error(describeIssues(fileName, result.error));
+  }
+  return result.data;
+}
 
 // ---------------------------------------------------------------------------
 // Parsing with readable errors

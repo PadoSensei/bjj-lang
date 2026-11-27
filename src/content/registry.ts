@@ -8,6 +8,7 @@
  */
 import { MOCK_LESSONS } from '../data/mockLessons';
 import { MOCK_COURSES } from '../data/mockCourseData';
+import { CONTENT_PACKS, buildPackEntries } from './packs';
 import type { VocabularyItem } from '../types/lesson';
 import {
   BELT_DEFAULT_CEFR,
@@ -75,6 +76,19 @@ function seedFromLegacyLessons(): void {
 }
 
 seedFromLegacyLessons();
+
+/** Add every content pack (new words, annotations, exercises, stories, scenarios). */
+function addContentPacks(): void {
+  for (const pack of CONTENT_PACKS) {
+    const entries = buildPackEntries(pack, (id) => lexicalItems.get(id));
+    for (const item of entries.items) lexicalItems.set(item.id, item);
+    for (const exercise of entries.exercises) exercises.set(exercise.id, exercise);
+    for (const story of entries.stories) stories.set(story.id, story);
+    for (const scenario of entries.scenarios) scenarios.set(scenario.id, scenario);
+  }
+}
+
+addContentPacks();
 
 export const getLexicalItem = (id: string): LexicalItem | undefined => lexicalItems.get(id);
 

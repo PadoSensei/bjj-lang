@@ -1,0 +1,237 @@
+{
+  "id": "story-white-first-class",
+  "belt": "white",
+  "title": {
+    "en": "My first class",
+    "pt": "Minha primeira aula"
+  },
+  "pages": [
+    {
+      "id": "p1",
+      "pt": "Olá! Meu nome é Ana. Eu sou nova.",
+      "tokens": [
+        {
+          "text": "Hello!"
+        },
+        {
+          "text": "My name is",
+          "itemId": "vocab-white-my-name-is"
+        },
+        {
+          "text": "Ana."
+        },
+        {
+          "text": "I"
+        },
+        {
+          "text": "am"
+        },
+        {
+          "text": "new."
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "pt": "Este é o meu professor. OSS, professor!",
+      "tokens": [
+        {
+          "text": "This"
+        },
+        {
+          "text": "is"
+        },
+        {
+          "text": "my"
+        },
+        {
+          "text": "teacher",
+          "itemId": "vocab-white-teacher"
+        },
+        {
+          "text": "."
+        },
+        {
+          "text": "OSS",
+          "itemId": "vocab-1-1-1"
+        },
+        {
+          "text": ","
+        },
+        {
+          "text": "teacher",
+          "itemId": "vocab-white-teacher"
+        },
+        {
+          "text": "!"
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "pt": "Com licença. Posso treinar? Sim! Encontre um parceiro.",
+      "tokens": [
+        {
+          "text": "Excuse me",
+          "itemId": "vocab-1-1-3"
+        },
+        {
+          "text": "."
+        },
+        {
+          "text": "Can"
+        },
+        {
+          "text": "I"
+        },
+        {
+          "text": "train?"
+        },
+        {
+          "text": "Yes",
+          "itemId": "vocab-1-3-6"
+        },
+        {
+          "text": "!"
+        },
+        {
+          "text": "Find"
+        },
+        {
+          "text": "a"
+        },
+        {
+          "text": "partner",
+          "itemId": "vocab-white-partner"
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "pt": "Conte comigo! Um, dois, três, quatro, cinco. É difícil? Não!",
+      "tokens": [
+        {
+          "text": "Count"
+        },
+        {
+          "text": "with"
+        },
+        {
+          "text": "me!"
+        },
+        {
+          "text": "One",
+          "itemId": "vocab-1-3-1"
+        },
+        {
+          "text": ","
+        },
+        {
+          "text": "two",
+          "itemId": "vocab-1-3-2"
+        },
+        {
+          "text": ","
+        },
+        {
+          "text": "three",
+          "itemId": "vocab-1-3-3"
+        },
+        {
+          "text": ","
+        },
+        {
+          "text": "four",
+          "itemId": "vocab-1-3-4"
+        },
+        {
+          "text": ","
+        },
+        {
+          "text": "five",
+          "itemId": "vocab-1-3-5"
+        },
+        {
+          "text": "."
+        },
+        {
+          "text": "Is"
+        },
+        {
+          "text": "it"
+        },
+        {
+          "text": "hard?"
+        },
+        {
+          "text": "No",
+          "itemId": "vocab-1-3-7"
+        },
+        {
+          "text": "!"
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "pt": "Eu bato. Meu parceiro para. De novo? Sim. De novo!",
+      "tokens": [
+        {
+          "text": "I"
+        },
+        {
+          "text": "tap",
+          "itemId": "vocab-1-2-3"
+        },
+        {
+          "text": "."
+        },
+        {
+          "text": "My"
+        },
+        {
+          "text": "partner",
+          "itemId": "vocab-white-partner"
+        },
+        {
+          "text": "stops",
+          "itemId": "vocab-1-2-1"
+        },
+        {
+          "text": "."
+        },
+        {
+          "text": "Again",
+          "itemId": "vocab-white-again"
+        },
+        {
+          "text": "?"
+        },
+        {
+          "text": "Yes",
+          "itemId": "vocab-1-3-6"
+        },
+        {
+          "text": "."
+        },
+        {
+          "text": "Again",
+          "itemId": "vocab-white-again"
+        },
+        {
+          "text": "!"
+        }
+      ]
+    }
+  ],
+  "comprehensionExerciseIds": [
+    "ex-white-first-class-c1",
+    "ex-white-first-class-c2"
+  ],
+  "review": {
+    "status": "draft"
+  }
+}

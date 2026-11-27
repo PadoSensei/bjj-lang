@@ -258,7 +258,9 @@ describe('ReviewScreen', () => {
       await act(async () => {
         fireEvent.press(getByTestId('review-show-answer-btn'));
       });
-      expect(getByTestId('review-contextual-vocab-context-text').props.children).toBe(contextPt(vocabId));
+      // The item's own Portuguese explanation (support.pt) when it has one, else the lesson's Portuguese context.
+      const expected = registry.getLexicalItem(vocabId)?.support?.pt ?? contextPt(vocabId);
+      expect(getByTestId('review-contextual-vocab-context-text').props.children).toBe(expected);
       expect(getByText('Explicação:')).toBeTruthy();
     });
 

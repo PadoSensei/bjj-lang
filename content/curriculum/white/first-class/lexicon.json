@@ -1,0 +1,147 @@
+{
+  "items": [
+    {
+      "id": "vocab-white-teacher",
+      "termEn": "Teacher",
+      "termPt": "Professor",
+      "belt": "white",
+      "cefr": "A1",
+      "reviewable": true,
+      "support": {
+        "pt": "A pessoa que dá a aula."
+      },
+      "exampleEn": "This is my teacher.",
+      "examplePt": "Este é meu professor.",
+      "review": {
+        "status": "draft"
+      }
+    },
+    {
+      "id": "vocab-white-partner",
+      "termEn": "Partner",
+      "termPt": "Parceiro",
+      "belt": "white",
+      "cefr": "A1",
+      "reviewable": true,
+      "support": {
+        "pt": "A pessoa que treina com você."
+      },
+      "exampleEn": "Find a partner.",
+      "examplePt": "Encontre um parceiro.",
+      "review": {
+        "status": "draft"
+      }
+    },
+    {
+      "id": "vocab-white-my-name-is",
+      "termEn": "My name is",
+      "termPt": "Meu nome é",
+      "belt": "white",
+      "cefr": "pre-A1",
+      "reviewable": true,
+      "support": {
+        "pt": "Use para dizer o seu nome."
+      },
+      "exampleEn": "My name is Ana.",
+      "examplePt": "Meu nome é Ana.",
+      "review": {
+        "status": "draft"
+      }
+    },
+    {
+      "id": "vocab-white-again",
+      "termEn": "Again",
+      "termPt": "De novo",
+      "belt": "white",
+      "cefr": "A1",
+      "reviewable": true,
+      "support": {
+        "pt": "Fazer mais uma vez."
+      },
+      "exampleEn": "Again? Yes!",
+      "examplePt": "De novo? Sim!",
+      "review": {
+        "status": "draft"
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "id": "vocab-1-1-1",
+      "cefr": "pre-A1",
+      "support": {
+        "pt": "Cumprimento de respeito no Jiu-Jitsu. Também quer dizer \"entendi\"."
+      }
+    },
+    {
+      "id": "vocab-1-1-3",
+      "cefr": "A1",
+      "support": {
+        "pt": "Use para pedir licença com educação."
+      }
+    },
+    {
+      "id": "vocab-1-2-1",
+      "cefr": "A1",
+      "support": {
+        "pt": "O professor diz \"Stop!\" para parar o treino."
+      }
+    },
+    {
+      "id": "vocab-1-2-3",
+      "cefr": "A1",
+      "support": {
+        "pt": "Bata no parceiro ou no tatame para desistir. Ele solta na hora."
+      }
+    },
+    {
+      "id": "vocab-1-3-1",
+      "cefr": "pre-A1",
+      "support": {
+        "pt": "O número 1. Use para contar."
+      }
+    },
+    {
+      "id": "vocab-1-3-2",
+      "cefr": "pre-A1",
+      "support": {
+        "pt": "O número 2. Use para contar."
+      }
+    },
+    {
+      "id": "vocab-1-3-3",
+      "cefr": "pre-A1",
+      "support": {
+        "pt": "O número 3. Use para contar."
+      }
+    },
+    {
+      "id": "vocab-1-3-4",
+      "cefr": "pre-A1",
+      "support": {
+        "pt": "O número 4. Use para contar."
+      }
+    },
+    {
+      "id": "vocab-1-3-5",
+      "cefr": "pre-A1",
+      "support": {
+        "pt": "O número 5. Use para contar."
+      }
+    },
+    {
+      "id": "vocab-1-3-6",
+      "cefr": "pre-A1",
+      "support": {
+        "pt": "Resposta positiva."
+      }
+    },
+    {
+      "id": "vocab-1-3-7",
+      "cefr": "pre-A1",
+      "support": {
+        "pt": "Resposta negativa."
+      }
+    }
+  ]
+}
