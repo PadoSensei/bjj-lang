@@ -12,13 +12,14 @@ const report = () => buildCurriculumReport(getContentSet(), validateRegistry(), 
 describe('buildCurriculumReport (curriculum review page)', () => {
   it('counts everything in the registry', () => {
     expect(report().totals).toEqual({
-      words: 46,
+      // 46 lesson words + 4 new White Belt words; 22 + 4 exercises; the White Belt story and adventure (#41)
+      words: 50,
       lessons: 7,
-      exercises: 22,
-      stories: 0,
-      scenarios: 0,
+      exercises: 26,
+      stories: 1,
+      scenarios: 1,
       reviewed: 0,
-      draft: 46,
+      draft: 50,
       issues: 0,
     });
   });
@@ -26,7 +27,7 @@ describe('buildCurriculumReport (curriculum review page)', () => {
   it('groups words and lessons by belt, White first, skipping empty belts', () => {
     const belts = report().belts;
     expect(belts.map((b) => b.belt)).toEqual(['white', 'blue', 'purple']);
-    expect(belts.map((b) => b.words.length)).toEqual([15, 11, 20]);
+    expect(belts.map((b) => b.words.length)).toEqual([19, 11, 20]);
     expect(belts.map((b) => b.lessons.map((l) => l.id))).toEqual([
       ['lesson-1-1', 'lesson-1-2', 'lesson-1-3'],
       ['lesson-2-1', 'lesson-2-2'],
@@ -39,12 +40,15 @@ describe('buildCurriculumReport (curriculum review page)', () => {
     expect(oss).toMatchObject({
       en: 'OSS (Respect greeting)',
       pt: 'OSS',
-      cefr: 'A1',
+      cefr: 'pre-A1', // set by the White Belt pack (#41)
       reviewable: true,
       status: 'draft',
       lessonIds: ['lesson-1-1'],
     });
-    expect(oss.explanationPt).toBe(MOCK_LESSONS['lesson-1-1'].vocabulary[0].context!.pt);
+    // The White Belt pack gives OSS its own short explanation, which wins over the lesson context.
+    expect(oss.explanationPt).toBe('Cumprimento de respeito no Jiu-Jitsu. Também quer dizer "entendi".');
+    const bow = report().belts[0].words.find((w) => w.id === 'vocab-1-1-2')!;
+    expect(bow.explanationPt).toBe(MOCK_LESSONS['lesson-1-1'].vocabulary[1].context!.pt);
   });
 
   it('prefers an item\'s own support.pt as its explanation', () => {
@@ -70,7 +74,7 @@ describe('buildCurriculumReport (curriculum review page)', () => {
 
   it('describes exercises with their prompt and answer in both languages', () => {
     const exercises = report().exercises;
-    expect(exercises).toHaveLength(22);
+    expect(exercises).toHaveLength(26);
     const mc = MOCK_LESSONS['lesson-1-1'].exercises.find((e) => e.type === 'multiple-choice')!;
     const row = exercises.find((e) => e.id === mc.id)!;
     expect(row.type).toBe('multiple-choice');
@@ -90,7 +94,7 @@ describe('filterCurriculumItems', () => {
   const words = () => report().belts.flatMap((b) => b.words);
 
   it('with no filters returns every word', () => {
-    expect(filterCurriculumItems(words(), {})).toHaveLength(46);
+    expect(filterCurriculumItems(words(), {})).toHaveLength(50);
   });
 
   it('filters by belt', () => {
@@ -101,7 +105,7 @@ describe('filterCurriculumItems', () => {
 
   it('filters by review status', () => {
     expect(filterCurriculumItems(words(), { status: 'reviewed' })).toHaveLength(0);
-    expect(filterCurriculumItems(words(), { status: 'draft' })).toHaveLength(46);
+    expect(filterCurriculumItems(words(), { status: 'draft' })).toHaveLength(50);
   });
 
   it('searches ID, English and Portuguese, ignoring case and accents', () => {

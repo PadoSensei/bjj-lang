@@ -19,10 +19,12 @@ describe('Curriculum review page (/curriculum)', () => {
 
   it('summarises the whole curriculum', () => {
     const { getByTestId } = render(<CurriculumScreen />);
-    expect(getByTestId('curriculum-total-words').props.children).toBe(46);
+    expect(getByTestId('curriculum-total-words').props.children).toBe(50);
     expect(getByTestId('curriculum-total-lessons').props.children).toBe(7);
-    expect(getByTestId('curriculum-total-exercises').props.children).toBe(22);
-    expect(getByTestId('curriculum-total-draft').props.children).toBe(46);
+    expect(getByTestId('curriculum-total-exercises').props.children).toBe(26);
+    expect(getByTestId('curriculum-total-draft').props.children).toBe(50);
+    expect(getByTestId('curriculum-total-stories').props.children).toBe(1);
+    expect(getByTestId('curriculum-total-scenarios').props.children).toBe(1);
     expect(getByTestId('curriculum-total-reviewed').props.children).toBe(0);
   });
 
@@ -31,7 +33,7 @@ describe('Curriculum review page (/curriculum)', () => {
     expect(getByTestId('curriculum-word-vocab-1-3-6-en').props.children).toBe('Yes');
     expect(getByTestId('curriculum-word-vocab-1-3-6-pt').props.children).toBe('Sim');
     expect(getByTestId('curriculum-word-vocab-1-3-6-status').props.children).toBe('draft');
-    expect(getByTestId('curriculum-word-vocab-1-3-6-explanation').props.children).toMatch(/Resposta afirmativa/);
+    expect(getByTestId('curriculum-word-vocab-1-3-6-explanation').props.children).toBe('Resposta positiva.');
   });
 
   it('groups words by belt, White first', () => {
@@ -53,7 +55,7 @@ describe('Curriculum review page (/curriculum)', () => {
 
     fireEvent.press(getByTestId('curriculum-filter-belt-all'));
     expect(getByTestId('curriculum-word-vocab-1-1-1')).toBeTruthy();
-    expect(getByTestId('curriculum-shown-count').props.children).toBe(46);
+    expect(getByTestId('curriculum-shown-count').props.children).toBe(50);
   });
 
   it('filters by review status', () => {
@@ -61,7 +63,7 @@ describe('Curriculum review page (/curriculum)', () => {
     fireEvent.press(getByTestId('curriculum-filter-status-reviewed'));
     expect(getByTestId('curriculum-no-matches')).toBeTruthy();
     fireEvent.press(getByTestId('curriculum-filter-status-all'));
-    expect(getByTestId('curriculum-shown-count').props.children).toBe(46);
+    expect(getByTestId('curriculum-shown-count').props.children).toBe(50);
   });
 
   it('searches English, Portuguese and IDs', () => {
@@ -75,14 +77,18 @@ describe('Curriculum review page (/curriculum)', () => {
     const { getByTestId, getAllByTestId } = render(<CurriculumScreen />);
     expect(getByTestId('curriculum-lesson-lesson-1-1-title-en')).toBeTruthy();
     expect(getByTestId('curriculum-lesson-lesson-1-1-title-pt')).toBeTruthy();
-    expect(getAllByTestId('curriculum-exercise-row')).toHaveLength(22);
+    expect(getAllByTestId('curriculum-exercise-row')).toHaveLength(26);
     expect(getByTestId('curriculum-exercise-ex-1-1-mc1-prompt-pt')).toBeTruthy();
   });
 
-  it('says when there are no stories or adventures yet', () => {
-    const { getByTestId } = render(<CurriculumScreen />);
-    expect(getByTestId('curriculum-stories-empty')).toBeTruthy();
-    expect(getByTestId('curriculum-scenarios-empty')).toBeTruthy();
+  it('shows the White Belt story and adventure (#41)', () => {
+    const { getByTestId, queryByTestId } = render(<CurriculumScreen />);
+    expect(getByTestId('curriculum-story-story-white-first-class')).toBeTruthy();
+    expect(getByTestId('curriculum-scenario-scn-white-first-class')).toBeTruthy();
+    // Reviewers see each choice's feedback in both languages.
+    expect(getByTestId('curriculum-choice-scn-white-first-class-greet')).toBeTruthy();
+    expect(queryByTestId('curriculum-stories-empty')).toBeNull();
+    expect(queryByTestId('curriculum-scenarios-empty')).toBeNull();
   });
 
   it('reports a clean validation run', () => {

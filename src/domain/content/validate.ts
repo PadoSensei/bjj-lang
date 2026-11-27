@@ -105,6 +105,11 @@ export function validateLexicalItem(item: LexicalItem): ContentIssue[] {
   return [];
 }
 
+/** An exercise may only list words that exist. Legacy exercises list none. */
+export function validateExercise(exercise: Exercise, index: ContentIndex): ContentIssue[] {
+  return danglingItems(exercise.id, exercise.itemIds ?? [], index, 'Exercise');
+}
+
 export function validateLesson(lesson: ContentLesson, index: ContentIndex): ContentIssue[] {
   return [
     ...danglingItems(lesson.id, lesson.itemIds, index, 'Lesson'),
@@ -213,6 +218,7 @@ export function validateAll(content: ContentSet, index: ContentIndex): ContentIs
   return [
     ...validateUniqueIds(content.allIds),
     ...content.lexicalItems.flatMap(validateLexicalItem),
+    ...content.exercises.flatMap((exercise) => validateExercise(exercise, index)),
     ...content.lessons.flatMap((lesson) => validateLesson(lesson, index)),
     ...content.stories.flatMap((story) => validateStory(story, index)),
     ...content.scenarios.flatMap((scenario) => validateScenario(scenario, index)),

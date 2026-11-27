@@ -22,6 +22,8 @@ export interface BaseExercise {
   id: string;
   type: 'multiple-choice' | 'translation-recall';
   explanation?: LocalizedText;
+  /** Lexical item IDs this exercise practises (ADR-008). Optional for legacy lessons. */
+  itemIds?: string[];
 }
 
 export interface MultipleChoiceExercise extends BaseExercise {

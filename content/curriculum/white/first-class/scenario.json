@@ -1,0 +1,128 @@
+{
+  "id": "scn-white-first-class",
+  "belt": "white",
+  "title": {
+    "en": "My first class",
+    "pt": "Minha primeira aula"
+  },
+  "startNodeId": "arrive",
+  "nodes": {
+    "arrive": {
+      "narrative": {
+        "en": "You arrive at the academy. The teacher sees you.",
+        "pt": "Você chega na academia. O professor vê você."
+      },
+      "choices": [
+        {
+          "id": "greet",
+          "text": "OSS, teacher!",
+          "itemIds": [
+            "vocab-1-1-1",
+            "vocab-white-teacher"
+          ],
+          "feedback": {
+            "pt": "Muito bem! \"OSS\" mostra respeito.",
+            "en": "Well done! \"OSS\" shows respect."
+          },
+          "nextNodeId": "partner"
+        },
+        {
+          "id": "stop",
+          "text": "Stop!",
+          "itemIds": [
+            "vocab-1-2-1"
+          ],
+          "feedback": {
+            "pt": "Ops! \"Stop\" é para parar o treino. Cumprimente o professor.",
+            "en": "Oops! \"Stop\" ends training. Greet the teacher."
+          },
+          "nextNodeId": "arrive"
+        }
+      ]
+    },
+    "partner": {
+      "narrative": {
+        "en": "The teacher says: find a partner.",
+        "pt": "O professor diz: encontre um parceiro."
+      },
+      "choices": [
+        {
+          "id": "ask",
+          "text": "Excuse me. Partner?",
+          "itemIds": [
+            "vocab-1-1-3",
+            "vocab-white-partner"
+          ],
+          "feedback": {
+            "pt": "Boa! Você pediu com educação.",
+            "en": "Nice! You asked politely."
+          },
+          "nextNodeId": "train"
+        },
+        {
+          "id": "no",
+          "text": "No!",
+          "itemIds": [
+            "vocab-1-3-7"
+          ],
+          "feedback": {
+            "pt": "Ops! Peça com educação: \"Excuse me\".",
+            "en": "Oops! Ask politely: \"Excuse me\"."
+          },
+          "nextNodeId": "partner"
+        }
+      ]
+    },
+    "train": {
+      "narrative": {
+        "en": "You train. It hurts a little.",
+        "pt": "Vocês treinam. Dói um pouco."
+      },
+      "choices": [
+        {
+          "id": "tap",
+          "text": "I tap.",
+          "itemIds": [
+            "vocab-1-2-3"
+          ],
+          "feedback": {
+            "pt": "Certo! Bater é seguro. O parceiro solta.",
+            "en": "Right! Tapping is safe. Your partner lets go."
+          },
+          "nextNodeId": "good-end"
+        },
+        {
+          "id": "again",
+          "text": "Again!",
+          "itemIds": [
+            "vocab-white-again"
+          ],
+          "feedback": {
+            "pt": "Cuidado! Se dói, bata.",
+            "en": "Careful! If it hurts, tap."
+          },
+          "nextNodeId": "retry-end"
+        }
+      ]
+    },
+    "good-end": {
+      "narrative": {
+        "en": "Your partner stops. Great class! OSS!",
+        "pt": "Seu parceiro para. Ótima aula! OSS!"
+      },
+      "ending": "good",
+      "choices": []
+    },
+    "retry-end": {
+      "narrative": {
+        "en": "Ouch! Next time, tap. Try again.",
+        "pt": "Ai! Da próxima vez, bata. Tente de novo."
+      },
+      "ending": "retry",
+      "choices": []
+    }
+  },
+  "review": {
+    "status": "draft"
+  }
+}

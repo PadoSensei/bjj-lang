@@ -8,6 +8,7 @@ import {
   validateScenario,
   validateStory,
   validateUniqueIds,
+  validateExercise,
 } from '../../src/domain/content/validate';
 import { Belt, LexicalItem, Scenario, Story, ContentLesson } from '../../src/domain/content/types';
 
@@ -172,6 +173,19 @@ describe('content validators (issue #38)', () => {
 
     it('reviewed White item missing Portuguese support', () => {
       expect(codes(validateLexicalItem(item({ support: { en: 'English only' } })))).toEqual(['missing-support-pt']);
+    });
+
+    it('exercise practising an unknown item', () => {
+      const exercise = {
+        id: 'ex-w-2',
+        type: 'translation-recall' as const,
+        prompt: { en: 'Yes', pt: 'Sim' },
+        targetAnswer: { en: 'Yes', pt: 'Sim' },
+        itemIds: ['vocab-w-1', 'vocab-nope'],
+      };
+      expect(codes(validateExercise(exercise, index))).toEqual(['dangling-reference']);
+      expect(validateExercise({ ...exercise, itemIds: ['vocab-w-1'] }, index)).toEqual([]);
+      expect(validateExercise({ ...exercise, itemIds: undefined }, index)).toEqual([]);
     });
 
     it('lesson referencing an unknown item', () => {

@@ -14,6 +14,7 @@ import {
 } from '../../src/content/registry';
 import { BELT_DEFAULT_CEFR, Belt } from '../../src/domain/content/types';
 import { BeltType } from '../../src/theme/tokens';
+import { CONTENT_PACKS } from '../../src/content/packs';
 
 const canonicalLessonIds = Object.keys(MOCK_LESSONS).filter((id) => !id.endsWith('-pt'));
 
@@ -49,27 +50,30 @@ describe('content registry (issue #37, ADR-008)', () => {
     });
 
     it('takes each item\'s belt from its unit and a default CEFR level from the belt', () => {
-      expect(getLexicalItem('vocab-1-1-1')).toMatchObject({ belt: 'white', cefr: 'A1' });
+      expect(getLexicalItem('vocab-1-1-2')).toMatchObject({ belt: 'white', cefr: 'A1' });
       expect(getLexicalItem('vocab-2-1-1')).toMatchObject({ belt: 'blue', cefr: 'A2' });
       expect(getLexicalItem('vocab-3-1-1')).toMatchObject({ belt: 'purple', cefr: 'B1' });
-      for (const item of listLexicalItems()) {
+      // Content packs may set a word's level explicitly; every other seeded word keeps its belt's default.
+      const setByPack = new Set(CONTENT_PACKS.flatMap((p) => [...p.annotations.map((a) => a.id), ...p.items.map((i) => i.id)]));
+      for (const item of listLexicalItems().filter((i) => !setByPack.has(i.id))) {
         expect(item.cefr).toBe(BELT_DEFAULT_CEFR[item.belt]);
       }
     });
 
-    it('marks seeded items reviewable and as unreviewed drafts', () => {
-      for (const item of listLexicalItems()) {
+    it('marks seeded items reviewable and as unreviewed drafts (packs may review their own words)', () => {
+      const setByPack = new Set(CONTENT_PACKS.flatMap((p) => [...p.annotations.map((a) => a.id), ...p.items.map((i) => i.id)]));
+      for (const item of listLexicalItems().filter((i) => !setByPack.has(i.id))) {
         expect(item.reviewable).toBe(true);
         expect(item.review.status).toBe('draft');
       }
     });
 
     it('lists items by belt', () => {
-      expect(listByBelt('white')).toHaveLength(15);
+      expect(listByBelt('white')).toHaveLength(15 + 4); // + 4 new words from the White Belt pack (#41)
       expect(listByBelt('blue')).toHaveLength(11);
       expect(listByBelt('purple')).toHaveLength(20);
       expect(listByBelt('brown')).toHaveLength(0);
-      expect(listLexicalItems()).toHaveLength(46);
+      expect(listLexicalItems()).toHaveLength(46 + 4);
     });
 
     it('uses belt names the theme understands', () => {
@@ -114,15 +118,16 @@ describe('content registry (issue #37, ADR-008)', () => {
       expect(getScenario('scn-white-nope')).toBeUndefined();
     });
 
-    it('has no stories or scenarios yet (they arrive with the White Belt pack)', () => {
-      expect(listStories()).toEqual([]);
-      expect(listScenarios()).toEqual([]);
+    it('has the White Belt pack\'s story and adventure (#41)', () => {
+      expect(listStories().map((s) => s.id)).toEqual(['story-white-first-class']);
+      expect(listScenarios().map((s) => s.id)).toEqual(['scn-white-first-class']);
     });
 
     it('never uses the same ID for two kinds of content', () => {
       const ids = listAllContentIds();
       expect(new Set(ids).size).toBe(ids.length);
-      expect(ids.length).toBe(46 + 22 + 7);
+      // 46 + 4 words, 22 + 4 exercises, 7 lessons, 1 story, 1 adventure
+      expect(ids.length).toBe(50 + 26 + 7 + 1 + 1);
     });
   });
 });

@@ -52,6 +52,17 @@ Existing content maps onto this: Unit 1 (`lesson-1-1` to `lesson-1-3`) seeds Whi
 ## Reviewing content
 Open **`/curriculum`** on the web preview to review the whole curriculum in one place: every item by belt, English and Portuguese side by side, its Portuguese explanation, review status and reviewer, plus any validation issues. Filter by belt or status, or search. When an item passes review, set `review.status` to `reviewed` and record the reviewer in the content file; the page and the integrity tests pick it up.
 
+### Content packs
+New content comes in themed packs, one folder each under `content/curriculum/<belt>/<theme>/`:
+- `lexicon.json`: `items` (new words, with `belt`, `cefr`, `reviewable`, `support.pt` and `review`) and `annotations` (extra metadata for existing words, by ID, without changing their text).
+- `exercises.json`: exercises; each lists the words it practises in `itemIds`.
+- `story.json`: the Reader story; tappable words carry an `itemId`.
+- `scenario.json`: the Adventure, as nodes with choices and endings.
+
+The first pack is White Belt "My first class" (`content/curriculum/white/first-class/`). Everything starts as `"review": { "status": "draft" }`.
+
+**To mark content reviewed**, set `"review": { "status": "reviewed", "reviewer": "<your name>" }` on the item, annotation, story or scenario in its JSON file, then run `pnpm test`. A reviewed White Belt word must have `support.pt`, and the tests require a reviewer name on anything marked reviewed.
+
 ## Item metadata
 Each lexical item records: English headword (a clean form such as `OSS`, with the gloss in `support.pt`), Portuguese meaning, belt, CEFR level, `reviewable` (whether it becomes a flashcard), optional phonetic and examples, and review status (`draft` or `reviewed`, plus reviewer).
 

@@ -247,7 +247,12 @@ export default function CurriculumScreen() {
             </View>
             {story.pages.map((page) => (
               <View key={page.id} style={styles.pair}>
-                <Text style={[styles.body, styles.half]}>{page.tokens.map((t) => t.text).join(' ')}</Text>
+                <Text style={[styles.body, styles.half]}>
+                  {page.tokens
+                    .map((t) => t.text)
+                    .join(' ')
+                    .replace(/\s+([.,!?;:])/g, '$1')}
+                </Text>
                 <Text style={[styles.body, styles.half]}>{page.pt}</Text>
               </View>
             ))}
@@ -281,9 +286,12 @@ export default function CurriculumScreen() {
                   <Text style={[styles.body, styles.half]}>{node.narrative.pt}</Text>
                 </View>
                 {node.choices.map((choice) => (
-                  <Text key={choice.id} style={styles.meta}>
-                    → {choice.text} (to {choice.nextNodeId})
-                  </Text>
+                  <View key={choice.id} style={styles.pair} testID={`curriculum-choice-${scenario.id}-${choice.id}`}>
+                    <Text style={[styles.meta, styles.half]}>
+                      → {choice.text} (to {choice.nextNodeId}) · feedback: {choice.feedback.en}
+                    </Text>
+                    <Text style={[styles.meta, styles.half]}>{choice.feedback.pt}</Text>
+                  </View>
                 ))}
                 {node.ending ? <Text style={styles.meta}>ending: {node.ending}</Text> : null}
               </View>
