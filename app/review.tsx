@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ScreenContainer } from '../src/components/ui/ScreenContainer';
@@ -10,12 +10,21 @@ import {
   ReviewEmptyView,
   ReviewCompletionView,
   ReviewLoadingView,
+  DeckToggle,
 } from '../src/features/review/components';
+import { getDueItems } from '../src/features/review/reviewScheduler';
 import { spacing } from '../src/theme/tokens';
 
 export default function ReviewScreen() {
   const router = useRouter();
-  const { direction, nextReviewTimestamp } = useCourse();
+  const { direction, setDirection, reviewMap, nextReviewTimestamp } = useCourse();
+  const dueCounts = useMemo(
+    () => ({
+      'pt-BR->en': getDueItems(reviewMap['pt-BR->en'] || []).length,
+      'en->pt-BR': getDueItems(reviewMap['en->pt-BR'] || []).length,
+    }),
+    [reviewMap]
+  );
 
   const session = useReviewSession(direction);
 
@@ -49,6 +58,8 @@ export default function ReviewScreen() {
           progressValue={progressValue}
           onClose={handleReturnToCourse}
         />
+
+        <DeckToggle selected={direction} dueCounts={dueCounts} onSelect={setDirection} />
 
         <View style={styles.content}>
           {!session.isInitialized && <ReviewLoadingView />}

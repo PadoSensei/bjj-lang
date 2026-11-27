@@ -1,4 +1,5 @@
 import { CourseDirection } from '../../components/ui/CourseDirectionSelector';
+import type { EncounterSource } from '../../types/encounter';
 import { VocabularyItem } from '../../types/lesson';
 import { ReviewOutcome, ReviewRecord } from '../../types/review';
 
@@ -69,6 +70,10 @@ export interface FormattedReviewItem {
   examplePt?: string;
   exampleEn?: string;
   rawVocab?: VocabularyItem;
+  /** Explanation in Portuguese, shown after the answer is revealed (ADR-009). */
+  helpTextPt?: string;
+  /** Where the learner first met the word, when known. */
+  source?: EncounterSource;
 }
 
 /**

@@ -30,7 +30,7 @@ The current goal is the **White Belt** (Pre-A1 to A1) vertical slice as a free i
 ### Implemented today
 - **App shell & navigation:** Expo Router stack across Home, Lesson runner, Review, Review history and direction selection.
 - **Lessons (pre-pivot content):** 7 lessons in Units 1–3, available in both directions, with 46 vocabulary items and 22 exercises (multiple choice and translation recall). Counts are checked by `__tests__/curriculum/CurriculumIntegrity.test.tsx`.
-- **Flashcard review:** reveal, self-rating, bounded in-session retry and history, in two isolated decks. Every word met (today: through lessons) gets a card in both decks, each with its own schedule. The session waits for stored progress to load.
+- **Flashcard review:** reveal, self-rating, bounded in-session retry and history, in two isolated decks (Português → English and English → Português) with a deck toggle on the review and history screens. Every word met (today: through lessons) gets a card in both decks, each with its own schedule. Help text is in Portuguese, and each card shows where the word was met. The session waits for stored progress to load.
 - **Local persistence:** completed lessons, review cards and history persist across reloads (AsyncStorage). All writes go through one serialized queue.
 - **Web deployment:** static web export (`dist/`) for Vercel.
 

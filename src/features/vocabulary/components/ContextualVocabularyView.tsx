@@ -11,6 +11,10 @@ export interface ContextualVocabularyViewProps {
   showTermHeader?: boolean;
   showContextExplanation?: boolean;
   showExamples?: boolean;
+  /** Show this explanation instead of the one chosen by direction (for example Portuguese help text). */
+  explanation?: string;
+  /** Label for the explanation section. Defaults to "BJJ Context:". */
+  explanationLabel?: string;
   testID?: string;
 }
 
@@ -20,6 +24,8 @@ export const ContextualVocabularyView: React.FC<ContextualVocabularyViewProps> =
   showTermHeader = true,
   showContextExplanation = true,
   showExamples = true,
+  explanation,
+  explanationLabel = 'BJJ Context:',
   testID = 'contextual-vocab-view',
 }) => {
   const isEnToPt = direction === 'en->pt-BR';
@@ -27,8 +33,8 @@ export const ContextualVocabularyView: React.FC<ContextualVocabularyViewProps> =
   const primaryTerm = isEnToPt ? vocab.termEn : vocab.termPt;
   const secondaryTerm = isEnToPt ? vocab.termPt : vocab.termEn;
 
-  let contextExplanation: string | undefined;
-  if (vocab.context) {
+  let contextExplanation: string | undefined = explanation;
+  if (contextExplanation === undefined && vocab.context) {
     contextExplanation = isEnToPt
       ? vocab.context.pt || vocab.context.en
       : vocab.context.en || vocab.context.pt;
@@ -63,7 +69,7 @@ export const ContextualVocabularyView: React.FC<ContextualVocabularyViewProps> =
 
       {hasContext ? (
         <View style={styles.sectionContainer} testID={`${testID}-context-section`}>
-          <Text style={styles.sectionLabel}>BJJ Context:</Text>
+          <Text style={styles.sectionLabel}>{explanationLabel}</Text>
           <Text style={styles.contextText} testID={`${testID}-context-text`}>
             {contextExplanation}
           </Text>
